@@ -1,6 +1,6 @@
-# GitHub AI Trending Tracker
+# GitHub AI Radar
 
-[![Daily Report](https://github.com/YOUR_USERNAME/trace-router/actions/workflows/daily.yml/badge.svg)](https://github.com/YOUR_USERNAME/trace-router/actions/workflows/daily.yml)
+[![Daily Report](https://github.com/YOUR_USERNAME/github-ai-radar/actions/workflows/daily.yml/badge.svg)](https://github.com/YOUR_USERNAME/github-ai-radar/actions/workflows/daily.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10+-blue.svg)](https://www.python.org)
 
@@ -149,8 +149,8 @@ reports/
 
 ```bash
 # 本地开发
-git clone https://github.com/YOUR_USERNAME/trace-router.git
-cd trace-router
+git clone https://github.com/YOUR_USERNAME/github-ai-radar.git
+cd github-ai-radar
 pip install -r requirements.txt
 python github_trending.py --no-verify
 ```
