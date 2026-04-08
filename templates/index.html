@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GitHub AI Radar - Daily AI Trending Tracker</title>
+<meta name="description" content="Track the hottest AI repositories on GitHub, updated daily. Discover trending AI/LLM frameworks, models, and personal AI applications.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, sans-serif;
+  background-color: #0d1117;
+  color: #c9d1d9;
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+a { color: #58a6ff; text-decoration: none; transition: color 0.2s; }
+a:hover { color: #79c0ff; }
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background:
+    radial-gradient(ellipse 600px 300px at 15% 10%, rgba(56,139,253,0.06) 0%, transparent 70%),
+    radial-gradient(ellipse 500px 400px at 85% 80%, rgba(136,46,224,0.05) 0%, transparent 70%),
+    radial-gradient(ellipse 400px 250px at 50% 50%, rgba(88,166,255,0.03) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+.container {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+.header {
+  text-align: center;
+  padding: 60px 0 40px;
+  position: relative;
+}
+.header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #58a6ff, #a371f7, #58a6ff, transparent);
+  border-radius: 2px;
+}
+.logo-area {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+.logo-icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+  filter: drop-shadow(0 0 12px rgba(88,166,255,0.5));
+}
+.header h1 {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 900;
+  background: linear-gradient(135deg, #58a6ff 0%, #a371f7 50%, #f778ba 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.02em;
+}
+.header .subtitle {
+  font-size: 1.1rem;
+  color: #8b949e;
+  margin-top: 6px;
+  font-weight: 500;
+}
+.header .timestamp {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 16px;
+  font-size: 0.85rem;
+  color: #6e7681;
+  background: rgba(88,166,255,0.08);
+  padding: 6px 16px;
+  border-radius: 20px;
+  border: 1px solid rgba(88,166,255,0.15);
+  font-family: 'JetBrains Mono', monospace;
+}
+.timestamp .pulse {
+  width: 8px; height: 8px;
+  background: #3fb950;
+  border-radius: 50%;
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(63,185,80,0.4); }
+  50% { opacity: 0.7; box-shadow: 0 0 0 6px rgba(63,185,80,0); }
+}
+.section { padding: 40px 0; }
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+}
+.section-icon {
+  font-size: 28px;
+  filter: drop-shadow(0 0 8px rgba(88,166,255,0.3));
+}
+.section-title {
+  font-size: clamp(1.3rem, 3vw, 1.75rem);
+  font-weight: 800;
+  color: #f0f6fc;
+  letter-spacing: -0.01em;
+}
+.section-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 12px;
+  background: rgba(88,166,255,0.12);
+  color: #58a6ff;
+  border: 1px solid rgba(88,166,255,0.2);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 16px;
+}
+.card {
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 12px;
+  padding: 20px;
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 0;
+  transform: translateY(20px);
+  overflow: hidden;
+}
+.card.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.card:hover {
+  border-color: #484f58;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+}
+.card[data-rank="1"] {
+  border-color: rgba(255,215,0,0.3);
+  background: linear-gradient(135deg, #161b22 0%, rgba(255,215,0,0.04) 100%);
+  box-shadow: 0 0 20px rgba(255,215,0,0.06), inset 0 1px 0 rgba(255,215,0,0.1);
+}
+.card[data-rank="1"]:hover {
+  border-color: rgba(255,215,0,0.5);
+  box-shadow: 0 8px 40px rgba(255,215,0,0.12);
+}
+.card[data-rank="2"] {
+  border-color: rgba(192,192,192,0.25);
+  background: linear-gradient(135deg, #161b22 0%, rgba(192,192,192,0.03) 100%);
+  box-shadow: 0 0 15px rgba(192,192,192,0.04), inset 0 1px 0 rgba(192,192,192,0.08);
+}
+.card[data-rank="2"]:hover {
+  border-color: rgba(192,192,192,0.4);
+  box-shadow: 0 8px 35px rgba(192,192,192,0.08);
+}
+.card[data-rank="3"] {
+  border-color: rgba(205,127,50,0.25);
+  background: linear-gradient(135deg, #161b22 0%, rgba(205,127,50,0.03) 100%);
+  box-shadow: 0 0 15px rgba(205,127,50,0.04), inset 0 1px 0 rgba(205,127,50,0.08);
+}
+.card[data-rank="3"]:hover {
+  border-color: rgba(205,127,50,0.4);
+  box-shadow: 0 8px 35px rgba(205,127,50,0.08);
+}
+.card-rank {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.85rem;
+  border-radius: 10px;
+  background: rgba(110,118,129,0.15);
+  color: #8b949e;
+  border: 1px solid rgba(110,118,129,0.2);
+  font-family: 'JetBrains Mono', monospace;
+}
+.card[data-rank="1"] .card-rank {
+  background: linear-gradient(135deg, #ffd700, #ffaa00);
+  color: #1a1200;
+  border: none;
+  box-shadow: 0 2px 10px rgba(255,215,0,0.3);
+}
+.card[data-rank="2"] .card-rank {
+  background: linear-gradient(135deg, #c0c0c0, #a0a0a0);
+  color: #1a1a1a;
+  border: none;
+  box-shadow: 0 2px 8px rgba(192,192,192,0.25);
+}
+.card[data-rank="3"] .card-rank {
+  background: linear-gradient(135deg, #cd7f32, #b06820);
+  color: #1a1000;
+  border: none;
+  box-shadow: 0 2px 8px rgba(205,127,50,0.25);
+}
+.card-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 10px;
+  padding-right: 44px;
+}
+.card-badges {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.rank-change {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 6px;
+  font-family: 'JetBrains Mono', monospace;
+}
+.rank-change.up { background: rgba(63,185,80,0.15); color: #3fb950; }
+.rank-change.down { background: rgba(248,81,73,0.15); color: #f85149; }
+.rank-change.same { background: rgba(110,118,129,0.15); color: #6e7681; }
+.rank-change.new-entry { background: rgba(255,215,0,0.15); color: #ffd700; }
+.rank-change.re-entry { background: rgba(163,113,247,0.15); color: #a371f7; }
+.badge-new {
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: linear-gradient(135deg, #ff6b6b, #ffa502);
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  animation: glow-new 2s ease-in-out infinite alternate;
+}
+@keyframes glow-new {
+  from { box-shadow: 0 0 4px rgba(255,107,107,0.3); }
+  to   { box-shadow: 0 0 12px rgba(255,107,107,0.5); }
+}
+.card-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #58a6ff;
+  display: block;
+  margin-bottom: 8px;
+  transition: color 0.2s;
+  word-break: break-word;
+}
+.card-name:hover { color: #79c0ff; }
+.card-name .owner { color: #8b949e; font-weight: 500; }
+.card-desc {
+  font-size: 0.85rem;
+  color: #8b949e;
+  line-height: 1.5;
+  margin-bottom: 14px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 2.55em;
+}
+.card-stats {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.stat {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.78rem;
+  color: #8b949e;
+  font-family: 'JetBrains Mono', monospace;
+}
+.stat svg { width: 14px; height: 14px; flex-shrink: 0; }
+.stat-stars svg { fill: #e3b341; }
+.stat-today { color: #3fb950; font-weight: 600; }
+.stat-growth { color: #58a6ff; }
+.stat-divider { width: 1px; height: 14px; background: #30363d; flex-shrink: 0; }
+.lang-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.75rem;
+  color: #8b949e;
+}
+.lang-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.hotness {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-left: auto;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  font-family: 'JetBrains Mono', monospace;
+  background: linear-gradient(135deg, rgba(255,165,0,0.15), rgba(255,69,0,0.15));
+  color: #ffa657;
+  border: 1px solid rgba(255,165,0,0.2);
+  white-space: nowrap;
+}
+.hotness .fire { font-size: 0.85rem; }
+.hotness-high {
+  background: linear-gradient(135deg, rgba(255,215,0,0.2), rgba(255,120,0,0.2));
+  color: #ffd700;
+  border-color: rgba(255,215,0,0.3);
+  box-shadow: 0 0 10px rgba(255,215,0,0.1);
+}
+.error-state { text-align: center; padding: 80px 20px; }
+.error-icon { font-size: 64px; margin-bottom: 20px; }
+.error-title { font-size: 1.5rem; font-weight: 700; color: #f0f6fc; margin-bottom: 10px; }
+.error-message { color: #8b949e; max-width: 450px; margin: 0 auto 24px; line-height: 1.6; }
+.error-retry {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 24px;
+  background: rgba(88,166,255,0.12);
+  color: #58a6ff;
+  border: 1px solid rgba(88,166,255,0.3);
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+  font-size: 0.95rem;
+}
+.error-retry:hover { background: rgba(88,166,255,0.2); border-color: rgba(88,166,255,0.5); }
+.loading-state { text-align: center; padding: 100px 20px; }
+.loading-spinner {
+  width: 48px; height: 48px;
+  border: 3px solid #30363d;
+  border-top-color: #58a6ff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: 0 auto 20px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-text { color: #8b949e; font-size: 1rem; }
+.footer {
+  border-top: 1px solid #21262d;
+  margin-top: 60px;
+  padding: 40px 0;
+  text-align: center;
+}
+.footer-methodology {
+  max-width: 700px;
+  margin: 0 auto 20px;
+  padding: 20px;
+  background: rgba(88,166,255,0.04);
+  border: 1px solid #21262d;
+  border-radius: 10px;
+}
+.footer-methodology h3 {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #f0f6fc;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.footer-methodology p {
+  font-size: 0.82rem;
+  color: #8b949e;
+  line-height: 1.6;
+  font-family: 'JetBrains Mono', monospace;
+}
+.footer-links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+.footer-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #8b949e;
+  font-size: 0.85rem;
+  transition: color 0.2s;
+}
+.footer-links a:hover { color: #58a6ff; }
+.footer-links a svg { width: 16px; height: 16px; fill: currentColor; }
+.footer-copy { margin-top: 16px; font-size: 0.78rem; color: #484f58; }
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #0d1117; }
+::-webkit-scrollbar-thumb { background: #30363d; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #484f58; }
+@media (max-width: 768px) {
+  .header { padding: 40px 0 30px; }
+  .card-grid { grid-template-columns: 1fr; }
+  .card-stats { gap: 8px; }
+  .hotness { margin-left: 0; margin-top: 4px; }
+  .section { padding: 30px 0; }
+  .stat-divider { display: none; }
+}
+@media (max-width: 400px) {
+  .container { padding: 0 12px; }
+  .card { padding: 16px; }
+  .card-stats { gap: 6px; }
+}
+.lang-toggle {
+  display: inline-flex;
+  margin-top: 12px;
+  border-radius: 20px;
+  border: 1px solid #30363d;
+  overflow: hidden;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+.lang-toggle button {
+  padding: 5px 16px;
+  background: transparent;
+  color: #8b949e;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+}
+.lang-toggle button.active {
+  background: rgba(88,166,255,0.15);
+  color: #58a6ff;
+}
+.lang-toggle button:hover:not(.active) {
+  color: #c9d1d9;
+  background: rgba(110,118,129,0.1);
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <header class="header">
+    <div class="logo-area">
+      <div class="logo-icon">&#x1F4E1;</div>
+      <h1>GitHub AI Radar</h1>
+    </div>
+    <p class="subtitle" id="subtitle">Daily AI Trending Tracker</p>
+    <div class="lang-toggle" id="lang-toggle">
+      <button data-lang="en" class="active">EN</button>
+      <button data-lang="zh">中文</button>
+    </div>
+    <div class="timestamp" id="timestamp">
+      <span class="pulse"></span>
+      <span id="timestamp-text">Loading...</span>
+    </div>
+  </header>
+  <main id="main-content">
+    <div class="loading-state" id="loading">
+      <div class="loading-spinner"></div>
+      <p class="loading-text">Fetching latest AI radar data...</p>
+    </div>
+  </main>
+  <footer class="footer" id="footer" style="display:none;">
+    <div class="footer-methodology">
+      <h3>&#x1F9EA; Ranking Methodology</h3>
+      <p id="methodology-text"></p>
+    </div>
+    <div class="footer-links">
+      <a href="https://github.com/JuliaYu907/github-ai-radar" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+        View on GitHub
+      </a>
+      <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">
+        <svg viewBox="0 0 16 16"><path d="M3.47 7.78a.75.75 0 010-1.06l4.25-4.25a.75.75 0 011.06 0l4.25 4.25a.75.75 0 01-1.06 1.06L8.75 4.56V13.5a.75.75 0 01-1.5 0V4.56L4.53 7.78a.75.75 0 01-1.06 0z" fill="currentColor"/></svg>
+        Back to Top
+      </a>
+    </div>
+    <p class="footer-copy">&copy; 2026 GitHub AI Radar. Data sourced from the GitHub API.</p>
+  </footer>
+</div>
+<script>
+const I18N = {
+  en: {
+    subtitle: "Daily AI Trending Tracker",
+    loading: "Fetching latest AI radar data...",
+    core_title: "AI / LLM Core",
+    app_title: "AI Personal Apps",
+    top: "Top",
+    no_desc: "No description provided.",
+    today: "today",
+    per_day: "/d",
+    methodology_title: "Ranking Methodology",
+    view_github: "View on GitHub",
+    back_top: "Back to Top",
+    copyright: "GitHub AI Radar. Data sourced from the GitHub API.",
+    error_title: "Unable to Load Data",
+    error_msg: "Could not fetch the latest radar data.",
+    error_retry: "Try Again",
+    error_local: "If viewing locally, try serving via a local HTTP server",
+    no_data: "No Data",
+    no_data_msg: "Report is empty.",
+    new_badge: "NEW",
+    re_badge: "RE",
+  },
+  zh: {
+    subtitle: "每日 AI 热门项目追踪",
+    loading: "正在加载最新 AI 雷达数据...",
+    core_title: "AI / LLM 核心",
+    app_title: "AI 个人应用",
+    top: "Top",
+    no_desc: "暂无描述",
+    today: "今日",
+    per_day: "/天",
+    methodology_title: "排名方法论",
+    view_github: "查看 GitHub",
+    back_top: "回到顶部",
+    copyright: "GitHub AI Radar. 数据来源于 GitHub API。",
+    error_title: "无法加载数据",
+    error_msg: "获取最新雷达数据失败。",
+    error_retry: "重试",
+    error_local: "如果在本地查看，请使用本地 HTTP 服务器",
+    no_data: "暂无数据",
+    no_data_msg: "报告为空。",
+    new_badge: "NEW",
+    re_badge: "RE",
+  }
+};
+var currentLang = localStorage.getItem('preferred_lang') || 'en';
+function t(key) { return I18N[currentLang][key] || I18N['en'][key] || key; }
+const LANG_COLORS = {
+  "Python":"#3572A5","JavaScript":"#f1e05a","TypeScript":"#3178c6","Rust":"#dea584",
+  "Go":"#00ADD8","C++":"#f34b7d","C":"#555555","Java":"#b07219","Kotlin":"#A97BFF",
+  "Swift":"#F05138","Ruby":"#701516","PHP":"#4F5D95","C#":"#178600","Dart":"#00B4AB",
+  "Scala":"#c22d40","Shell":"#89e051","Lua":"#000080","Jupyter Notebook":"#DA5B0B",
+  "HTML":"#e34c26","CSS":"#563d7c","Vue":"#41b883","Svelte":"#ff3e00","Zig":"#ec915c",
+  "Elixir":"#6e4a7e","Haskell":"#5e5086","OCaml":"#3be133","Cuda":"#3A4E3A",
+  "Dockerfile":"#384d54","Makefile":"#427819","MDX":"#fcb32c"
+};
+function fmt(n){if(n==null)return'-';if(n>=1e6)return(n/1e6).toFixed(1)+'M';if(n>=1e3)return(n/1e3).toFixed(1)+'k';return n.toLocaleString();}
+function fmtTime(s){try{var d=new Date(s);return d.toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit',timeZoneName:'short'});}catch(e){return s;}}
+function isNew(c){if(!c)return false;return(new Date()-new Date(c))/(864e5)<7;}
+function trunc(d,m){if(!d)return t('no_desc');return d.length>m?d.slice(0,m).trim()+'...':d;}
+function langColor(l){return LANG_COLORS[l]||'#8b949e';}
+function rankBadge(c){
+  if(c==null||c===undefined)return'';var v=String(c).toLowerCase();
+  if(v==='new')return'<span class="rank-change new-entry">&#9733; '+t('new_badge')+'</span>';
+  if(v==='re-entry')return'<span class="rank-change re-entry">&#8634; '+t('re_badge')+'</span>';
+  var n=parseInt(c,10);if(isNaN(n))return'';
+  if(n>0)return'<span class="rank-change up">&#9650; +'+n+'</span>';
+  if(n<0)return'<span class="rank-change down">&#9660; '+n+'</span>';
+  return'<span class="rank-change same">&ndash; 0</span>';
+}
+var STAR='<svg viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.75.75 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z" fill="#e3b341"/></svg>';
+var UP='<svg viewBox="0 0 16 16"><path d="M4.427 9.573l3.396-3.396a.25.25 0 01.354 0l3.396 3.396a.25.25 0 01-.177.427H4.604a.25.25 0 01-.177-.427z" fill="#3fb950"/></svg>';
+function card(r,i){
+  var hc=r.hotness_score>=8?'hotness-high':'';
+  var p=(r.full_name||'').split('/'),o=p[0]||'',nm=p[1]||r.full_name;
+  return'<article class="card" data-rank="'+r.rank+'" style="animation-delay:'+(i*60)+'ms;">'+
+    '<div class="card-rank">#'+r.rank+'</div>'+
+    '<div class="card-top"><div class="card-badges">'+(isNew(r.created_at)?'<span class="badge-new">'+t('new_badge')+'</span>':'')+rankBadge(r.rank_change)+'</div></div>'+
+    '<a href="'+(r.url||'#')+'" target="_blank" rel="noopener noreferrer" class="card-name"><span class="owner">'+o+' /</span> '+nm+'</a>'+
+    '<p class="card-desc">'+trunc(r.description,120)+'</p>'+
+    '<div class="card-stats">'+
+    (r.language?'<span class="lang-badge"><span class="lang-dot" style="background:'+langColor(r.language)+'"></span>'+r.language+'</span><span class="stat-divider"></span>':'')+
+    '<span class="stat stat-stars">'+STAR+' '+fmt(r.stars)+'</span>'+
+    (r.today_stars?'<span class="stat-divider"></span><span class="stat stat-today">'+UP+' +'+fmt(r.today_stars)+' '+t('today')+'</span>':'')+
+    (r.growth_rate_per_day?'<span class="stat-divider"></span><span class="stat stat-growth">&#x1F4C8; '+r.growth_rate_per_day.toFixed(1)+t('per_day')+'</span>':'')+
+    '<span class="hotness '+hc+'"><span class="fire">&#x1F525;</span> '+(r.hotness_score!=null?r.hotness_score.toFixed(1):'-')+'</span>'+
+    '</div></article>';
+}
+function section(title,icon,badge,repos){
+  if(!repos||!repos.length)return'';
+  return'<section class="section"><div class="section-header"><span class="section-icon">'+icon+'</span><h2 class="section-title">'+title+'</h2><span class="section-badge">'+badge+'</span></div><div class="card-grid">'+repos.map(function(r,i){return card(r,i);}).join('')+'</div></section>';
+}
+function observe(){
+  var cards=document.querySelectorAll('.card');
+  if(!('IntersectionObserver' in window)){cards.forEach(function(c){c.classList.add('visible');});return;}
+  var obs=new IntersectionObserver(function(es){es.forEach(function(e){
+    if(e.isIntersecting){var d=parseInt(e.target.style.animationDelay)||0;setTimeout(function(){e.target.classList.add('visible');},d);obs.unobserve(e.target);}
+  });},{threshold:0.05,rootMargin:'0px 0px -30px 0px'});
+  cards.forEach(function(c){obs.observe(c);});
+}
+function loadData(){
+  var main=document.getElementById('main-content'),ft=document.getElementById('footer'),ts=document.getElementById('timestamp-text');
+  main.innerHTML='<div class="loading-state"><div class="loading-spinner"></div><p class="loading-text">'+t('loading')+'</p></div>';
+  ft.style.display='none';
+  fetch('./data/latest.json').then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();}).then(function(d){
+    ts.textContent=d.generated_at?'Updated '+fmtTime(d.generated_at):'Data loaded';
+    document.getElementById('methodology-text').textContent=d.methodology||'Ranked by composite hotness score.';
+    var h='';
+    h+=section(t('core_title'),'&#x1F9E0;',t('top')+' '+(d.ai_llm_core_top10?d.ai_llm_core_top10.length:'10'),d.ai_llm_core_top10);
+    h+=section(t('app_title'),'&#x1F680;',t('top')+' '+(d.ai_app_top20?d.ai_app_top20.length:'20'),d.ai_app_top20);
+    if(!h){main.innerHTML='<div class="error-state"><div class="error-icon">&#x1F4ED;</div><h2 class="error-title">'+t('no_data')+'</h2><p class="error-message">'+t('no_data_msg')+'</p></div>';return;}
+    main.innerHTML=h;ft.style.display='block';
+    applyStaticLang();
+    requestAnimationFrame(function(){observe();});
+  }).catch(function(err){
+    console.error(err);
+    main.innerHTML='<div class="error-state"><div class="error-icon">&#x1F50D;</div><h2 class="error-title">'+t('error_title')+'</h2><p class="error-message">'+t('error_msg')+'<br><span style="font-family:\'JetBrains Mono\',monospace;font-size:0.8rem;color:#6e7681;">'+err.message+'</span><br><br>'+t('error_local')+':<br><code style="background:#21262d;padding:2px 8px;border-radius:4px;font-size:0.8rem;">python -m http.server 8000</code></p><button class="error-retry" onclick="loadData()">&#x1F504; '+t('error_retry')+'</button></div>';
+  });
+}
+function applyStaticLang(){
+  document.getElementById('subtitle').textContent=t('subtitle');
+  var methH3=document.querySelector('.footer-methodology h3');
+  if(methH3) methH3.innerHTML='&#x1F9EA; '+t('methodology_title');
+  var links=document.querySelectorAll('.footer-links a');
+  if(links.length>=1) links[0].innerHTML=links[0].querySelector('svg').outerHTML+' '+t('view_github');
+  if(links.length>=2) links[1].innerHTML=links[1].querySelector('svg').outerHTML+' '+t('back_top');
+  var copy=document.querySelector('.footer-copy');
+  if(copy) copy.innerHTML='&copy; 2026 '+t('copyright');
+}
+function setLang(lang){
+  currentLang=lang;
+  localStorage.setItem('preferred_lang',lang);
+  var btns=document.querySelectorAll('#lang-toggle button');
+  btns.forEach(function(b){b.classList.toggle('active',b.getAttribute('data-lang')===lang);});
+  loadData();
+}
+document.getElementById('lang-toggle').addEventListener('click',function(e){
+  var btn=e.target.closest('button');
+  if(!btn)return;
+  var lang=btn.getAttribute('data-lang');
+  if(lang&&lang!==currentLang) setLang(lang);
+});
+document.addEventListener('DOMContentLoaded',function(){
+  var btns=document.querySelectorAll('#lang-toggle button');
+  btns.forEach(function(b){b.classList.toggle('active',b.getAttribute('data-lang')===currentLang);});
+  document.getElementById('subtitle').textContent=t('subtitle');
+  loadData();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,299 @@
+# ============================================================================
+# GitHub AI Radar — 配置文件
+# ============================================================================
+# 修改此文件可自定义追踪范围、评分公式、输出格式等。
+# 所有字段都有默认值，删掉的字段会自动回退到内置默认值。
+
+# ---------------------------------------------------------------------------
+# 时间窗口 & API 设置
+# ---------------------------------------------------------------------------
+time_window_hours: 48          # 数据采集时间窗口（小时）
+
+api:
+  pages_per_query: 2           # 每个查询抓取的页数
+  per_page: 100                # 每页返回的仓库数
+  request_interval: 2          # 请求间隔（秒）
+  rate_limit_sleep: 12         # 触发速率限制后等待（秒）
+  max_retries: 3               # 速率限制重试次数
+
+# ---------------------------------------------------------------------------
+# 评分公式权重（必须加起来 = 1.0）
+# ---------------------------------------------------------------------------
+scoring:
+  today_stars_weight: 0.40     # 当日 star 增量（来自 Trending 页面）
+  growth_rate_weight: 0.30     # 近期增长速率
+  recency_weight: 0.15         # push 时间新鲜度
+  base_stars_weight: 0.15      # 基础影响力（log 压缩）
+
+# ---------------------------------------------------------------------------
+# 排行榜设置
+# ---------------------------------------------------------------------------
+rankings:
+  core_top_n: 10               # AI/LLM 核心榜 Top N
+  app_top_n: 20                # AI 应用榜 Top N
+  deduplicate: true            # 核心榜出现过的仓库不再出现在应用榜
+
+# ---------------------------------------------------------------------------
+# 新项目查询阈值（created:>time_window 内的新项目最少需要多少 star）
+# ---------------------------------------------------------------------------
+new_project_min_stars:
+  ai: 50
+  llm: 50
+  agent: 20
+  general: 50
+
+# ---------------------------------------------------------------------------
+# 搜索查询 — topic 列表
+# 主力查询: pushed:>time_window + topic:X
+# ---------------------------------------------------------------------------
+search_topics:
+  - llm
+  - machine-learning
+  - deep-learning
+  - ai-agent
+  - generative-ai
+  - chatbot
+  - rag
+  - langchain
+  - transformer
+  - diffusion
+  - nlp
+  - computer-vision
+  - openai
+  - agent
+  - mcp                        # Model Context Protocol
+  - pytorch
+  - copilot
+  - multimodal
+
+# ---------------------------------------------------------------------------
+# 分类关键词
+# ---------------------------------------------------------------------------
+classification:
+  # --- AI/LLM 核心仓库 ---
+  core_topics:
+    - machine-learning
+    - deep-learning
+    - neural-network
+    - deep-neural-networks
+    - llm
+    - llms
+    - large-language-model
+    - transformer
+    - transformers
+    - nlp
+    - natural-language-processing
+    - computer-vision
+    - cv
+    - speech-recognition
+    - reinforcement-learning
+    - pytorch
+    - tensorflow
+    - jax
+    - mxnet
+    - onnx
+    - triton
+    - diffusion
+    - stable-diffusion
+    - text-to-image
+    - embedding
+    - embeddings
+    - vector-database
+    - faiss
+    - inference
+    - model-serving
+    - model-hub
+    - pretrained-models
+    - fine-tuning
+    - rlhf
+    - lora
+    - quantization
+    - cuda
+    - gpu
+    - tpu
+    - distributed-training
+    - multimodal
+    - vlm
+    - vision-language-model
+
+  core_keywords_in_desc:
+    - machine learning
+    - deep learning
+    - neural network
+    - large language model
+    - llm framework
+    - model training
+    - inference engine
+    - serving engine
+    - model hub
+    - transformer
+    - diffusion model
+    - embedding
+    - pre-trained
+    - pretrained
+    - fine-tun
+
+  core_keywords_in_name:
+    - llm
+    - transformer
+    - diffusion
+    - neural
+    - torch
+    - tensor
+
+  # --- AI 应用仓库 ---
+  app_topics:
+    - ai
+    - artificial-intelligence
+    - generative-ai
+    - genai
+    - agent
+    - ai-agent
+    - agentic-ai
+    - agentic-workflow
+    - agentic-framework
+    - chatbot
+    - chat
+    - conversational-ai
+    - rag
+    - retrieval-augmented-generation
+    - copilot
+    - ai-assistant
+    - ai-coding
+    - code-generation
+    - openai
+    - gpt
+    - gpt-4
+    - gpt-4o
+    - chatgpt
+    - claude
+    - gemini
+    - deepseek
+    - qwen
+    - llama
+    - langchain
+    - llamaindex
+    - autogen
+    - prompt-engineering
+    - prompt
+    - text-generation
+    - image-generation
+    - automation
+    - workflow
+    - orchestration
+    - low-code
+    - no-code
+    - mcp
+    - function-calling
+    - tool-use
+    - ollama
+    - local-llm
+
+  app_keywords_in_desc:
+    - ai assistant
+    - ai agent
+    - coding agent
+    - chatbot
+    - gpt
+    - openai
+    - claude
+    - gemini
+    - deepseek
+    - llama
+    - copilot
+    - ai-powered
+    - ai tool
+    - rag
+    - retrieval augmented
+    - agentic
+    - prompt
+    - workflow
+    - orchestrat
+    - local llm
+    - run llm
+    - ollama
+    - text generat
+    - image generat
+    - voice
+
+  app_keywords_in_name:
+    - agent
+    - chat
+    - copilot
+    - gpt
+    - ai-
+    - ollama
+
+  # --- 企业级排除（仅对应用榜生效）---
+  enterprise_topics:
+    - enterprise
+    - saas
+    - mlops
+    - devops
+    - infrastructure
+    - data-pipeline
+    - etl
+    - monitoring
+    - observability
+    - cloud-native
+    - microservices
+    - kubernetes
+    - k8s
+    - ci-cd
+    - api-gateway
+    - service-mesh
+
+  enterprise_keywords_in_desc:
+    - enterprise
+    - production-ready platform
+    - saas platform
+    - b2b
+    - for teams
+    - for organizations
+    - for companies
+    - mlops
+    - devops
+    - data pipeline
+    - etl pipeline
+    - monitoring platform
+    - observability platform
+    - api platform
+    - api for ai
+    - cloud platform
+    - deployment platform
+    - infrastructure platform
+    - team collaboration platform
+    - organization management
+    - customer support platform
+    - customer service platform
+    - crm
+    - erp
+
+  personal_boost_keywords:
+    - personal
+    - local
+    - self-hosted
+    - cli
+    - terminal
+    - desktop
+    - browser extension
+    - private
+    - offline
+    - your own
+    - on your machine
+    - run locally
+    - note
+    - productivity
+    - bookmark
+    - journal
+
+# ---------------------------------------------------------------------------
+# 输出设置
+# ---------------------------------------------------------------------------
+output:
+  reports_dir: reports          # 报告目录
+  formats:                     # 输出格式（可选: json, markdown, html）
+    - json
+    - markdown
+    - html                     # 生成 GitHub Pages 静态站
+  pages_dir: docs              # GitHub Pages 输出目录

@@ -1,155 +1,247 @@
 # GitHub AI Radar
 
-[![Daily Report](https://github.com/YOUR_USERNAME/github-ai-radar/actions/workflows/daily.yml/badge.svg)](https://github.com/YOUR_USERNAME/github-ai-radar/actions/workflows/daily.yml)
+**[中文](README_zh.md) | English**
+
+[![Daily Report](https://github.com/JuliaYu907/github-ai-radar/actions/workflows/daily.yml/badge.svg)](https://github.com/JuliaYu907/github-ai-radar/actions/workflows/daily.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10+-blue.svg)](https://www.python.org)
 
-> Fork this repo and get **daily auto-generated AI trending reports** via GitHub Actions. Zero maintenance.
+> Fork this repo and get **daily auto-generated AI trending reports** + a **live dashboard** via GitHub Actions & Pages. Zero maintenance.
 
-抓取过去 48 小时 GitHub 上真正热门的 AI 仓库，以 **star 增长速率**而非总 star 数排序，帮你发现最新、最火的 AI 项目。
+Discover the hottest AI repositories on GitHub from the past 48 hours, ranked by **star growth rate** instead of total stars — helping you spot the newest and most trending AI projects.
 
-## 特性
+## Features
 
-- **每日自动运行** — GitHub Actions 定时抓取，报告自动 commit 到 `reports/` 目录
-- **多维度数据采集** — GitHub Search API (19 组 AI 关键词查询) + GitHub Trending 页面爬取
-- **增长驱动排序** — 热度评分公式: `today_stars(40%) + growth_rate(30%) + recency(15%) + base_stars(15%)`
-- **新项目捕获** — 48 小时内创建且快速获星的全新项目优先展示
-- **双榜单输出**
-  - AI/LLM 核心仓库 Top 10 (框架、模型、训练推理工具)
-  - AI 个人应用 Top 20 (CLI 工具、本地模型、个人助手等，过滤企业级平台)
-- **多格式报告** — 终端 Rich 表格 + JSON 报告 + Markdown 报告
+- **Auto-run daily** — GitHub Actions fetches data on schedule and auto-commits reports to the `reports/` directory
+- **GitHub Pages Dashboard** — Dark-themed live dashboard, auto-deployed after forking to `https://<user>.github.io/github-ai-radar/`
+- **Multi-source data collection** — GitHub Search API (18 AI topic queries + 5 new-project burst queries) + GitHub Trending page scraping
+- **Growth-driven ranking** — Hotness scoring formula: `today_stars(40%) + growth_rate(30%) + recency(15%) + base_stars(15%)`
+- **Real growth rate** — Prioritizes historical report comparison for true daily gain, falls back to Trending daily increment, then to `stars/√age`
+- **New project detection** — Brand-new projects created within 48 hours that gain stars quickly are highlighted
+- **Dual rankings (deduplicated)**
+  - AI/LLM Core Repos Top 10 (frameworks, models, training & inference tools)
+  - AI Personal Apps Top 20 (CLI tools, local models, personal assistants, etc. — enterprise platforms filtered out, deduplicated against Core ranking)
+- **Fully configurable** — Customize keywords, scoring weights, Top N counts, search scope, and more via `config.yaml`
+- **Multi-format reports** — Terminal Rich tables + JSON + Markdown + GitHub Pages HTML
 
-## 一键部署（推荐）
+## One-Click Deploy (Recommended)
 
-Fork 本仓库后，GitHub Actions 会**每天自动运行**并将报告提交到你的仓库。
+After forking this repo, GitHub Actions will **run automatically every day**, committing reports to your repository. GitHub Pages will auto-deploy the dashboard.
 
-### 步骤
+### Steps
 
-1. **Fork** 本仓库
-2. 在 fork 的仓库中进入 **Settings → Secrets and variables → Actions**
-3. 添加一个 Repository Secret:
+1. **Fork** this repository
+2. In your forked repo, go to **Settings → Secrets and variables → Actions**
+3. Add a Repository Secret:
    - Name: `GH_PAT`
-   - Value: 你的 [GitHub Personal Access Token](https://github.com/settings/tokens)（需要 `public_repo` 权限）
-4. 进入 **Actions** 页面，启用 workflows
-5. 点击 **Daily AI Trending Report → Run workflow** 手动触发一次，验证是否正常
+   - Value: Your [GitHub Personal Access Token](https://github.com/settings/tokens) (requires `public_repo` scope)
+4. Enable **GitHub Pages**:
+   - Go to **Settings → Pages**
+   - Set Source to **GitHub Actions**
+5. Go to the **Actions** tab and enable workflows
+6. Click **Daily AI Trending Report → Run workflow** to trigger a manual run and verify everything works
 
-之后每天 UTC 08:00（北京时间 16:00）会自动运行，报告出现在 `reports/` 目录下。
+After that, it runs automatically every day at UTC 08:00 (16:00 Beijing Time):
+- Reports appear in the `reports/` directory
+- Dashboard auto-updates at `https://<your-username>.github.io/github-ai-radar/`
 
-> **Token 是可选的**：不配置也能跑，但 API 速率限制会从 30 req/min 降到 10 req/min，可能漏掉部分数据。
+> **Token is optional**: It works without one, but the API rate limit drops from 30 req/min to 10 req/min, potentially missing some data.
 
-## 本地运行
+## Local Usage
 
-### 环境要求
+### Requirements
 
 - Python 3.10+
 
-### 安装依赖
+### Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 运行
+### Run
 
 ```bash
-# 基本用法 (报告自动保存到 reports/YYYY-MM-DD/)
+# Basic usage (reports auto-saved to reports/YYYY-MM-DD/, Pages generated to docs/)
 python github_trending.py
 
-# 跳过 SSL 验证 (代理/VPN 环境)
+# Skip SSL verification (proxy/VPN environments)
 python github_trending.py --no-verify
 
-# 使用 GitHub Token 提升 API 速率限制 (10 → 30 req/min)
+# Use a GitHub Token to increase API rate limit (10 → 30 req/min)
 python github_trending.py --token ghp_xxxxxxxxxxxx
-# 或通过环境变量:
+# Or via environment variable:
 export GITHUB_TOKEN=ghp_xxxxxxxxxxxx
 python github_trending.py
 
-# 指定输出路径 (同时生成 .json 和 .md)
+# Use a custom config file
+python github_trending.py --config my_config.yaml
+
+# Specify output path (generates both .json and .md)
 python github_trending.py --output reports/custom/my_report
+
+# Preview GitHub Pages dashboard locally
+python -m http.server 8000 -d docs
+# Then open http://localhost:8000
 ```
 
-### 命令行参数
+### CLI Arguments
 
-| 参数 | 说明 | 默认值 |
-|------|------|--------|
-| `--token` | GitHub Personal Access Token，提升 API 速率 | 环境变量 `GITHUB_TOKEN` |
-| `--no-verify` | 跳过 SSL 证书验证，解决代理/VPN 环境下的连接问题 | 关闭 |
-| `--output` | 报告输出基础路径 (不含扩展名，同时生成 .json 和 .md) | `reports/YYYY-MM-DD/github_hot_repo_YYYY-MM-DD` |
+| Argument | Description | Default |
+|----------|-------------|---------|
+| `--token` | GitHub Personal Access Token to increase API rate limit | Env variable `GITHUB_TOKEN` |
+| `--no-verify` | Skip SSL certificate verification for proxy/VPN environments | Disabled |
+| `--output` | Base path for report output (without extension; generates both .json and .md) | `reports/YYYY-MM-DD/github_hot_repo_YYYY-MM-DD` |
+| `--config` | Path to configuration file | `config.yaml` |
 
-## 输出示例
+## Configuration
 
-### 终端输出
+Customize all parameters via `config.yaml` — no code changes needed:
+
+```yaml
+# Time window
+time_window_hours: 48
+
+# Scoring formula weights (must sum to 1.0)
+scoring:
+  today_stars_weight: 0.40
+  growth_rate_weight: 0.30
+  recency_weight: 0.15
+  base_stars_weight: 0.15
+
+# Ranking settings
+rankings:
+  core_top_n: 10
+  app_top_n: 20
+  deduplicate: true        # Repos in Core ranking won't appear in App ranking
+
+# Search topic list (customize to track any domain)
+search_topics:
+  - llm
+  - machine-learning
+  - ai-agent
+  - mcp
+  # ... see config.yaml for the full list
+
+# Output formats
+output:
+  formats: [json, markdown, html]
+  pages_dir: docs
+```
+
+See [`config.yaml`](config.yaml) for all configuration options and classification keywords.
+
+## Output Examples
+
+### Terminal Output
 
 ```
-AI/LLM Core — Top 10 (48h Hottest)
+AI/LLM Core — Top 10 (Hottest)
 ┌──┬────────────────────────────┬──────┬───────┬───────┬─────────┬─────┐
 │# │ Repository                 │ Lang │ Stars │ +Today│ Growth/d│ Hot │
 ├──┼────────────────────────────┼──────┼───────┼───────┼─────────┼─────┤
-│1 │ affaan-m/everything-claud… │ JS   │ 134k  │ -     │ 1.8k/d  │ 10.3│
-│2 │ JackChen-me/open-multi-a… │ TS   │ 2.8k  │ -     │ 1.1k/d  │ 9.24│
+│1 │ milla-jovovich/mempalace   │ Py   │ 20.2k │ -     │ 11.2k/d │ 11.2│
+│2 │ langgenius/dify            │ TS   │ 136k  │ -     │ 4.1k/d  │ 11.1│
 │…
 ```
 
-### 报告目录结构
+### GitHub Pages Dashboard
+
+Dark-themed card layout with gold/silver/bronze glow effects for the Top 3:
+
+- Rank, repository name (clickable), language badge
+- Total stars, today's increment, daily growth rate, hotness score
+- NEW badge (for projects created within the last 7 days)
+- Rank change indicators (↑ rising / ↓ falling / ★ new entry)
+
+### Directory Structure
 
 ```
-reports/
-├── 2026-04-03/
-│   ├── github_hot_repo_2026-04-03.md    ← Markdown 报告 (适合阅读/分享)
-│   └── github_hot_repo_2026-04-03.json  ← JSON 报告 (适合程序消费)
-├── 2026-04-04/
-│   ├── github_hot_repo_2026-04-04.md
-│   └── github_hot_repo_2026-04-04.json
-└── ...
+github-ai-radar/
+├── README.md                          ← English README
+├── README_zh.md                       ← Chinese README
+├── config.yaml                        ← Configuration file (customizable)
+├── github_trending.py                 ← Main script
+├── templates/
+│   └── index.html                     ← Pages template
+├── docs/                              ← GitHub Pages site (auto-generated)
+│   ├── index.html
+│   └── data/
+│       └── latest.json
+├── reports/                           ← Daily reports (auto-generated)
+│   └── 2026-04-08/
+│       ├── github_hot_repo_2026-04-08_en.md
+│       ├── github_hot_repo_2026-04-08_zh.md
+│       └── github_hot_repo_2026-04-08.json
+└── .github/workflows/
+    ├── daily.yml                      ← Daily auto-run
+    └── pages.yml                      ← GitHub Pages auto-deploy
 ```
 
-## 工作原理
+## How It Works
 
 ```
-┌─────────────────────┐     ┌──────────────────────┐
-│  GitHub Search API  │     │  GitHub Trending 页面 │
-│  19 组 AI 关键词查询 │     │  当日 star 增量数据    │
-└────────┬────────────┘     └──────────┬───────────┘
-         │                             │
-         └──────────┬──────────────────┘
+┌─────────────────────┐     ┌──────────────────────┐     ┌─────────────────────┐
+│  GitHub Search API  │     │  GitHub Trending Page │     │  Historical Report   │
+│  23 queries         │     │  Daily star increment │     │  JSON (prev. day)    │
+│                     │     │  data                 │     │                      │
+└────────┬────────────┘     └──────────┬───────────┘     └───────┬─────────────┘
+         │                             │                         │
+         └──────────┬──────────────────┴─────────────────────────┘
                     ▼
-           ┌────────────────┐
-           │  合并去重 ~2000 │
-           └───────┬────────┘
+           ┌───────────────────────┐
+           │  Merge & deduplicate  │
+           │  ~2400 repos          │
+           └───────┬───────────────┘
                    ▼
-           ┌────────────────┐
-           │  计算增长速率    │
-           │  计算热度评分    │
-           └───────┬────────┘
+           ┌────────────────────────────────────┐
+           │  Compute growth rate               │
+           │  (3-tier strategy)                 │
+           │  1. Historical comparison          │
+           │     → real daily gain              │
+           │  2. Trending today_stars           │
+           │  3. stars / √age                  │
+           └───────┬────────────────────────────┘
                    ▼
-           ┌────────────────┐
-           │  分类 (核心/应用)│
-           │  过滤企业级项目  │
-           └───────┬────────┘
+           ┌────────────────────────┐
+           │  Compute hotness score │
+           │  (configurable weights)│
+           └───────┬────────────────┘
                    ▼
-        ┌──────────────────────┐
-        │  排序 & 输出双榜单    │
-        │  JSON + Markdown 报告│
-        └──────────────────────┘
+           ┌──────────────────────────┐
+           │  Classify (Core / App)   │
+           │  Filter enterprise       │
+           │  projects                │
+           │  Deduplicate dual        │
+           │  rankings                │
+           └───────┬──────────────────┘
+                   ▼
+        ┌────────────────────────────────┐
+        │  Sort & output                 │
+        │  JSON + Markdown + HTML        │
+        │  GitHub Pages dashboard update │
+        └────────────────────────────────┘
 ```
 
-## 分类逻辑
+## Classification Logic
 
-**AI/LLM 核心** — 命中以下关键词的仓库: `machine-learning`, `deep-learning`, `llm`, `transformer`, `diffusion`, `pytorch`, `tensorflow`, `fine-tuning`, `inference` 等
+**AI/LLM Core** — Repositories matching keywords such as: `machine-learning`, `deep-learning`, `llm`, `transformer`, `diffusion`, `pytorch`, `tensorflow`, `fine-tuning`, `inference`, `multimodal`, etc.
 
-**AI 个人应用** — 命中 `ai-agent`, `chatbot`, `rag`, `copilot`, `ollama`, `prompt` 等关键词，并排除带有 `enterprise`, `saas`, `mlops`, `devops` 等企业级标签的项目
+**AI Personal Apps** — Repositories matching keywords like `ai-agent`, `chatbot`, `rag`, `copilot`, `ollama`, `mcp`, `prompt`, etc., excluding projects tagged with enterprise labels such as `enterprise`, `saas`, `mlops`, `devops`; repos already in the Core ranking are automatically deduplicated
 
-## 贡献
+> All classification keywords can be customized via `config.yaml` and can also be used to track domains beyond AI.
 
-欢迎 PR 和 Issue！
+## Contributing
 
-- **关键词补充** — 发现有 AI 仓库被遗漏？请提 Issue 或 PR 补充分类关键词
-- **Bug 修复** — 发现报告数据异常或脚本报错？请提 Issue 附上运行日志
-- **新功能** — 有好的想法？先开 Issue 讨论，再提 PR
+PRs and Issues are welcome!
+
+- **Keyword additions** — Found an AI repo that's being missed? Open an Issue or PR to add classification keywords in `config.yaml`
+- **Bug fixes** — Found data anomalies in reports or script errors? Open an Issue with your run logs
+- **New features** — Have a great idea? Open an Issue to discuss first, then submit a PR
 
 ```bash
-# 本地开发
-git clone https://github.com/YOUR_USERNAME/github-ai-radar.git
+# Local development
+git clone https://github.com/JuliaYu907/github-ai-radar.git
 cd github-ai-radar
 pip install -r requirements.txt
 python github_trending.py --no-verify
