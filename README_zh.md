@@ -91,7 +91,7 @@ python -m http.server 8000 -d docs
 |------|------|--------|
 | `--token` | GitHub Personal Access Token，提升 API 速率 | 环境变量 `GITHUB_TOKEN` |
 | `--no-verify` | 跳过 SSL 证书验证，解决代理/VPN 环境下的连接问题 | 关闭 |
-| `--output` | 报告输出基础路径 (不含扩展名，同时生成 .json 和 .md) | `reports/YYYY-MM-DD/github_hot_repo_YYYY-MM-DD` |
+| `--output` | 报告输出基础路径 (不含扩展名，同时生成 .json 和 .md) | `reports/YYYY-MM-DD/ai_trending_YYYY-MM-DD` |
 | `--config` | 配置文件路径 | `config.yaml` |
 
 ## 配置文件
@@ -170,9 +170,9 @@ github-ai-radar/
 │       └── latest.json
 ├── reports/                           ← 每日报告 (自动生成)
 │   └── 2026-04-08/
-│       ├── github_hot_repo_2026-04-08_en.md
-│       ├── github_hot_repo_2026-04-08_zh.md
-│       └── github_hot_repo_2026-04-08.json
+│       ├── ai_trending_2026-04-08_en.md
+│       ├── ai_trending_2026-04-08_zh.md
+│       └── ai_trending_2026-04-08.json
 └── .github/workflows/
     ├── daily.yml                      ← 每日自动运行
     └── pages.yml                      ← GitHub Pages 自动部署

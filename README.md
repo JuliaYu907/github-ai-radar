@@ -91,7 +91,7 @@ python -m http.server 8000 -d docs
 |----------|-------------|---------|
 | `--token` | GitHub Personal Access Token to increase API rate limit | Env variable `GITHUB_TOKEN` |
 | `--no-verify` | Skip SSL certificate verification for proxy/VPN environments | Disabled |
-| `--output` | Base path for report output (without extension; generates both .json and .md) | `reports/YYYY-MM-DD/github_hot_repo_YYYY-MM-DD` |
+| `--output` | Base path for report output (without extension; generates both .json and .md) | `reports/YYYY-MM-DD/ai_trending_YYYY-MM-DD` |
 | `--config` | Path to configuration file | `config.yaml` |
 
 ## Configuration
@@ -170,9 +170,9 @@ github-ai-radar/
 │       └── latest.json
 ├── reports/                           ← Daily reports (auto-generated)
 │   └── 2026-04-08/
-│       ├── github_hot_repo_2026-04-08_en.md
-│       ├── github_hot_repo_2026-04-08_zh.md
-│       └── github_hot_repo_2026-04-08.json
+│       ├── ai_trending_2026-04-08_en.md
+│       ├── ai_trending_2026-04-08_zh.md
+│       └── ai_trending_2026-04-08.json
 └── .github/workflows/
     ├── daily.yml                      ← Daily auto-run
     └── pages.yml                      ← GitHub Pages auto-deploy
