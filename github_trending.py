@@ -15,10 +15,12 @@ GitHub AI Radar — 过去 48 小时真正热门的 AI 仓库追踪器
 """
 
 import argparse
+import base64
 import io
 import json
 import math
 import os
+import re as _re
 import shutil
 import sys
 import time
@@ -515,6 +517,73 @@ def _merge(api_repos: list[dict], trending_repos: list[dict]) -> list[dict]:
 
 
 # ---------------------------------------------------------------------------
+# README 摘要抓取 (丰富简介)
+# ---------------------------------------------------------------------------
+
+
+def _extract_summary(md_text: str, max_len: int = 200) -> str:
+    """从 README Markdown 中提取第一段有意义的文字作为简介."""
+    lines = md_text.split("\n")
+    buf: list[str] = []
+    for line in lines:
+        stripped = line.strip()
+        # 跳过空行、标题、徽章行、HTML 标签、图片、分割线
+        if not stripped:
+            if buf:
+                break  # 遇到空行且已有内容, 段落结束
+            continue
+        if stripped.startswith(("#", "!", "<", "[!", "---", "***", "===")):
+            if buf:
+                break
+            continue
+        # 跳过纯链接/徽章行
+        if _re.match(r"^\[!\[", stripped) or _re.match(r"^<(img|div|p|br|hr|table)", stripped, _re.I):
+            if buf:
+                break
+            continue
+        buf.append(stripped)
+    text = " ".join(buf)
+    # 清理 Markdown 格式
+    text = _re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", text)  # [text](url) → text
+    text = _re.sub(r"[*_`~]", "", text)  # 去掉 bold/italic/code
+    text = _re.sub(r"\s+", " ", text).strip()
+    if len(text) > max_len:
+        text = text[:max_len].rsplit(" ", 1)[0] + "..."
+    return text
+
+
+def _fetch_readme_summary(full_name: str, token: Optional[str] = None) -> str:
+    """通过 GitHub API 获取仓库 README 并提取摘要."""
+    url = f"https://api.github.com/repos/{full_name}/readme"
+    try:
+        resp = requests.get(url, headers=_headers(token), timeout=10, verify=SSL_VERIFY)
+        if resp.status_code != 200:
+            return ""
+        data = resp.json()
+        content = base64.b64decode(data.get("content", "")).decode("utf-8", errors="replace")
+        return _extract_summary(content)
+    except Exception:
+        return ""
+
+
+def enrich_descriptions(repos: list[dict], token: Optional[str] = None,
+                        top_n: int = 30) -> None:
+    """为排名靠前的仓库抓取 README 摘要, 丰富 description 字段."""
+    api_cfg = CFG.get("api", {})
+    interval = api_cfg.get("request_interval", 2)
+    count = 0
+    for r in repos[:top_n]:
+        name = r.get("full_name", "")
+        summary = _fetch_readme_summary(name, token)
+        if summary and len(summary) > len(r.get("description") or ""):
+            r["_readme_summary"] = summary
+            count += 1
+        time.sleep(interval * 0.5)  # 适度降速, 避免触发速率限制
+    if count:
+        console.print(f"    README 摘要: {count}/{min(len(repos), top_n)} 个仓库已丰富")
+
+
+# ---------------------------------------------------------------------------
 # 排名变化计算
 # ---------------------------------------------------------------------------
 
@@ -583,7 +652,7 @@ def _print_ranked(title: str, repos: list[dict], top_n: int) -> None:
 
     console.print()
     for i, r in enumerate(repos[:top_n], 1):
-        desc = (r.get("description") or "N/A")[:72]
+        desc = (r.get("_readme_summary") or r.get("description") or "N/A")[:72]
         age = ""
         created = r.get("created_at")
         if created:
@@ -609,7 +678,7 @@ def _repo_summary(r: dict, rank: int) -> dict:
     return {
         "rank": rank,
         "full_name": r.get("full_name"),
-        "description": r.get("description"),
+        "description": r.get("_readme_summary") or r.get("description"),
         "language": r.get("language"),
         "stars": r.get("stargazers_count", 0),
         "forks": r.get("forks_count", 0),
@@ -719,7 +788,7 @@ def _build_md_lines(core: list[dict], apps: list[dict], lang: str,
             growth = r.get("_growth_rate", 0)
             growth_s = f"{_fmt(growth)}/d" if growth else "-"
             score = r.get("_score", 0)
-            desc = (r.get("description") or "")[:60]
+            desc = (r.get("_readme_summary") or r.get("description") or "")[:120]
             created = r.get("created_at")
             if created:
                 try:
@@ -822,16 +891,16 @@ def main() -> None:
     output_formats = set(CFG.get("output", {}).get("formats", ["json", "markdown", "html"]))
 
     # 1. 抓取
-    console.print("[cyan]>>> [1/5] Search API: AI topic + 新项目爆发查询...[/cyan]")
+    console.print("[cyan]>>> [1/6] Search API: AI topic + 新项目爆发查询...[/cyan]")
     api_repos = fetch_ai_repos(token=args.token)
     console.print(f"    API 共获取 {len(api_repos)} 个去重仓库")
 
-    console.print("[cyan]>>> [2/5] GitHub Trending (today_stars)...[/cyan]")
+    console.print("[cyan]>>> [2/6] GitHub Trending (today_stars)...[/cyan]")
     trending = fetch_trending()
     console.print(f"    Trending 返回 {len(trending)} 条")
 
     # 2. 加载历史数据
-    console.print("[cyan]>>> [3/5] 加载历史数据 & 计算增长速率...[/cyan]")
+    console.print("[cyan]>>> [3/6] 加载历史数据 & 计算增长速率...[/cyan]")
     prev_data = _load_previous_report()
 
     # 3. 合并 & 计算增长指标
@@ -841,7 +910,7 @@ def main() -> None:
         r["_score"] = hotness_score(r)
 
     # 4. 分类
-    console.print("[cyan]>>> [4/5] 分类 & 排序...[/cyan]")
+    console.print("[cyan]>>> [4/6] 分类 & 排序...[/cyan]")
     kw = _get_sets("classification")
     core_list: list[dict] = []
     app_list: list[dict] = []
@@ -876,10 +945,15 @@ def main() -> None:
         console.print("[red]未获取到任何 AI 仓库数据。[/red]")
         sys.exit(1)
 
-    # 5. 输出
-    console.print("[cyan]>>> [5/5] 生成报告...[/cyan]")
+    # 5. 抓取 README 摘要 (丰富简介)
+    console.print("[cyan]>>> [5/6] 抓取 README 摘要...[/cyan]")
     core_n = CFG.get("rankings", {}).get("core_top_n", 10)
     app_n = CFG.get("rankings", {}).get("app_top_n", 20)
+    enrich_descriptions(core_list, token=args.token, top_n=core_n)
+    enrich_descriptions(app_list, token=args.token, top_n=app_n)
+
+    # 6. 输出
+    console.print("[cyan]>>> [6/6] 生成报告...[/cyan]")
 
     _print_ranked(f"AI/LLM Core — Top {core_n} (Hottest)", core_list, core_n)
     console.print()
