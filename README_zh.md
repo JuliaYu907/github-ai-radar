@@ -131,6 +131,28 @@ output:
 
 完整配置项和分类关键词见 [`config.yaml`](config.yaml)。
 
+### LLM 总结（可选）
+
+项目支持通过 OpenAI 兼容的 LLM API 为每个仓库生成分析性总结。启用方法：
+
+1. 设置环境变量或编辑 `config.yaml`：
+   ```bash
+   export LLM_API_KEY=sk-xxxxxxxxxxxx
+   export LLM_API_BASE=https://api.openai.com/v1   # 可选
+   export LLM_MODEL=gpt-4o-mini                     # 可选
+   ```
+
+2. 或在 `config.yaml` 中配置：
+   ```yaml
+   llm:
+     enabled: true
+     api_key: ""        # 或设置 LLM_API_KEY 环境变量
+     api_base: ""       # OpenAI 兼容接口地址
+     model: "gpt-4o-mini"
+   ```
+
+未配置 LLM 时，系统将回退到基于 README 摘录 + 元数据分析的模板总结方案。
+
 ## 输出示例
 
 ### 终端输出

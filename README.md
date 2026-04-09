@@ -131,6 +131,28 @@ output:
 
 See [`config.yaml`](config.yaml) for all configuration options and classification keywords.
 
+### LLM Summaries (Optional)
+
+The project can generate analytical summaries for each repo using an OpenAI-compatible LLM. To enable:
+
+1. Set environment variables or edit `config.yaml`:
+   ```bash
+   export LLM_API_KEY=sk-xxxxxxxxxxxx
+   export LLM_API_BASE=https://api.openai.com/v1   # optional
+   export LLM_MODEL=gpt-4o-mini                     # optional
+   ```
+
+2. Or configure in `config.yaml`:
+   ```yaml
+   llm:
+     enabled: true
+     api_key: ""        # or set LLM_API_KEY env var
+     api_base: ""       # OpenAI-compatible endpoint
+     model: "gpt-4o-mini"
+   ```
+
+Without LLM configuration, the system falls back to template-based summaries using README extraction + metadata analysis.
+
 ## Output Examples
 
 ### Terminal Output

@@ -100,9 +100,17 @@ def load_config(path: Optional[str] = None) -> dict:
         with open(cfg_path, "r", encoding="utf-8") as f:
             user_cfg = yaml.safe_load(f) or {}
         console.print(f"  [dim]配置文件: {cfg_path}[/dim]")
-        return _deep_merge(DEFAULTS, user_cfg)
-    console.print(f"  [dim]未找到配置文件, 使用内置默认值[/dim]")
-    return DEFAULTS.copy()
+        cfg = _deep_merge(DEFAULTS, user_cfg)
+    else:
+        console.print(f"  [dim]未找到配置文件, 使用内置默认值[/dim]")
+        cfg = DEFAULTS.copy()
+    # CONFIG-14: 校验评分权重之和
+    scoring = cfg.get("scoring", {})
+    total = sum(scoring.get(k, 0) for k in
+                ("today_stars_weight", "growth_rate_weight", "recency_weight", "base_stars_weight"))
+    if abs(total - 1.0) > 0.01:
+        console.print(f"  [yellow]警告: 评分权重之和 = {total:.2f} (应为 1.0), 结果可能不准确[/yellow]")
+    return cfg
 
 
 # ---------------------------------------------------------------------------
@@ -383,7 +391,7 @@ def _parse_int(text: str) -> int:
 
 
 def _load_previous_report() -> dict[str, dict]:
-    """加载前一天的 JSON 报告, 返回 {full_name_lower: repo_summary}."""
+    """加载前一天的 JSON 报告, 返回 {section:full_name_lower: repo_summary}."""
     reports_dir = Path(CFG.get("output", {}).get("reports_dir", "reports"))
     if not reports_dir.exists():
         return {}
@@ -396,6 +404,7 @@ def _load_previous_report() -> dict[str, dict]:
     )
 
     for d in date_dirs[:3]:  # 最多回溯 3 天
+        # ISSUE-10: 兼容新旧两种文件名格式
         json_files = list(d.glob("*.json"))
         for jf in json_files:
             if "details" in jf.name:
@@ -405,10 +414,15 @@ def _load_previous_report() -> dict[str, dict]:
                     data = json.load(f)
                 prev: dict[str, dict] = {}
                 for section in ("ai_llm_core_top10", "ai_app_top20"):
-                    for r in data.get(section, []):
-                        key = (r.get("full_name") or "").lower()
-                        if key:
-                            prev[key] = r
+                    for idx, r in enumerate(data.get(section, []), 1):
+                        fn = (r.get("full_name") or "").lower()
+                        if not fn:
+                            continue
+                        # ISSUE-10: 旧报告可能没有 rank 字段, 从列表位置重建
+                        if "rank" not in r:
+                            r["rank"] = idx
+                        # BUG-2: 使用 section 前缀区分 core/app 排名
+                        prev[f"{section}:{fn}"] = r
                 if prev:
                     console.print(f"  [dim]历史数据: {jf.name} ({len(prev)} 个仓库)[/dim]")
                     return prev
@@ -427,30 +441,33 @@ def _compute_growth_rate(repo: dict, prev_data: dict[str, dict]) -> float:
     计算增长速率, 优先使用真实数据:
       1. 如果有昨天的报告, 用 (today_stars - yesterday_stars) 作为真实日增
       2. 如果有 today_stars (来自 Trending), 直接使用
-      3. 回退到 total_stars / sqrt(age_days), 比 total/age 更公平
+      3. 回退到 total_stars / age_days (线性日均, 不再用 sqrt 以避免失真)
     """
     stars = repo.get("stargazers_count", 0)
     key = (repo.get("full_name") or "").lower()
     today = repo.get("today_stars", 0)
 
-    # 方法 1: 历史对比
-    if key in prev_data:
-        prev_stars = prev_data[key].get("stars", 0)
-        if prev_stars > 0 and stars > prev_stars:
-            return round(stars - prev_stars, 1)
+    # 方法 1: 历史对比 (尝试两个 section 的前缀)
+    for section in ("ai_llm_core_top10", "ai_app_top20"):
+        lookup = f"{section}:{key}"
+        if lookup in prev_data:
+            prev_stars = prev_data[lookup].get("stars", 0)
+            if prev_stars > 0 and stars > prev_stars:
+                return round(stars - prev_stars, 1)
+            break
 
     # 方法 2: Trending 的 today_stars
     if today > 0:
         return float(today)
 
-    # 方法 3: 回退公式 — sqrt 衰减, 对老项目更公平
+    # 方法 3: 回退公式 — 线性日均 stars, 避免 sqrt 导致的数值失真
     created = repo.get("created_at")
     if not created or stars == 0:
         return 0.0
     try:
         dt = datetime.fromisoformat(created.replace("Z", "+00:00"))
         age_days = max((NOW - dt).total_seconds() / 86400, 0.5)
-        return round(stars / math.sqrt(age_days), 1)
+        return round(stars / age_days, 1)
     except (ValueError, TypeError):
         return 0.0
 
@@ -516,44 +533,234 @@ def _merge(api_repos: list[dict], trending_repos: list[dict]) -> list[dict]:
     return list(seen.values())
 
 
+def _fetch_repo_metadata(full_name: str, token: Optional[str] = None) -> Optional[dict]:
+    """通过 GitHub API 获取仓库完整元数据."""
+    url = f"https://api.github.com/repos/{full_name}"
+    try:
+        resp = requests.get(url, headers=_headers(token), timeout=10, verify=SSL_VERIFY)
+        if resp.status_code == 200:
+            return resp.json()
+    except requests.RequestException:
+        pass
+    return None
+
+
+def _enrich_trending_metadata(repos: list[dict], token: Optional[str] = None) -> None:
+    """BUG-3: 为仅来自 Trending 的仓库补充完整元数据 (created_at, topics, pushed_at 等)."""
+    api_cfg = CFG.get("api", {})
+    interval = api_cfg.get("request_interval", 2)
+    count = 0
+    for r in repos:
+        if r.get("source") != "trending":
+            continue
+        # 已有完整元数据则跳过
+        if r.get("created_at") and r.get("topics"):
+            continue
+        name = r.get("full_name", "")
+        meta = _fetch_repo_metadata(name, token)
+        if meta:
+            for key in ("created_at", "pushed_at", "topics", "open_issues_count",
+                        "forks_count", "stargazers_count", "language", "html_url",
+                        "description"):
+                if meta.get(key) is not None and not r.get(key):
+                    r[key] = meta[key]
+            # 保留 trending 的 today_stars
+            r["source"] = "trending"
+            count += 1
+        time.sleep(interval * 0.5)
+    if count:
+        console.print(f"    补充 Trending 仓库元数据: {count} 个")
+
+
 # ---------------------------------------------------------------------------
 # README 摘要抓取 (丰富简介)
 # ---------------------------------------------------------------------------
 
 
-def _extract_summary(md_text: str, max_len: int = 200) -> str:
-    """从 README Markdown 中提取第一段有意义的文字作为简介."""
-    lines = md_text.split("\n")
-    buf: list[str] = []
-    for line in lines:
-        stripped = line.strip()
-        # 跳过空行、标题、徽章行、HTML 标签、图片、分割线
-        if not stripped:
-            if buf:
-                break  # 遇到空行且已有内容, 段落结束
-            continue
-        if stripped.startswith(("#", "!", "<", "[!", "---", "***", "===")):
-            if buf:
-                break
-            continue
-        # 跳过纯链接/徽章行
-        if _re.match(r"^\[!\[", stripped) or _re.match(r"^<(img|div|p|br|hr|table)", stripped, _re.I):
-            if buf:
-                break
-            continue
-        buf.append(stripped)
-    text = " ".join(buf)
-    # 清理 Markdown 格式
-    text = _re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", text)  # [text](url) → text
-    text = _re.sub(r"[*_`~]", "", text)  # 去掉 bold/italic/code
+def _is_junk_line(line: str) -> bool:
+    """判断一行是否为无意义的导航/徽章/链接/翻译列表等, 应跳过."""
+    s = line.strip()
+    if not s:
+        return True
+    # 标题、图片、HTML 标签、分割线
+    if s.startswith(("#", "!", "<", "[!", "---", "***", "===")):
+        return True
+    # 徽章/HTML 元素行 (含内嵌 HTML 标签)
+    if _re.match(r"^\[!\[", s) or _re.search(
+            r"<(img|div|p|br|hr|table|a\s|!--|svg|video|source|picture|iframe)\b", s, _re.I):
+        return True
+    # BUG-5: 含 src= 属性的行 (HTML 残留, 如 img 标签)
+    if _re.search(r'\bsrc\s*=\s*["\']', s, _re.I) and len(s) < 500:
+        return True
+    # BUG-5: 代码行 — import/from/require/include 语句
+    if _re.match(r"^(import |from \S+ import |require\(|#include|using |package )", s):
+        return True
+    # BUG-5: 代码块标记
+    if s.startswith("```"):
+        return True
+    # 语言/翻译链接列表: "Arabic | Bengali | Chinese ..." 或带 Markdown 链接
+    if s.count("|") >= 3 and _re.search(r"[A-Z][a-z]+\s*\|", s):
+        return True
+    # 导航行: "Features · Get Started · Explore" 或 "Docs | API | Demo"
+    if s.count("·") >= 2 or (s.count("|") >= 2 and len(s) < 200
+                              and _re.search(r"\[.+?\]\(.+?\)", s)):
+        return True
+    # 纯链接行 (整行都是 Markdown 链接, 无实质内容)
+    cleaned = _re.sub(r"\[([^\]]*)\]\([^)]*\)", r"\1", s)
+    cleaned = _re.sub(r"[*_`~\[\]()|\s·•–—]", "", cleaned)
+    if len(cleaned) < 5 and len(s) > 10:
+        return True
+    # 纯 emoji / 徽标行
+    if _re.match(r"^[\s\W]*$", cleaned) and len(s) > 5:
+        return True
+    # 项目元信息行 (License, Version, Build Status 等)
+    if _re.match(r"^(license|version|build|status|downloads?|coverage|stars?)\s*[:：]", s, _re.I):
+        return True
+    return False
+
+
+def _clean_md_text(text: str) -> str:
+    """清理 Markdown 格式, 提取纯文本."""
+    text = _re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", text)   # [text](url) → text
+    text = _re.sub(r"<[^>]+>", "", text)                      # 去掉 HTML 标签
+    text = _re.sub(r"[*_`~]", "", text)                       # 去掉 bold/italic/code
     text = _re.sub(r"\s+", " ", text).strip()
-    if len(text) > max_len:
-        text = text[:max_len].rsplit(" ", 1)[0] + "..."
     return text
 
 
-def _fetch_readme_summary(full_name: str, token: Optional[str] = None) -> str:
-    """通过 GitHub API 获取仓库 README 并提取摘要."""
+def _extract_summary(md_text: str, max_len: int = 300,
+                     repo_name: str = "") -> str:
+    """从 README Markdown 中智能提取项目描述.
+
+    策略 (按优先级):
+      1. 找 "{项目名} is a/an ..." 的定义句
+      2. 找描述性标题 (About/Overview/Introduction/Description) 后的段落
+      3. 找包含描述性关键词 (framework/tool/platform/library...) 的段落
+      4. 回退到第一段 >= 30 字符的有意义段落
+    """
+    lines = md_text.split("\n")
+
+    # --- 第 1 步: 收集所有候选段落, 并记录每段前面的标题 ---
+    paragraphs: list[dict] = []  # [{"text": str, "heading": str, "index": int}]
+    buf: list[str] = []
+    last_heading = ""
+
+    def _flush(idx: int):
+        if not buf:
+            return
+        raw = " ".join(buf)
+        cleaned = _clean_md_text(raw)
+        if len(cleaned) >= 20:
+            paragraphs.append({"text": cleaned, "heading": last_heading, "index": idx})
+        buf.clear()
+
+    for i, line in enumerate(lines):
+        stripped = line.strip()
+        if not stripped:
+            _flush(i)
+            if len(paragraphs) >= 10:
+                break
+            continue
+        if stripped.startswith("#"):
+            _flush(i)
+            last_heading = _re.sub(r"^#+\s*", "", stripped).strip().lower()
+            continue
+        if _is_junk_line(stripped):
+            _flush(i)
+            continue
+        buf.append(stripped)
+
+    _flush(len(lines))
+
+    if not paragraphs:
+        return ""
+
+    # --- 第 2 步: 为每个候选段落打分 ---
+    # 提取短项目名用于匹配 (e.g. "tensorflow/tensorflow" → "tensorflow")
+    short_name = repo_name.split("/")[-1].lower().replace("-", " ") if repo_name else ""
+
+    # 描述性标题关键词
+    _DESC_HEADINGS = {"about", "overview", "introduction", "description",
+                      "what is", "summary", "getting started", "简介", "概述", "介绍"}
+    # 定义句式模式
+    _DEF_PATTERN = _re.compile(
+        r"\b(is an?|are|provides?|enables?|offers?|allows?|helps?)\b", _re.I)
+    # 描述性名词关键词
+    _DESC_KEYWORDS = _re.compile(
+        r"\b(framework|library|toolkit|platform|engine|tool|system|suite|sdk|"
+        r"application|app|interface|model|agent|assistant|server|client|runtime|"
+        r"solution|service|infrastructure|database|manager|builder|generator|"
+        r"compiler|editor|browser|dashboard|monitor|pipeline|gateway|proxy|"
+        r"extension|plugin|wrapper|cli|api|gui|ui|ide)\b", _re.I)
+
+    best_score = -1
+    best_text = ""
+
+    for p in paragraphs:
+        text = p["text"]
+        heading = p["heading"]
+        score = 0
+
+        # 名称匹配: 段落包含项目名 (强信号)
+        if short_name and len(short_name) > 2 and short_name in text.lower():
+            score += 30
+
+        # 定义句式: "is a/an", "provides", "enables" (强信号)
+        if _DEF_PATTERN.search(text):
+            score += 25
+
+        # 描述性标题下: About / Overview / Introduction 等
+        if any(kw in heading for kw in _DESC_HEADINGS):
+            score += 20
+
+        # 包含描述性名词关键词
+        if _DESC_KEYWORDS.search(text):
+            score += 10
+
+        # 段落位置: 靠前的段落略有优势
+        score -= p["index"] * 0.1
+
+        # 长度适中 (30-200 最佳)
+        tlen = len(text)
+        if 30 <= tlen <= 200:
+            score += 5
+        elif tlen < 30:
+            score -= 10
+
+        # 排除明显非描述段落
+        lower = text.lower()
+        if lower.startswith(("install", "pip ", "npm ", "cargo ", "brew ", "docker ",
+                             "usage", "prerequisit", "require", "import ", "from ",
+                             "mkdir ", "cd ", "git clone", "curl ", "wget ")):
+            score -= 50
+        # 列表项开头
+        if text.startswith(("- ", "* ", "1. ", "1) ")):
+            score -= 30
+
+        # BUG-4: 段落以其他项目名开头的 "X is a..." 定义句 → 可能是错误内容
+        if _DEF_PATTERN.search(text) and short_name:
+            m = _re.match(r"^(.{3,50}?)\s+(is an?|are|provides?)\b", text, _re.I)
+            if m:
+                subject = m.group(1).lower().strip().replace("-", " ")
+                name_parts = [p for p in short_name.split() if len(p) > 2]
+                if name_parts and not any(p in subject for p in name_parts):
+                    score -= 40
+
+        if score > best_score:
+            best_score = score
+            best_text = text
+
+    if not best_text:
+        best_text = paragraphs[0]["text"]
+
+    if len(best_text) > max_len:
+        best_text = best_text[:max_len].rsplit(" ", 1)[0] + "..."
+    return best_text
+
+
+def _fetch_readme_raw(full_name: str, token: Optional[str] = None,
+                      max_chars: int = 3000) -> str:
+    """通过 GitHub API 获取仓库 README 原始内容 (截断到 max_chars)."""
     url = f"https://api.github.com/repos/{full_name}/readme"
     try:
         resp = requests.get(url, headers=_headers(token), timeout=10, verify=SSL_VERIFY)
@@ -561,26 +768,394 @@ def _fetch_readme_summary(full_name: str, token: Optional[str] = None) -> str:
             return ""
         data = resp.json()
         content = base64.b64decode(data.get("content", "")).decode("utf-8", errors="replace")
-        return _extract_summary(content)
+        return content[:max_chars]
     except Exception:
         return ""
 
 
+def _fetch_readme_summary(full_name: str, token: Optional[str] = None) -> str:
+    """通过 GitHub API 获取仓库 README 并提取摘要 (回退方案, 不走 LLM)."""
+    raw = _fetch_readme_raw(full_name, token)
+    return _extract_summary(raw, repo_name=full_name) if raw else ""
+
+
+# ---------------------------------------------------------------------------
+# 模板拼接法: README 摘录 + 元数据分析 (无需 LLM)
+# ---------------------------------------------------------------------------
+
+# 已知组织 -> 中文显示名
+_KNOWN_ORGS: dict[str, str] = {
+    "google": "Google", "tensorflow": "Google", "pytorch": "Meta",
+    "meta": "Meta", "facebook": "Meta", "facebookresearch": "Meta Research",
+    "microsoft": "微软", "azure": "微软", "openai": "OpenAI",
+    "huggingface": "Hugging Face", "alibaba": "阿里巴巴", "ant-design": "蚂蚁",
+    "tencent": "腾讯", "baidu": "百度", "bytedance": "字节跳动",
+    "apple": "Apple", "aws": "AWS", "amazon": "Amazon",
+    "nvidia": "NVIDIA", "intel": "Intel", "ibm": "IBM",
+    "deepmind": "DeepMind", "anthropic": "Anthropic",
+    "ray-project": "Anyscale", "langchain-ai": "LangChain",
+    "langgenius": "Dify 团队", "lobehub": "LobeHub 团队",
+    "infiniflow": "InfiniFlow", "comfy-org": "ComfyUI 团队",
+    "significant-gravitas": "Significant Gravitas",
+}
+
+# 主题 -> 中文领域标签 (用于自动归类)
+_TOPIC_LABELS: dict[str, str] = {
+    "machine-learning": "机器学习", "deep-learning": "深度学习",
+    "llm": "大语言模型", "llms": "大语言模型",
+    "large-language-model": "大语言模型",
+    "transformer": "Transformer", "transformers": "Transformer",
+    "nlp": "自然语言处理", "natural-language-processing": "自然语言处理",
+    "computer-vision": "计算机视觉", "cv": "计算机视觉",
+    "speech-recognition": "语音识别",
+    "reinforcement-learning": "强化学习",
+    "generative-ai": "生成式 AI", "genai": "生成式 AI",
+    "diffusion": "扩散模型", "stable-diffusion": "Stable Diffusion",
+    "text-to-image": "文生图",
+    "agent": "AI Agent", "ai-agent": "AI Agent",
+    "agentic-ai": "Agentic AI", "agentic-workflow": "Agent 工作流",
+    "rag": "RAG 检索增强", "retrieval-augmented-generation": "RAG",
+    "chatbot": "聊天机器人", "chat": "对话",
+    "mcp": "MCP 协议", "function-calling": "函数调用",
+    "copilot": "AI 编程助手", "ai-coding": "AI 编程",
+    "embedding": "向量嵌入", "vector-database": "向量数据库",
+    "inference": "推理引擎", "model-serving": "模型服务",
+    "fine-tuning": "微调", "lora": "LoRA 微调",
+    "quantization": "量化", "rlhf": "RLHF",
+    "multimodal": "多模态", "vlm": "视觉语言模型",
+    "automation": "自动化", "workflow": "工作流",
+    "low-code": "低代码", "no-code": "无代码",
+    "self-hosted": "自托管", "local-llm": "本地大模型",
+    "ollama": "Ollama 生态",
+}
+
+# 知名模型/产品名 (在 topics 中出现时可提及)
+_MODEL_NAMES: set[str] = {
+    "chatgpt", "gpt", "gpt-4", "gpt-4o", "claude", "gemini", "gemma",
+    "deepseek", "qwen", "llama", "mistral", "phi",
+    "stable-diffusion", "flux", "dall-e",
+}
+
+
+def _first_sentence(text: str, max_len: int = 160) -> str:
+    """提取第一句话, 在句号处截断."""
+    if not text:
+        return ""
+    # 判断是否主要是英文
+    ascii_ratio = sum(1 for c in text if c.isascii()) / max(len(text), 1)
+    is_english = ascii_ratio > 0.7
+    # 尝试在句号处截断 (含句末无空格的情况)
+    seps = [". ", "! ", "? "] if is_english else ["。", ". ", "! ", "！"]
+    for sep in seps:
+        idx = text.find(sep)
+        if 15 < idx < max_len:
+            return text[:idx + len(sep)].strip()
+    # 检查句号恰好在文末
+    if len(text) <= max_len and text.rstrip().endswith((".", "。", "!", "？", "?", "！")):
+        return text.strip()
+    # 没有句号 → 在 max_len 处按词截断
+    if len(text) > max_len:
+        cut = text[:max_len].rsplit(" ", 1)[0] if is_english else text[:max_len]
+        cut = cut.rstrip("，,;；、")
+        return cut + ("..." if is_english else "。")
+    # 短文本原样返回, 补句号
+    tail = text.rstrip("，,;；、")
+    if is_english:
+        return tail if tail.endswith((".", "!", "?")) else tail + "."
+    return tail if tail.endswith(("。", ".", "!", "！", "?", "？")) else tail + "。"
+
+
+def _template_summarize(r: dict, readme_extract: str) -> str:
+    """基于模板 + 元数据生成分析性总结 (无需 LLM).
+
+    结构: [组织归属 +] 核心描述(来自README) + 技术/领域标签 + 数据洞察(stars/forks/age)
+    """
+    name = r.get("full_name", "")
+    owner = name.split("/")[0].lower() if "/" in name else ""
+    desc_raw = readme_extract or r.get("description") or ""
+    lang = r.get("language") or ""
+    stars = r.get("stargazers_count", 0)
+    forks = r.get("forks_count", 0)
+    issues = r.get("open_issues_count", 0)
+    topics = r.get("topics", [])
+    today = r.get("today_stars", 0)
+    growth = r.get("_growth_rate", 0)
+    created = r.get("created_at", "")
+
+    parts: list[str] = []
+
+    # === 第 1 句: [组织] + 核心定位 ===
+    org = _KNOWN_ORGS.get(owner, "")
+    core_desc = _first_sentence(desc_raw)
+
+    if org and core_desc:
+        # 避免重复: 如果描述已包含组织名则不再前缀
+        if org.lower() in core_desc.lower():
+            parts.append(core_desc)
+        else:
+            parts.append(f"{org} 开源的 {core_desc}")
+    elif core_desc:
+        parts.append(core_desc)
+
+    # === 第 2 句: 技术 / 领域标签 ===
+    # 从 topics 中提取有意义的领域标签 (最多 3 个)
+    domain_tags: list[str] = []
+    model_tags: list[str] = []
+    for t in topics:
+        tl = t.lower()
+        if tl in _TOPIC_LABELS and _TOPIC_LABELS[tl] not in domain_tags:
+            domain_tags.append(_TOPIC_LABELS[tl])
+        if tl in _MODEL_NAMES:
+            model_tags.append(t.capitalize())
+    domain_tags = domain_tags[:3]
+    model_tags = model_tags[:4]
+
+    tech_parts: list[str] = []
+    if domain_tags:
+        tech_parts.append("涵盖" + " / ".join(domain_tags) + "等领域")
+    if model_tags:
+        tech_parts.append("支持 " + " / ".join(model_tags) + " 等模型")
+
+    if tech_parts:
+        parts.append("，".join(tech_parts) + "。")
+
+    # === 第 3 句: 数据洞察 (选择最有信息量的 1-2 个事实) ===
+    insights: list[str] = []
+
+    # Forks 洞察
+    if forks >= 20_000:
+        insights.append(f"{_fmt(forks)} forks 表明大量团队基于此项目进行二次开发")
+    elif stars > 0 and forks / max(stars, 1) > 0.3:
+        insights.append(f"fork 率超过 {forks/stars*100:.0f}%，二次开发需求旺盛")
+
+    # Issues 洞察
+    if issues >= 5_000:
+        insights.append(f"{_fmt(issues)} open issues 反映了极其活跃的社区需求")
+
+    # 今日 Stars
+    if today >= 500:
+        insights.append("今日热度爆发，关注度飙升")
+    elif today >= 100:
+        insights.append("近期关注度持续走高")
+
+    # 年龄 + 增长
+    if created:
+        try:
+            dt = datetime.fromisoformat(created.replace("Z", "+00:00"))
+            age_days = (NOW - dt).days
+            year = dt.year
+            if age_days <= 7:
+                insights.append(f"创建仅 {age_days} 天的全新项目，增速惊人")
+            elif age_days <= 30:
+                insights.append("创建不到一个月即快速崛起，值得关注")
+            elif age_days <= 180 and stars >= 5_000:
+                insights.append(f"创建于 {year} 年，半年内即快速崛起")
+            elif age_days > 365 * 3:
+                yrs = age_days // 365
+                insights.append(f"创建于 {year} 年，持续维护 {yrs} 年")
+        except (ValueError, TypeError):
+            pass
+
+    # 取最有信息量的 2 条
+    if insights:
+        parts.append("。".join(insights[:2]) + "。")
+
+    result = " ".join(parts)
+    # 清理多余标点
+    result = _re.sub(r"。。", "。", result)
+    result = _re.sub(r"\.。", "。", result)
+    result = _re.sub(r"\s+", " ", result).strip()
+    return result
+
+
+# ---------------------------------------------------------------------------
+# LLM 分析性总结
+# ---------------------------------------------------------------------------
+
+def _get_llm_client():
+    """创建 OpenAI 兼容的 LLM 客户端. 返回 (client, model) 或 (None, None)."""
+    llm_cfg = CFG.get("llm", {})
+    if not llm_cfg.get("enabled", False):
+        return None, None
+    try:
+        from openai import OpenAI
+    except ImportError:
+        console.print("  [yellow]openai 库未安装, 跳过 LLM 总结 (pip install openai)[/yellow]")
+        return None, None
+
+    api_key = llm_cfg.get("api_key") or os.environ.get("LLM_API_KEY") or ""
+    api_base = llm_cfg.get("api_base") or os.environ.get("LLM_API_BASE") or ""
+    model = llm_cfg.get("model") or os.environ.get("LLM_MODEL") or "gpt-4o-mini"
+
+    if not api_key:
+        console.print("  [yellow]未设置 LLM_API_KEY, 跳过 LLM 总结[/yellow]")
+        return None, None
+
+    kwargs: dict[str, Any] = {"api_key": api_key}
+    if api_base:
+        kwargs["base_url"] = api_base
+    return OpenAI(**kwargs), model
+
+
+def _build_repo_context(r: dict, readme_text: str) -> str:
+    """为单个仓库构建 LLM 输入上下文."""
+    name = r.get("full_name", "")
+    desc = r.get("description") or ""
+    lang = r.get("language") or "N/A"
+    stars = r.get("stargazers_count", 0)
+    forks = r.get("forks_count", 0)
+    issues = r.get("open_issues_count", 0)
+    topics = ", ".join(r.get("topics", []))
+    today = r.get("today_stars", 0)
+    growth = r.get("_growth_rate", 0)
+    score = r.get("_score", 0)
+    created = r.get("created_at", "")
+    readme_snippet = readme_text.strip()[:2000] if readme_text else "(无 README)"
+
+    return (
+        f"仓库: {name}\n"
+        f"GitHub 简介: {desc}\n"
+        f"语言: {lang} | Stars: {stars} | Forks: {forks} | Issues: {issues}\n"
+        f"Topics: {topics}\n"
+        f"今日 Stars: +{today} | 日增速: {growth:.1f} | 热度分: {score}\n"
+        f"创建时间: {created}\n"
+        f"README 节选:\n{readme_snippet}"
+    )
+
+
+def _llm_summarize_batch(repos: list[dict], readmes: dict[str, str],
+                          client, model: str) -> dict[str, str]:
+    """调用 LLM 批量生成分析性总结. 返回 {full_name: summary}."""
+    llm_cfg = CFG.get("llm", {})
+    temperature = llm_cfg.get("temperature", 0.3)
+    max_chars = llm_cfg.get("max_summary_chars", 200)
+    batch_size = llm_cfg.get("batch_size", 10)
+    results: dict[str, str] = {}
+
+    for start in range(0, len(repos), batch_size):
+        batch = repos[start:start + batch_size]
+        repo_blocks = []
+        for idx, r in enumerate(batch, 1):
+            name = r.get("full_name", "")
+            readme = readmes.get(name, "")
+            ctx = _build_repo_context(r, readme)
+            repo_blocks.append(f"--- 仓库 {idx}: ---\n{ctx}")
+
+        prompt = (
+            "你是一位 GitHub AI 仓库分析师。请为以下每个仓库撰写一段简洁的中文分析性总结。\n\n"
+            "要求:\n"
+            f"- 每个总结控制在 {max_chars} 字以内, 1-2 句话\n"
+            "- 不要照搬 README 或 GitHub 简介的原话, 要用自己的语言概括\n"
+            "- 结合 Stars/Forks/Topics/语言/创建时间等元数据进行分析\n"
+            "- 指出项目的核心定位、技术特色、行业影响力\n"
+            "- 如果是新项目(创建不久但增长快), 要特别指出\n"
+            "- 风格参考: 「Google 的开源机器学习框架，深度学习领域的行业标杆。C++ 为核心、Python 为接口，"
+            "涵盖分布式训练、推理部署全链路。75k forks 居全榜最高，反映其作为基础设施级项目被广泛二次开发。」\n\n"
+            "输出格式 (严格遵守, 每行一个仓库):\n"
+            "1. <总结内容>\n"
+            "2. <总结内容>\n"
+            "...\n\n"
+        )
+        prompt += "\n\n".join(repo_blocks)
+
+        try:
+            resp = client.chat.completions.create(
+                model=model,
+                messages=[{"role": "user", "content": prompt}],
+                temperature=temperature,
+                max_tokens=batch_size * 300,
+            )
+            reply = resp.choices[0].message.content or ""
+            # 解析编号输出: "1. xxx\n2. xxx\n..."
+            for line in reply.split("\n"):
+                line = line.strip()
+                m = _re.match(r"^(\d+)\.\s*(.+)", line)
+                if m:
+                    idx = int(m.group(1)) - 1
+                    summary = m.group(2).strip()
+                    if 0 <= idx < len(batch):
+                        name = batch[idx].get("full_name", "")
+                        results[name] = summary
+        except Exception as e:
+            console.print(f"  [yellow]LLM 批量总结失败: {e}[/yellow]")
+
+        if start + batch_size < len(repos):
+            time.sleep(1)
+
+    return results
+
+
 def enrich_descriptions(repos: list[dict], token: Optional[str] = None,
                         top_n: int = 30) -> None:
-    """为排名靠前的仓库抓取 README 摘要, 丰富 description 字段."""
+    """为排名靠前的仓库丰富描述.
+
+    优先级: LLM 分析性总结 > 模板拼接法 > README 摘录
+    """
     api_cfg = CFG.get("api", {})
     interval = api_cfg.get("request_interval", 2)
-    count = 0
-    for r in repos[:top_n]:
+    llm_cfg = CFG.get("llm", {})
+    max_readme = llm_cfg.get("max_readme_chars", 3000)
+    targets = repos[:top_n]
+
+    # 1. 抓取 README 原始内容
+    readmes: dict[str, str] = {}
+    for r in targets:
         name = r.get("full_name", "")
-        summary = _fetch_readme_summary(name, token)
-        if summary and len(summary) > len(r.get("description") or ""):
-            r["_readme_summary"] = summary
-            count += 1
-        time.sleep(interval * 0.5)  # 适度降速, 避免触发速率限制
-    if count:
-        console.print(f"    README 摘要: {count}/{min(len(repos), top_n)} 个仓库已丰富")
+        raw = _fetch_readme_raw(name, token, max_chars=max_readme)
+        if raw:
+            readmes[name] = raw
+        time.sleep(interval * 0.5)
+    console.print(f"    README 抓取: {len(readmes)}/{len(targets)} 个仓库")
+
+    # 2. 为所有仓库提取 README 摘录 (后续步骤会用到)
+    extracts: dict[str, str] = {}
+    for r in targets:
+        name = r.get("full_name", "")
+        raw = readmes.get(name, "")
+        if raw:
+            ext = _extract_summary(raw, repo_name=name)
+            if ext:
+                extracts[name] = ext
+
+    # 3. 尝试 LLM 分析性总结
+    client, model = _get_llm_client()
+    llm_count = 0
+    if client:
+        console.print(f"    LLM 总结中 (model={model})...")
+        summaries = _llm_summarize_batch(targets, readmes, client, model)
+        for r in targets:
+            name = r.get("full_name", "")
+            if name in summaries and summaries[name]:
+                r["_summary"] = summaries[name]
+                llm_count += 1
+        console.print(f"    LLM 总结: {llm_count}/{len(targets)} 个仓库")
+
+    # 4. 模板拼接法: 用 README 摘录 + 元数据生成分析性总结
+    tpl_count = 0
+    for r in targets:
+        if r.get("_summary"):
+            continue
+        name = r.get("full_name", "")
+        readme_ext = extracts.get(name, "")
+        summary = _template_summarize(r, readme_ext)
+        if summary and len(summary) > 20:
+            r["_summary"] = summary
+            tpl_count += 1
+    if tpl_count:
+        console.print(f"    模板总结: {tpl_count}/{len(targets)} 个仓库")
+
+    # 5. 最终回退: 用 README 摘录替换过短的 description
+    fallback_count = 0
+    for r in targets:
+        if r.get("_summary"):
+            continue
+        name = r.get("full_name", "")
+        ext = extracts.get(name, "")
+        if ext and len(ext) > len(r.get("description") or ""):
+            r["_readme_summary"] = ext
+            fallback_count += 1
+    if fallback_count:
+        console.print(f"    README 摘录回退: {fallback_count} 个仓库")
 
 
 # ---------------------------------------------------------------------------
@@ -589,28 +1164,21 @@ def enrich_descriptions(repos: list[dict], token: Optional[str] = None,
 
 
 def _compute_rank_changes(ranked: list[dict], prev_data: dict[str, dict],
-                          section_key: str) -> list[dict]:
+                          section_key: str) -> None:
     """与昨日报告对比, 计算排名变化."""
     if not prev_data:
-        return ranked
-
-    # 从历史数据重建旧排名
-    prev_ranks: dict[str, int] = {}
-    # prev_data 只有 repo summary, 需要用 rank 字段
-    for key, r in prev_data.items():
-        if "rank" in r:
-            prev_ranks[key] = r["rank"]
+        return
 
     for r in ranked:
         key = (r.get("full_name") or "").lower()
-        if key in prev_ranks:
-            old_rank = prev_ranks[key]
+        # BUG-2: 使用 section_key 前缀查找, 避免 core/app 排名冲突
+        lookup = f"{section_key}:{key}"
+        if lookup in prev_data:
+            old_rank = prev_data[lookup].get("rank", 0)
             new_rank = r.get("_rank", 0)
             r["_rank_change"] = old_rank - new_rank  # 正数=上升
         else:
             r["_rank_change"] = "new"
-
-    return ranked
 
 
 # ---------------------------------------------------------------------------
@@ -652,7 +1220,7 @@ def _print_ranked(title: str, repos: list[dict], top_n: int) -> None:
 
     console.print()
     for i, r in enumerate(repos[:top_n], 1):
-        desc = (r.get("_readme_summary") or r.get("description") or "N/A")[:72]
+        desc = (r.get("_summary") or r.get("_readme_summary") or r.get("description") or "N/A")[:72]
         age = ""
         created = r.get("created_at")
         if created:
@@ -675,22 +1243,24 @@ def _print_ranked(title: str, repos: list[dict], top_n: int) -> None:
 # ---------------------------------------------------------------------------
 
 def _repo_summary(r: dict, rank: int) -> dict:
-    return {
+    summary: dict[str, Any] = {
         "rank": rank,
         "full_name": r.get("full_name"),
         "description": r.get("_readme_summary") or r.get("description"),
+        "summary": r.get("_summary") or "",
         "language": r.get("language"),
         "stars": r.get("stargazers_count", 0),
         "forks": r.get("forks_count", 0),
         "issues": r.get("open_issues_count", 0),
         "today_stars": r.get("today_stars", 0),
-        "growth_rate_per_day": r.get("_growth_rate", 0),
+        "growth_score": r.get("_growth_rate", 0),
         "hotness_score": r.get("_score", 0),
         "created_at": r.get("created_at"),
         "topics": r.get("topics", []),
         "url": r.get("html_url") or f"https://github.com/{r.get('full_name', '')}",
         "rank_change": r.get("_rank_change"),
     }
+    return summary
 
 
 def _report_dir(base: str = "reports") -> tuple[str, str]:
@@ -730,9 +1300,11 @@ MD_STRINGS = {
         "scope": "采集范围: 核心 {core} / 应用 {app} (个人向)",
         "core_section": "AI/LLM 核心仓库 Top {n}",
         "app_section": "AI 个人应用 Top {n}",
-        "header": "| # | 仓库 | 语言 | Stars | 今日增 | 日增速 | 热度 | 简介 |",
-        "desc_note": "> *注: 「简介」列内容来自仓库作者原始描述，通常为英文。*",
+        "header": "| # | 仓库 | 语言 | Stars | 今日增 | 日增速 | 热度 | 总结 |",
+        "separator": "|--:|------|------|------:|------:|------:|-----:|------|",
+        "desc_note": "",
         "footer": "*报告由 [GitHub AI Radar](https://github.com/JuliaYu907/github-ai-radar) 自动生成*",
+        "insights_title": "趋势洞察",
     },
     "en": {
         "title": "GitHub AI Repo Trending Report",
@@ -742,11 +1314,107 @@ MD_STRINGS = {
         "scope": "Scope: Core {core} / App {app} (personal use)",
         "core_section": "AI/LLM Core Top {n}",
         "app_section": "AI Personal Apps Top {n}",
-        "header": "| # | Repo | Lang | Stars | +Today | Growth/d | Hot | Description |",
+        "header": "| # | Repo | Lang | Stars | +Today | Growth | Hot | Summary |",
+        "separator": "|--:|------|------|------:|------:|------:|-----:|---------|",
         "desc_note": "",
         "footer": "*Report generated by [GitHub AI Radar](https://github.com/JuliaYu907/github-ai-radar)*",
+        "insights_title": "Trend Insights",
     },
 }
+
+
+def _generate_trend_insights(core: list[dict], apps: list[dict], lang: str) -> list[str]:
+    """MISSING-7: 自动生成趋势洞察章节."""
+    all_repos = list(core) + list(apps)
+    if not all_repos:
+        return []
+    s = MD_STRINGS[lang]
+    lines: list[str] = []
+    lines.append(f"## {s['insights_title']}")
+    lines.append("")
+
+    insight_num = 1
+
+    # 1. 语言分布
+    lang_counts: dict[str, int] = {}
+    for r in all_repos:
+        rl = r.get("language") or "Other"
+        lang_counts[rl] = lang_counts.get(rl, 0) + 1
+    top_langs = sorted(lang_counts.items(), key=lambda x: x[1], reverse=True)[:5]
+    if top_langs:
+        if lang == "zh":
+            lang_str = "、".join(f"{l}({c})" for l, c in top_langs)
+            lines.append(f"{insight_num}. **语言分布**: 上榜项目语言前五: {lang_str}")
+        else:
+            lang_str = ", ".join(f"{l}({c})" for l, c in top_langs)
+            lines.append(f"{insight_num}. **Language Distribution**: Top languages: {lang_str}")
+        insight_num += 1
+
+    # 2. 主题热度
+    topic_counts: dict[str, int] = {}
+    for r in all_repos:
+        for tp in r.get("topics", []):
+            tl = tp.lower()
+            if tl in _TOPIC_LABELS:
+                label = _TOPIC_LABELS[tl]
+                topic_counts[label] = topic_counts.get(label, 0) + 1
+    top_topics = sorted(topic_counts.items(), key=lambda x: x[1], reverse=True)[:6]
+    if top_topics:
+        if lang == "zh":
+            topic_str = "、".join(f"{t}({c})" for t, c in top_topics)
+            lines.append(f"{insight_num}. **热门领域**: {topic_str}")
+        else:
+            topic_str = ", ".join(f"{t}({c})" for t, c in top_topics)
+            lines.append(f"{insight_num}. **Hot Topics**: {topic_str}")
+        insight_num += 1
+
+    # 3. 新项目涌现
+    new_repos: list[str] = []
+    for r in all_repos:
+        created = r.get("created_at")
+        if created:
+            try:
+                dt = datetime.fromisoformat(created.replace("Z", "+00:00"))
+                if (NOW - dt).days <= 7:
+                    new_repos.append(r.get("full_name", "").split("/")[-1])
+            except (ValueError, TypeError):
+                pass
+    if new_repos:
+        if lang == "zh":
+            names = "、".join(new_repos[:5])
+            lines.append(f"{insight_num}. **新项目涌现**: 本期有 {len(new_repos)} 个创建不到一周的全新项目上榜 ({names})")
+        else:
+            names = ", ".join(new_repos[:5])
+            lines.append(f"{insight_num}. **New Projects**: {len(new_repos)} projects created within the last week ({names})")
+        insight_num += 1
+
+    # 4. 今日最热
+    hottest = max(all_repos, key=lambda x: x.get("today_stars", 0), default=None)
+    if hottest and hottest.get("today_stars", 0) > 0:
+        name = hottest.get("full_name", "")
+        today = hottest.get("today_stars", 0)
+        if lang == "zh":
+            lines.append(f"{insight_num}. **今日最热**: [{name}](https://github.com/{name}) 今日获得 +{_fmt(today)} stars")
+        else:
+            lines.append(f"{insight_num}. **Hottest Today**: [{name}](https://github.com/{name}) gained +{_fmt(today)} stars today")
+        insight_num += 1
+
+    # 5. 大型项目活跃度
+    big_active = [r for r in all_repos
+                  if r.get("stargazers_count", 0) > 50000 and r.get("today_stars", 0) > 50]
+    if big_active:
+        if lang == "zh":
+            names = "、".join(r.get("full_name", "").split("/")[-1] for r in big_active[:5])
+            lines.append(f"{insight_num}. **大型项目活跃**: {names} 等成熟项目持续保持高活跃度")
+        else:
+            names = ", ".join(r.get("full_name", "").split("/")[-1] for r in big_active[:5])
+            lines.append(f"{insight_num}. **Active Established Projects**: {names} continue to maintain high activity")
+        insight_num += 1
+
+    lines.append("")
+    lines.append("---")
+    lines.append("")
+    return lines
 
 
 def _build_md_lines(core: list[dict], apps: list[dict], lang: str,
@@ -777,33 +1445,39 @@ def _build_md_lines(core: list[dict], apps: list[dict], lang: str,
         lines.append(f"## {section_title}")
         lines.append("")
         lines.append(s["header"])
-        lines.append("|--:|------|------|------:|-------:|-------:|-----:|------|")
+        lines.append(s["separator"])
         for i, r in enumerate(repos[:top_n], 1):
             name = r.get("full_name", "")
             url = r.get("html_url") or f"https://github.com/{name}"
             rlang = (r.get("language") or "-")[:10]
             stars = _fmt(r.get("stargazers_count", 0))
             today = r.get("today_stars", 0)
-            today_s = f"+{_fmt(today)}" if today else "-"
+            today_str = f"+{_fmt(today)}" if today else "-"
             growth = r.get("_growth_rate", 0)
-            growth_s = f"{_fmt(growth)}/d" if growth else "-"
+            growth_str = f"{_fmt(growth)}/d" if growth else "-"
             score = r.get("_score", 0)
-            desc = (r.get("_readme_summary") or r.get("description") or "")[:120]
+            summary = r.get("_summary") or r.get("_readme_summary") or r.get("description") or ""
+            # MISSING-9: NEW 标签
+            new_badge = ""
             created = r.get("created_at")
             if created:
                 try:
                     dt = datetime.fromisoformat(created.replace("Z", "+00:00"))
-                    if (NOW - dt).days < 7:
-                        desc = f"**NEW** {desc}"
+                    if (NOW - dt).days <= 7:
+                        new_badge = "**NEW** "
                 except (ValueError, TypeError):
                     pass
-            lines.append(f"| {i} | [{name}]({url}) | {rlang} | {stars} | {today_s} | {growth_s} | {score} | {desc} |")
+            lines.append(f"| {i} | {new_badge}[{name}]({url}) | {rlang} | {stars} | {today_str} | {growth_str} | {score} | {summary} |")
         lines.append("")
         lines.append("---")
         lines.append("")
 
     _table(s["core_section"].format(n=core_n), core, core_n)
     _table(s["app_section"].format(n=app_n), apps, app_n)
+
+    # MISSING-7: 趋势洞察
+    insight_lines = _generate_trend_insights(core[:core_n], apps[:app_n], lang)
+    lines.extend(insight_lines)
 
     lines.append(s["footer"])
     lines.append("")
@@ -905,6 +1579,10 @@ def main() -> None:
 
     # 3. 合并 & 计算增长指标
     all_repos = _merge(api_repos, trending)
+
+    # BUG-3: 为仅来自 Trending 的仓库补充完整元数据
+    _enrich_trending_metadata(all_repos, token=args.token)
+
     for r in all_repos:
         r["_growth_rate"] = _compute_growth_rate(r, prev_data)
         r["_score"] = hotness_score(r)
@@ -939,14 +1617,18 @@ def main() -> None:
     for i, r in enumerate(app_list):
         r["_rank"] = i + 1
 
+    # BUG-1: 计算排名变化
+    _compute_rank_changes(core_list, prev_data, "ai_llm_core_top10")
+    _compute_rank_changes(app_list, prev_data, "ai_app_top20")
+
     console.print(f"    分类完成: 核心 {len(core_list)} / 应用 {len(app_list)} (个人向, 已去重)")
 
     if not core_list and not app_list:
         console.print("[red]未获取到任何 AI 仓库数据。[/red]")
         sys.exit(1)
 
-    # 5. 抓取 README 摘要 (丰富简介)
-    console.print("[cyan]>>> [5/6] 抓取 README 摘要...[/cyan]")
+    # 5. 抓取 README & LLM 分析性总结
+    console.print("[cyan]>>> [5/6] 抓取 README & 生成分析性总结...[/cyan]")
     core_n = CFG.get("rankings", {}).get("core_top_n", 10)
     app_n = CFG.get("rankings", {}).get("app_top_n", 20)
     enrich_descriptions(core_list, token=args.token, top_n=core_n)
