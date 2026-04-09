@@ -569,7 +569,8 @@ const LANG_COLORS = {
 function fmt(n){if(n==null)return'-';if(n>=1e6)return(n/1e6).toFixed(1)+'M';if(n>=1e3)return(n/1e3).toFixed(1)+'k';return n.toLocaleString();}
 function fmtTime(s){try{var d=new Date(s);return d.toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit',timeZoneName:'short'});}catch(e){return s;}}
 function isNew(c){if(!c)return false;return(new Date()-new Date(c))/(864e5)<7;}
-function trunc(d,m){if(!d)return t('no_desc');return d.length>m?d.slice(0,m).trim()+'...':d;}
+function stripMd(s){if(!s)return '';s=s.replace(/\[([^\]]+)\]\([^)]+\)/g,'$1');s=s.replace(/<[^>]+>/g,'');s=s.replace(/[*_`~>]/g,'');return s.replace(/\s+/g,' ').trim();}
+function trunc(d,m){if(!d)return t('no_desc');d=stripMd(d);return d.length>m?d.slice(0,m).trim()+'...':d;}
 function langColor(l){return LANG_COLORS[l]||'#8b949e';}
 function rankBadge(c){
   if(c==null||c===undefined)return'';var v=String(c).toLowerCase();
@@ -582,19 +583,29 @@ function rankBadge(c){
 }
 var STAR='<svg viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.75.75 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z" fill="#e3b341"/></svg>';
 var UP='<svg viewBox="0 0 16 16"><path d="M4.427 9.573l3.396-3.396a.25.25 0 01.354 0l3.396 3.396a.25.25 0 01-.177.427H4.604a.25.25 0 01-.177-.427z" fill="#3fb950"/></svg>';
+var _hotnessThreshold=12;
+function computeHotnessThreshold(data){
+  var all=[].concat(data.ai_llm_core_top10||[],data.ai_app_top20||[]);
+  var scores=all.map(function(r){return r.hotness_score||0;}).filter(function(s){return s>0;}).sort(function(a,b){return a-b;});
+  if(!scores.length)return 12;
+  var median=scores[Math.floor(scores.length/2)];
+  var range=scores[scores.length-1]-scores[0];
+  return Math.round((median+range*0.15)*10)/10;
+}
 function card(r,i){
-  var hc=r.hotness_score>=8?'hotness-high':'';
+  var hc=r.hotness_score>=_hotnessThreshold?'hotness-high':'';
+  var gs=r.growth_score||r.growth_rate_per_day||0;
   var p=(r.full_name||'').split('/'),o=p[0]||'',nm=p[1]||r.full_name;
   return'<article class="card" data-rank="'+r.rank+'" style="animation-delay:'+(i*60)+'ms;">'+
     '<div class="card-rank">#'+r.rank+'</div>'+
     '<div class="card-top"><div class="card-badges">'+(isNew(r.created_at)?'<span class="badge-new">'+t('new_badge')+'</span>':'')+rankBadge(r.rank_change)+'</div></div>'+
     '<a href="'+(r.url||'#')+'" target="_blank" rel="noopener noreferrer" class="card-name"><span class="owner">'+o+' /</span> '+nm+'</a>'+
-    '<p class="card-desc">'+trunc(r.description,120)+'</p>'+
+    '<p class="card-desc">'+trunc(r.summary||r.description,120)+'</p>'+
     '<div class="card-stats">'+
     (r.language?'<span class="lang-badge"><span class="lang-dot" style="background:'+langColor(r.language)+'"></span>'+r.language+'</span><span class="stat-divider"></span>':'')+
     '<span class="stat stat-stars">'+STAR+' '+fmt(r.stars)+'</span>'+
     (r.today_stars?'<span class="stat-divider"></span><span class="stat stat-today">'+UP+' +'+fmt(r.today_stars)+' '+t('today')+'</span>':'')+
-    (r.growth_rate_per_day?'<span class="stat-divider"></span><span class="stat stat-growth">&#x1F4C8; '+r.growth_rate_per_day.toFixed(1)+t('per_day')+'</span>':'')+
+    (gs?'<span class="stat-divider"></span><span class="stat stat-growth">&#x1F4C8; '+gs.toFixed(1)+t('per_day')+'</span>':'')+
     '<span class="hotness '+hc+'"><span class="fire">&#x1F525;</span> '+(r.hotness_score!=null?r.hotness_score.toFixed(1):'-')+'</span>'+
     '</div></article>';
 }
@@ -610,13 +621,12 @@ function observe(){
   });},{threshold:0.05,rootMargin:'0px 0px -30px 0px'});
   cards.forEach(function(c){obs.observe(c);});
 }
-function loadData(){
-  var main=document.getElementById('main-content'),ft=document.getElementById('footer'),ts=document.getElementById('timestamp-text');
-  main.innerHTML='<div class="loading-state"><div class="loading-spinner"></div><p class="loading-text">'+t('loading')+'</p></div>';
-  ft.style.display='none';
-  fetch('./data/latest.json').then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();}).then(function(d){
+var _cachedData=null;
+function renderData(d){
+    var main=document.getElementById('main-content'),ft=document.getElementById('footer'),ts=document.getElementById('timestamp-text');
     ts.textContent=d.generated_at?'Updated '+fmtTime(d.generated_at):'Data loaded';
     document.getElementById('methodology-text').textContent=d.methodology||'Ranked by composite hotness score.';
+    _hotnessThreshold=computeHotnessThreshold(d);
     var h='';
     h+=section(t('core_title'),'&#x1F9E0;',t('top')+' '+(d.ai_llm_core_top10?d.ai_llm_core_top10.length:'10'),d.ai_llm_core_top10);
     h+=section(t('app_title'),'&#x1F680;',t('top')+' '+(d.ai_app_top20?d.ai_app_top20.length:'20'),d.ai_app_top20);
@@ -624,6 +634,15 @@ function loadData(){
     main.innerHTML=h;ft.style.display='block';
     applyStaticLang();
     requestAnimationFrame(function(){observe();});
+}
+function loadData(){
+  var main=document.getElementById('main-content'),ft=document.getElementById('footer');
+  if(_cachedData){renderData(_cachedData);return;}
+  main.innerHTML='<div class="loading-state"><div class="loading-spinner"></div><p class="loading-text">'+t('loading')+'</p></div>';
+  ft.style.display='none';
+  fetch('./data/latest.json').then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();}).then(function(d){
+    _cachedData=d;
+    renderData(d);
   }).catch(function(err){
     console.error(err);
     main.innerHTML='<div class="error-state"><div class="error-icon">&#x1F50D;</div><h2 class="error-title">'+t('error_title')+'</h2><p class="error-message">'+t('error_msg')+'<br><span style="font-family:\'JetBrains Mono\',monospace;font-size:0.8rem;color:#6e7681;">'+err.message+'</span><br><br>'+t('error_local')+':<br><code style="background:#21262d;padding:2px 8px;border-radius:4px;font-size:0.8rem;">python -m http.server 8000</code></p><button class="error-retry" onclick="loadData()">&#x1F504; '+t('error_retry')+'</button></div>';

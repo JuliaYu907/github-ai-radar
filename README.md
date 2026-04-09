@@ -91,7 +91,7 @@ python -m http.server 8000 -d docs
 |----------|-------------|---------|
 | `--token` | GitHub Personal Access Token to increase API rate limit | Env variable `GITHUB_TOKEN` |
 | `--no-verify` | Skip SSL certificate verification for proxy/VPN environments | Disabled |
-| `--output` | Base path for report output (without extension; generates both .json and .md) | `reports/YYYY-MM-DD/ai_trending_YYYY-MM-DD` |
+| `--output` | Base path for report output (without extension; generates both .json and .md) | `reports/YYYY-MM-DD/github_ai_hot_repo_YYYY-MM-DD` |
 | `--config` | Path to configuration file | `config.yaml` |
 
 ## Configuration
@@ -130,6 +130,28 @@ output:
 ```
 
 See [`config.yaml`](config.yaml) for all configuration options and classification keywords.
+
+### LLM Summaries (Optional)
+
+The project can generate analytical summaries for each repo using an OpenAI-compatible LLM. To enable:
+
+1. Set environment variables or edit `config.yaml`:
+   ```bash
+   export LLM_API_KEY=sk-xxxxxxxxxxxx
+   export LLM_API_BASE=https://api.openai.com/v1   # optional
+   export LLM_MODEL=gpt-4o-mini                     # optional
+   ```
+
+2. Or configure in `config.yaml`:
+   ```yaml
+   llm:
+     enabled: true
+     api_key: ""        # or set LLM_API_KEY env var
+     api_base: ""       # OpenAI-compatible endpoint
+     model: "gpt-4o-mini"
+   ```
+
+Without LLM configuration, the system falls back to template-based summaries using README extraction + metadata analysis.
 
 ## Output Examples
 
@@ -170,9 +192,9 @@ github-ai-radar/
 │       └── latest.json
 ├── reports/                           ← Daily reports (auto-generated)
 │   └── 2026-04-08/
-│       ├── ai_trending_2026-04-08_en.md
-│       ├── ai_trending_2026-04-08_zh.md
-│       └── ai_trending_2026-04-08.json
+│       ├── github_ai_hot_repo_2026-04-08_en.md
+│       ├── github_ai_hot_repo_2026-04-08_zh.md
+│       └── github_ai_hot_repo_2026-04-08.json
 └── .github/workflows/
     ├── daily.yml                      ← Daily auto-run
     └── pages.yml                      ← GitHub Pages auto-deploy

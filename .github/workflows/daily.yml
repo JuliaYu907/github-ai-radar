@@ -31,7 +31,14 @@ jobs:
       - name: Generate report
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
-        run: python github_trending.py
+          LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
+          LLM_API_BASE: ${{ secrets.LLM_API_BASE }}
+          LLM_MODEL: ${{ secrets.LLM_MODEL }}
+        run: python github_trending.py || (echo "First attempt failed, retrying..." && sleep 30 && python github_trending.py)
+
+      - name: Cleanup old reports
+        run: |
+          find reports/ -maxdepth 1 -type d -name "20*" -mtime +30 -exec rm -rf {} + 2>/dev/null || true
 
       - name: Commit and push report
         run: |
