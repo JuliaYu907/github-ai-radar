@@ -24,6 +24,7 @@ import re as _re
 import shutil
 import sys
 import time
+from dataclasses import dataclass, field
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Optional
@@ -114,20 +115,26 @@ def load_config(path: Optional[str] = None) -> dict:
 
 
 # ---------------------------------------------------------------------------
-# 全局状态 (在 main 中初始化)
+# 运行上下文 (替代全局可变状态, 便于测试与复用)
 # ---------------------------------------------------------------------------
-SSL_VERIFY: bool = True
-NOW: datetime = datetime.now(timezone.utc)
-CFG: dict = {}
+
+@dataclass
+class RunContext:
+    """运行时上下文, 持有所有可变的全局状态."""
+    ssl_verify: bool = True
+    now: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
+    cfg: dict = field(default_factory=dict)
+
+ctx = RunContext()
 
 # ---------------------------------------------------------------------------
 # 分类逻辑
 # ---------------------------------------------------------------------------
 
 
-def _get_sets(section: str) -> dict:
+def _get_sets() -> dict:
     """从配置中获取分类关键词集合."""
-    cls = CFG.get("classification", {})
+    cls = ctx.cfg.get("classification", {})
     return {
         "core_topics": set(cls.get("core_topics", [])),
         "core_kw_desc": cls.get("core_keywords_in_desc", []),
@@ -189,7 +196,7 @@ def _headers(token: Optional[str] = None) -> dict:
 
 def _search(query: str, token: Optional[str] = None) -> list[dict]:
     """搜索仓库, 支持指数退避重试."""
-    api_cfg = CFG.get("api", {})
+    api_cfg = ctx.cfg.get("api", {})
     pages = api_cfg.get("pages_per_query", 2)
     per_page = api_cfg.get("per_page", 100)
     interval = api_cfg.get("request_interval", 2)
@@ -205,7 +212,7 @@ def _search(query: str, token: Optional[str] = None) -> list[dict]:
         for attempt in range(max_retries):
             try:
                 resp = requests.get(SEARCH_URL, headers=headers, params=params,
-                                    timeout=15, verify=SSL_VERIFY)
+                                    timeout=15, verify=ctx.ssl_verify)
                 if resp.status_code == 403:
                     wait = base_sleep * (2 ** attempt)
                     # 尝试从 header 获取精确等待时间
@@ -246,11 +253,11 @@ def fetch_ai_repos(token: Optional[str] = None) -> list[dict]:
       A) pushed:>time_window + topic:X  → 活跃的已有项目
       B) created:>time_window + AI 关键词 → 新创建且快速增长的项目
     """
-    hours = CFG.get("time_window_hours", 48)
-    d2 = (NOW - timedelta(hours=hours)).strftime("%Y-%m-%d")
+    hours = ctx.cfg.get("time_window_hours", 48)
+    d2 = (ctx.now - timedelta(hours=hours)).strftime("%Y-%m-%d")
 
     # A: 主力查询 — 各 AI topic 下最近有 push 的项目
-    search_topics = CFG.get("search_topics", [
+    search_topics = ctx.cfg.get("search_topics", [
         "llm", "machine-learning", "deep-learning", "ai-agent",
         "generative-ai", "chatbot", "rag", "langchain",
         "transformer", "diffusion", "nlp", "computer-vision",
@@ -259,7 +266,7 @@ def fetch_ai_repos(token: Optional[str] = None) -> list[dict]:
     topic_queries = [f"pushed:>{d2} topic:{t}" for t in search_topics]
 
     # B: 新项目爆发查询
-    min_stars = CFG.get("new_project_min_stars", {})
+    min_stars = ctx.cfg.get("new_project_min_stars", {})
     new_queries = [
         f"created:>{d2} stars:>{min_stars.get('ai', 50)} topic:ai",
         f"created:>{d2} stars:>{min_stars.get('llm', 50)} topic:llm",
@@ -317,7 +324,7 @@ def fetch_trending() -> list[dict]:
     try:
         resp = requests.get(
             TRENDING_URL, params={"since": "daily"},
-            headers={"User-Agent": "Mozilla/5.0"}, timeout=15, verify=SSL_VERIFY,
+            headers={"User-Agent": "Mozilla/5.0"}, timeout=15, verify=ctx.ssl_verify,
         )
         resp.raise_for_status()
     except requests.RequestException as exc:
@@ -392,12 +399,12 @@ def _parse_int(text: str) -> int:
 
 def _load_previous_report() -> dict[str, dict]:
     """加载前一天的 JSON 报告, 返回 {section:full_name_lower: repo_summary}."""
-    reports_dir = Path(CFG.get("output", {}).get("reports_dir", "reports"))
+    reports_dir = Path(ctx.cfg.get("output", {}).get("reports_dir", "reports"))
     if not reports_dir.exists():
         return {}
 
     # 查找最近的报告目录 (排除今天)
-    today_str = NOW.strftime("%Y-%m-%d")
+    today_str = ctx.now.strftime("%Y-%m-%d")
     date_dirs = sorted(
         [d for d in reports_dir.iterdir() if d.is_dir() and d.name != today_str and d.name[:4].isdigit()],
         reverse=True,
@@ -466,7 +473,7 @@ def _compute_growth_rate(repo: dict, prev_data: dict[str, dict]) -> float:
         return 0.0
     try:
         dt = datetime.fromisoformat(created.replace("Z", "+00:00"))
-        age_days = max((NOW - dt).total_seconds() / 86400, 0.5)
+        age_days = max((ctx.now - dt).total_seconds() / 86400, 0.5)
         return round(stars / age_days, 1)
     except (ValueError, TypeError):
         return 0.0
@@ -480,7 +487,7 @@ def hotness_score(repo: dict) -> float:
       - recency_bonus        * weight_recency (push 时间越近越高)
       - log2(total_stars)    * weight_base    (基础影响力, 权重压低)
     """
-    scoring = CFG.get("scoring", {})
+    scoring = ctx.cfg.get("scoring", {})
     w_today = scoring.get("today_stars_weight", 0.40)
     w_growth = scoring.get("growth_rate_weight", 0.30)
     w_recency = scoring.get("recency_weight", 0.15)
@@ -496,7 +503,7 @@ def hotness_score(repo: dict) -> float:
     if pa:
         try:
             dt = datetime.fromisoformat(pa.replace("Z", "+00:00"))
-            hours_ago = (NOW - dt).total_seconds() / 3600
+            hours_ago = (ctx.now - dt).total_seconds() / 3600
             recency = max(0, 10 - hours_ago * 0.2)
         except (ValueError, TypeError):
             pass
@@ -537,7 +544,7 @@ def _fetch_repo_metadata(full_name: str, token: Optional[str] = None) -> Optiona
     """通过 GitHub API 获取仓库完整元数据."""
     url = f"https://api.github.com/repos/{full_name}"
     try:
-        resp = requests.get(url, headers=_headers(token), timeout=10, verify=SSL_VERIFY)
+        resp = requests.get(url, headers=_headers(token), timeout=10, verify=ctx.ssl_verify)
         if resp.status_code == 200:
             return resp.json()
     except requests.RequestException:
@@ -547,7 +554,7 @@ def _fetch_repo_metadata(full_name: str, token: Optional[str] = None) -> Optiona
 
 def _enrich_trending_metadata(repos: list[dict], token: Optional[str] = None) -> None:
     """BUG-3: 为仅来自 Trending 的仓库补充完整元数据 (created_at, topics, pushed_at 等)."""
-    api_cfg = CFG.get("api", {})
+    api_cfg = ctx.cfg.get("api", {})
     interval = api_cfg.get("request_interval", 2)
     count = 0
     for r in repos:
@@ -763,7 +770,7 @@ def _fetch_readme_raw(full_name: str, token: Optional[str] = None,
     """通过 GitHub API 获取仓库 README 原始内容 (截断到 max_chars)."""
     url = f"https://api.github.com/repos/{full_name}/readme"
     try:
-        resp = requests.get(url, headers=_headers(token), timeout=10, verify=SSL_VERIFY)
+        resp = requests.get(url, headers=_headers(token), timeout=10, verify=ctx.ssl_verify)
         if resp.status_code != 200:
             return ""
         data = resp.json()
@@ -799,6 +806,21 @@ _KNOWN_ORGS: dict[str, str] = {
     "significant-gravitas": "Significant Gravitas",
 }
 
+_KNOWN_ORGS_EN: dict[str, str] = {
+    "google": "Google", "tensorflow": "Google", "pytorch": "Meta",
+    "meta": "Meta", "facebook": "Meta", "facebookresearch": "Meta Research",
+    "microsoft": "Microsoft", "azure": "Microsoft", "openai": "OpenAI",
+    "huggingface": "Hugging Face", "alibaba": "Alibaba", "ant-design": "Ant Group",
+    "tencent": "Tencent", "baidu": "Baidu", "bytedance": "ByteDance",
+    "apple": "Apple", "aws": "AWS", "amazon": "Amazon",
+    "nvidia": "NVIDIA", "intel": "Intel", "ibm": "IBM",
+    "deepmind": "DeepMind", "anthropic": "Anthropic",
+    "ray-project": "Anyscale", "langchain-ai": "LangChain",
+    "langgenius": "Dify Team", "lobehub": "LobeHub Team",
+    "infiniflow": "InfiniFlow", "comfy-org": "ComfyUI Team",
+    "significant-gravitas": "Significant Gravitas",
+}
+
 # 主题 -> 中文领域标签 (用于自动归类)
 _TOPIC_LABELS: dict[str, str] = {
     "machine-learning": "机器学习", "deep-learning": "深度学习",
@@ -827,6 +849,35 @@ _TOPIC_LABELS: dict[str, str] = {
     "low-code": "低代码", "no-code": "无代码",
     "self-hosted": "自托管", "local-llm": "本地大模型",
     "ollama": "Ollama 生态",
+}
+
+_TOPIC_LABELS_EN: dict[str, str] = {
+    "machine-learning": "Machine Learning", "deep-learning": "Deep Learning",
+    "llm": "LLM", "llms": "LLM",
+    "large-language-model": "LLM",
+    "transformer": "Transformer", "transformers": "Transformer",
+    "nlp": "NLP", "natural-language-processing": "NLP",
+    "computer-vision": "Computer Vision", "cv": "Computer Vision",
+    "speech-recognition": "Speech Recognition",
+    "reinforcement-learning": "Reinforcement Learning",
+    "generative-ai": "Generative AI", "genai": "Generative AI",
+    "diffusion": "Diffusion Model", "stable-diffusion": "Stable Diffusion",
+    "text-to-image": "Text-to-Image",
+    "agent": "AI Agent", "ai-agent": "AI Agent",
+    "agentic-ai": "Agentic AI", "agentic-workflow": "Agent Workflow",
+    "rag": "RAG", "retrieval-augmented-generation": "RAG",
+    "chatbot": "Chatbot", "chat": "Chat",
+    "mcp": "MCP", "function-calling": "Function Calling",
+    "copilot": "AI Coding Assistant", "ai-coding": "AI Coding",
+    "embedding": "Embedding", "vector-database": "Vector Database",
+    "inference": "Inference Engine", "model-serving": "Model Serving",
+    "fine-tuning": "Fine-tuning", "lora": "LoRA Fine-tuning",
+    "quantization": "Quantization", "rlhf": "RLHF",
+    "multimodal": "Multimodal", "vlm": "Vision-Language Model",
+    "automation": "Automation", "workflow": "Workflow",
+    "low-code": "Low-Code", "no-code": "No-Code",
+    "self-hosted": "Self-hosted", "local-llm": "Local LLM",
+    "ollama": "Ollama Ecosystem",
 }
 
 # 知名模型/产品名 (在 topics 中出现时可提及)
@@ -865,15 +916,16 @@ def _first_sentence(text: str, max_len: int = 160) -> str:
     return tail if tail.endswith(("。", ".", "!", "！", "?", "？")) else tail + "。"
 
 
-def _template_summarize(r: dict, readme_extract: str) -> str:
+def _template_summarize(r: dict, readme_extract: str, lang: str = "zh") -> str:
     """基于模板 + 元数据生成分析性总结 (无需 LLM).
 
     结构: [组织归属 +] 核心描述(来自README) + 技术/领域标签 + 数据洞察(stars/forks/age)
     """
+    is_en = (lang == "en")
     name = r.get("full_name", "")
     owner = name.split("/")[0].lower() if "/" in name else ""
     desc_raw = readme_extract or r.get("description") or ""
-    lang = r.get("language") or ""
+    lang_prog = r.get("language") or ""
     stars = r.get("stargazers_count", 0)
     forks = r.get("forks_count", 0)
     issues = r.get("open_issues_count", 0)
@@ -885,85 +937,121 @@ def _template_summarize(r: dict, readme_extract: str) -> str:
     parts: list[str] = []
 
     # === 第 1 句: [组织] + 核心定位 ===
-    org = _KNOWN_ORGS.get(owner, "")
+    orgs = _KNOWN_ORGS_EN if is_en else _KNOWN_ORGS
+    org = orgs.get(owner, "")
     core_desc = _first_sentence(desc_raw)
 
     if org and core_desc:
-        # 避免重复: 如果描述已包含组织名则不再前缀
         if org.lower() in core_desc.lower():
             parts.append(core_desc)
         else:
-            parts.append(f"{org} 开源的 {core_desc}")
+            if is_en:
+                parts.append(f"Open-sourced by {org}. {core_desc}")
+            else:
+                parts.append(f"{org} 开源的 {core_desc}")
     elif core_desc:
         parts.append(core_desc)
 
     # === 第 2 句: 技术 / 领域标签 ===
-    # 从 topics 中提取有意义的领域标签 (最多 3 个)
+    topic_labels = _TOPIC_LABELS_EN if is_en else _TOPIC_LABELS
     domain_tags: list[str] = []
     model_tags: list[str] = []
-    for t in topics:
-        tl = t.lower()
-        if tl in _TOPIC_LABELS and _TOPIC_LABELS[tl] not in domain_tags:
-            domain_tags.append(_TOPIC_LABELS[tl])
+    for tp in topics:
+        tl = tp.lower()
+        if tl in topic_labels and topic_labels[tl] not in domain_tags:
+            domain_tags.append(topic_labels[tl])
         if tl in _MODEL_NAMES:
-            model_tags.append(t.capitalize())
+            model_tags.append(tp.capitalize())
     domain_tags = domain_tags[:3]
     model_tags = model_tags[:4]
 
     tech_parts: list[str] = []
     if domain_tags:
-        tech_parts.append("涵盖" + " / ".join(domain_tags) + "等领域")
+        if is_en:
+            tech_parts.append("covers " + " / ".join(domain_tags))
+        else:
+            tech_parts.append("涵盖" + " / ".join(domain_tags) + "等领域")
     if model_tags:
-        tech_parts.append("支持 " + " / ".join(model_tags) + " 等模型")
+        if is_en:
+            tech_parts.append("supports " + " / ".join(model_tags))
+        else:
+            tech_parts.append("支持 " + " / ".join(model_tags) + " 等模型")
 
     if tech_parts:
-        parts.append("，".join(tech_parts) + "。")
+        if is_en:
+            parts.append(", ".join(tech_parts) + ".")
+        else:
+            parts.append("，".join(tech_parts) + "。")
 
     # === 第 3 句: 数据洞察 (选择最有信息量的 1-2 个事实) ===
     insights: list[str] = []
 
-    # Forks 洞察
     if forks >= 20_000:
-        insights.append(f"{_fmt(forks)} forks 表明大量团队基于此项目进行二次开发")
+        if is_en:
+            insights.append(f"{_fmt(forks)} forks indicate widespread adoption and secondary development")
+        else:
+            insights.append(f"{_fmt(forks)} forks 表明大量团队基于此项目进行二次开发")
     elif stars > 0 and forks / max(stars, 1) > 0.3:
-        insights.append(f"fork 率超过 {forks/stars*100:.0f}%，二次开发需求旺盛")
+        pct = forks / stars * 100
+        if is_en:
+            insights.append(f"fork ratio exceeds {pct:.0f}%, indicating strong secondary development demand")
+        else:
+            insights.append(f"fork 率超过 {pct:.0f}%，二次开发需求旺盛")
 
-    # Issues 洞察
     if issues >= 5_000:
-        insights.append(f"{_fmt(issues)} open issues 反映了极其活跃的社区需求")
+        if is_en:
+            insights.append(f"{_fmt(issues)} open issues reflect an extremely active community")
+        else:
+            insights.append(f"{_fmt(issues)} open issues 反映了极其活跃的社区需求")
 
-    # 今日 Stars
     if today >= 500:
-        insights.append("今日热度爆发，关注度飙升")
+        if is_en:
+            insights.append("exploding in popularity today")
+        else:
+            insights.append("今日热度爆发，关注度飙升")
     elif today >= 100:
-        insights.append("近期关注度持续走高")
+        if is_en:
+            insights.append("gaining significant attention recently")
+        else:
+            insights.append("近期关注度持续走高")
 
-    # 年龄 + 增长
     if created:
         try:
             dt = datetime.fromisoformat(created.replace("Z", "+00:00"))
-            age_days = (NOW - dt).days
+            age_days = (ctx.now - dt).days
             year = dt.year
             if age_days <= 7:
-                insights.append(f"创建仅 {age_days} 天的全新项目，增速惊人")
+                if is_en:
+                    insights.append(f"brand new project, created only {age_days} days ago with impressive growth")
+                else:
+                    insights.append(f"创建仅 {age_days} 天的全新项目，增速惊人")
             elif age_days <= 30:
-                insights.append("创建不到一个月即快速崛起，值得关注")
+                if is_en:
+                    insights.append("rapidly rising within its first month, worth watching")
+                else:
+                    insights.append("创建不到一个月即快速崛起，值得关注")
             elif age_days <= 180 and stars >= 5_000:
-                insights.append(f"创建于 {year} 年，半年内即快速崛起")
+                if is_en:
+                    insights.append(f"created in {year}, rapidly rising within 6 months")
+                else:
+                    insights.append(f"创建于 {year} 年，半年内即快速崛起")
             elif age_days > 365 * 3:
                 yrs = age_days // 365
-                insights.append(f"创建于 {year} 年，持续维护 {yrs} 年")
+                if is_en:
+                    insights.append(f"created in {year}, actively maintained for {yrs} years")
+                else:
+                    insights.append(f"创建于 {year} 年，持续维护 {yrs} 年")
         except (ValueError, TypeError):
             pass
 
-    # 取最有信息量的 2 条
     if insights:
-        parts.append("。".join(insights[:2]) + "。")
+        sep = ". " if is_en else "。"
+        parts.append(sep.join(insights[:2]) + ("." if is_en else "。"))
 
     result = " ".join(parts)
-    # 清理多余标点
     result = _re.sub(r"。。", "。", result)
     result = _re.sub(r"\.。", "。", result)
+    result = _re.sub(r"\.\.", ".", result)
     result = _re.sub(r"\s+", " ", result).strip()
     return result
 
@@ -974,7 +1062,7 @@ def _template_summarize(r: dict, readme_extract: str) -> str:
 
 def _get_llm_client():
     """创建 OpenAI 兼容的 LLM 客户端. 返回 (client, model) 或 (None, None)."""
-    llm_cfg = CFG.get("llm", {})
+    llm_cfg = ctx.cfg.get("llm", {})
     if not llm_cfg.get("enabled", False):
         return None, None
     try:
@@ -1026,7 +1114,7 @@ def _build_repo_context(r: dict, readme_text: str) -> str:
 def _llm_summarize_batch(repos: list[dict], readmes: dict[str, str],
                           client, model: str) -> dict[str, str]:
     """调用 LLM 批量生成分析性总结. 返回 {full_name: summary}."""
-    llm_cfg = CFG.get("llm", {})
+    llm_cfg = ctx.cfg.get("llm", {})
     temperature = llm_cfg.get("temperature", 0.3)
     max_chars = llm_cfg.get("max_summary_chars", 200)
     batch_size = llm_cfg.get("batch_size", 10)
@@ -1091,9 +1179,9 @@ def enrich_descriptions(repos: list[dict], token: Optional[str] = None,
 
     优先级: LLM 分析性总结 > 模板拼接法 > README 摘录
     """
-    api_cfg = CFG.get("api", {})
+    api_cfg = ctx.cfg.get("api", {})
     interval = api_cfg.get("request_interval", 2)
-    llm_cfg = CFG.get("llm", {})
+    llm_cfg = ctx.cfg.get("llm", {})
     max_readme = llm_cfg.get("max_readme_chars", 3000)
     targets = repos[:top_n]
 
@@ -1130,19 +1218,31 @@ def enrich_descriptions(repos: list[dict], token: Optional[str] = None,
                 llm_count += 1
         console.print(f"    LLM 总结: {llm_count}/{len(targets)} 个仓库")
 
-    # 4. 模板拼接法: 用 README 摘录 + 元数据生成分析性总结
+    # 4. 模板拼接法: 用 README 摘录 + 元数据生成分析性总结 (中文)
     tpl_count = 0
     for r in targets:
         if r.get("_summary"):
             continue
         name = r.get("full_name", "")
         readme_ext = extracts.get(name, "")
-        summary = _template_summarize(r, readme_ext)
+        summary = _template_summarize(r, readme_ext, lang="zh")
         if summary and len(summary) > 20:
             r["_summary"] = summary
             tpl_count += 1
     if tpl_count:
         console.print(f"    模板总结: {tpl_count}/{len(targets)} 个仓库")
+
+    # 4b. 模板拼接法: 英文总结
+    tpl_en_count = 0
+    for r in targets:
+        name = r.get("full_name", "")
+        readme_ext = extracts.get(name, "")
+        summary_en = _template_summarize(r, readme_ext, lang="en")
+        if summary_en and len(summary_en) > 20:
+            r["_summary_en"] = summary_en
+            tpl_en_count += 1
+    if tpl_en_count:
+        console.print(f"    英文模板总结: {tpl_en_count}/{len(targets)} 个仓库")
 
     # 5. 最终回退: 用 README 摘录替换过短的 description
     fallback_count = 0
@@ -1226,7 +1326,7 @@ def _print_ranked(title: str, repos: list[dict], top_n: int) -> None:
         if created:
             try:
                 dt = datetime.fromisoformat(created.replace("Z", "+00:00"))
-                days = (NOW - dt).days
+                days = (ctx.now - dt).days
                 if days < 7:
                     age = f"  [bold green][NEW {days}d][/]"
                 elif days < 90:
@@ -1248,6 +1348,7 @@ def _repo_summary(r: dict, rank: int) -> dict:
         "full_name": r.get("full_name"),
         "description": r.get("_readme_summary") or r.get("description"),
         "summary": r.get("_summary") or "",
+        "summary_en": r.get("_summary_en") or "",
         "language": r.get("language"),
         "stars": r.get("stargazers_count", 0),
         "forks": r.get("forks_count", 0),
@@ -1265,7 +1366,7 @@ def _repo_summary(r: dict, rank: int) -> dict:
 
 def _report_dir(base: str = "reports") -> tuple[str, str]:
     """返回 (目录路径, 日期字符串), 自动创建 reports/YYYY-MM-DD/ 目录."""
-    date_str = NOW.strftime("%Y-%m-%d")
+    date_str = ctx.now.strftime("%Y-%m-%d")
     dir_path = os.path.join(base, date_str)
     os.makedirs(dir_path, exist_ok=True)
     return dir_path, date_str
@@ -1273,15 +1374,15 @@ def _report_dir(base: str = "reports") -> tuple[str, str]:
 
 def save_report(core: list[dict], apps: list[dict], path: str) -> None:
     os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
-    core_n = CFG.get("rankings", {}).get("core_top_n", 10)
-    app_n = CFG.get("rankings", {}).get("app_top_n", 20)
+    core_n = ctx.cfg.get("rankings", {}).get("core_top_n", 10)
+    app_n = ctx.cfg.get("rankings", {}).get("app_top_n", 20)
     report = {
-        "generated_at": NOW.isoformat(),
+        "generated_at": ctx.now.isoformat(),
         "methodology": "Ranked by hotness_score = today_stars({w1}) + growth_rate({w2}) + recency({w3}) + base_stars({w4})".format(
-            w1=CFG.get("scoring", {}).get("today_stars_weight", 0.40),
-            w2=CFG.get("scoring", {}).get("growth_rate_weight", 0.30),
-            w3=CFG.get("scoring", {}).get("recency_weight", 0.15),
-            w4=CFG.get("scoring", {}).get("base_stars_weight", 0.15),
+            w1=ctx.cfg.get("scoring", {}).get("today_stars_weight", 0.40),
+            w2=ctx.cfg.get("scoring", {}).get("growth_rate_weight", 0.30),
+            w3=ctx.cfg.get("scoring", {}).get("recency_weight", 0.15),
+            w4=ctx.cfg.get("scoring", {}).get("base_stars_weight", 0.15),
         ),
         "ai_llm_core_top10": [_repo_summary(r, i+1) for i, r in enumerate(core[:core_n])],
         "ai_app_top20": [_repo_summary(r, i+1) for i, r in enumerate(apps[:app_n])],
@@ -1375,7 +1476,7 @@ def _generate_trend_insights(core: list[dict], apps: list[dict], lang: str) -> l
         if created:
             try:
                 dt = datetime.fromisoformat(created.replace("Z", "+00:00"))
-                if (NOW - dt).days <= 7:
+                if (ctx.now - dt).days <= 7:
                     new_repos.append(r.get("full_name", "").split("/")[-1])
             except (ValueError, TypeError):
                 pass
@@ -1421,15 +1522,15 @@ def _build_md_lines(core: list[dict], apps: list[dict], lang: str,
                     core_count: int = 0, app_count: int = 0) -> list[str]:
     """构建 Markdown 报告内容行."""
     s = MD_STRINGS[lang]
-    core_n = CFG.get("rankings", {}).get("core_top_n", 10)
-    app_n = CFG.get("rankings", {}).get("app_top_n", 20)
-    scoring = CFG.get("scoring", {})
-    hours = CFG.get("time_window_hours", 48)
+    core_n = ctx.cfg.get("rankings", {}).get("core_top_n", 10)
+    app_n = ctx.cfg.get("rankings", {}).get("app_top_n", 20)
+    scoring = ctx.cfg.get("scoring", {})
+    hours = ctx.cfg.get("time_window_hours", 48)
     lines: list[str] = []
 
     lines.append(f"# {s['title']}")
     lines.append("")
-    lines.append(f"> {s['timestamp']}: {NOW.strftime('%Y-%m-%d %H:%M UTC')} | {s['window'].format(hours=hours)}")
+    lines.append(f"> {s['timestamp']}: {ctx.now.strftime('%Y-%m-%d %H:%M UTC')} | {s['window'].format(hours=hours)}")
     lines.append(">")
     lines.append(f"> {s['formula']}: `today_stars({scoring.get('today_stars_weight', 0.40)}) + growth_rate({scoring.get('growth_rate_weight', 0.30)}) + recency({scoring.get('recency_weight', 0.15)}) + base_stars({scoring.get('base_stars_weight', 0.15)})`")
     if core_count or app_count:
@@ -1456,14 +1557,14 @@ def _build_md_lines(core: list[dict], apps: list[dict], lang: str,
             growth = r.get("_growth_rate", 0)
             growth_str = f"{_fmt(growth)}/d" if growth else "-"
             score = r.get("_score", 0)
-            summary = r.get("_summary") or r.get("_readme_summary") or r.get("description") or ""
+            summary = (r.get("_summary_en") if lang == "en" else r.get("_summary")) or r.get("_readme_summary") or r.get("description") or ""
             # MISSING-9: NEW 标签
             new_badge = ""
             created = r.get("created_at")
             if created:
                 try:
                     dt = datetime.fromisoformat(created.replace("Z", "+00:00"))
-                    if (NOW - dt).days <= 7:
+                    if (ctx.now - dt).days <= 7:
                         new_badge = "**NEW** "
                 except (ValueError, TypeError):
                     pass
@@ -1503,7 +1604,7 @@ def save_md_report(core: list[dict], apps: list[dict], path_base: str,
 
 def generate_pages(core: list[dict], apps: list[dict], report_json_path: str) -> None:
     """将 HTML 模板复制到 docs/, 将报告数据写入 docs/data/latest.json."""
-    output_cfg = CFG.get("output", {})
+    output_cfg = ctx.cfg.get("output", {})
     pages_dir = Path(output_cfg.get("pages_dir", "docs"))
     template_path = Path(__file__).parent / "templates" / "index.html"
 
@@ -1533,9 +1634,8 @@ def generate_pages(core: list[dict], apps: list[dict], report_json_path: str) ->
 # ---------------------------------------------------------------------------
 
 def main() -> None:
-    global SSL_VERIFY, NOW, CFG
 
-    NOW = datetime.now(timezone.utc)
+    ctx.now = datetime.now(timezone.utc)
 
     parser = argparse.ArgumentParser(description="GitHub AI Radar — AI 热门仓库追踪器 (增长驱动)")
     parser.add_argument("--token", type=str, default=os.environ.get("GITHUB_TOKEN"),
@@ -1548,10 +1648,10 @@ def main() -> None:
     args = parser.parse_args()
 
     # 加载配置
-    CFG = load_config(args.config)
+    ctx.cfg = load_config(args.config)
 
     # 确定报告输出路径
-    reports_dir = CFG.get("output", {}).get("reports_dir", "reports")
+    reports_dir = ctx.cfg.get("output", {}).get("reports_dir", "reports")
     if args.output:
         report_base = args.output.rsplit(".", 1)[0]
     else:
@@ -1559,10 +1659,10 @@ def main() -> None:
         report_base = os.path.join(dir_path, f"github_ai_hot_repo_{date_str}")
 
     if args.no_verify:
-        SSL_VERIFY = False
+        ctx.ssl_verify = False
         console.print("[yellow]>>> SSL 证书验证已禁用[/yellow]")
 
-    output_formats = set(CFG.get("output", {}).get("formats", ["json", "markdown", "html"]))
+    output_formats = set(ctx.cfg.get("output", {}).get("formats", ["json", "markdown", "html"]))
 
     # 1. 抓取
     console.print("[cyan]>>> [1/6] Search API: AI topic + 新项目爆发查询...[/cyan]")
@@ -1589,7 +1689,7 @@ def main() -> None:
 
     # 4. 分类
     console.print("[cyan]>>> [4/6] 分类 & 排序...[/cyan]")
-    kw = _get_sets("classification")
+    kw = _get_sets()
     core_list: list[dict] = []
     app_list: list[dict] = []
     for r in all_repos:
@@ -1606,8 +1706,8 @@ def main() -> None:
     app_list.sort(key=lambda x: x["_score"], reverse=True)
 
     # 去重: 核心榜出现过的仓库不再出现在应用榜
-    if CFG.get("rankings", {}).get("deduplicate", True):
-        core_n = CFG.get("rankings", {}).get("core_top_n", 10)
+    if ctx.cfg.get("rankings", {}).get("deduplicate", True):
+        core_n = ctx.cfg.get("rankings", {}).get("core_top_n", 10)
         core_names = {r.get("full_name", "").lower() for r in core_list[:core_n]}
         app_list = [r for r in app_list if r.get("full_name", "").lower() not in core_names]
 
@@ -1629,8 +1729,8 @@ def main() -> None:
 
     # 5. 抓取 README & LLM 分析性总结
     console.print("[cyan]>>> [5/6] 抓取 README & 生成分析性总结...[/cyan]")
-    core_n = CFG.get("rankings", {}).get("core_top_n", 10)
-    app_n = CFG.get("rankings", {}).get("app_top_n", 20)
+    core_n = ctx.cfg.get("rankings", {}).get("core_top_n", 10)
+    app_n = ctx.cfg.get("rankings", {}).get("app_top_n", 20)
     enrich_descriptions(core_list, token=args.token, top_n=core_n)
     enrich_descriptions(app_list, token=args.token, top_n=app_n)
 
@@ -1650,10 +1750,10 @@ def main() -> None:
     if "html" in output_formats:
         generate_pages(core_list, app_list, report_json)
 
-    console.print(f"\n  [dim]时间窗口: 过去 {CFG.get('time_window_hours', 48)} 小时 | 数据时间: {NOW.strftime('%Y-%m-%d %H:%M UTC')}[/dim]")
+    console.print(f"\n  [dim]时间窗口: 过去 {ctx.cfg.get('time_window_hours', 48)} 小时 | 数据时间: {ctx.now.strftime('%Y-%m-%d %H:%M UTC')}[/dim]")
     rate = "未认证 (10 req/min)" if not args.token else "已认证 (30 req/min)"
     console.print(f"  [dim]API 速率: {rate}[/dim]")
-    scoring = CFG.get("scoring", {})
+    scoring = ctx.cfg.get("scoring", {})
     console.print(f"  [dim]评分公式: today_stars({scoring.get('today_stars_weight', 0.40)}) + growth_rate({scoring.get('growth_rate_weight', 0.30)}) + recency({scoring.get('recency_weight', 0.15)}) + base_stars({scoring.get('base_stars_weight', 0.15)})[/dim]\n")
 
 

@@ -284,12 +284,32 @@ body::before {
   font-size: 0.85rem;
   color: #8b949e;
   line-height: 1.5;
-  margin-bottom: 14px;
+  margin-bottom: 6px;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
   min-height: 2.55em;
+  transition: all 0.3s ease;
+}
+.card-desc.expanded {
+  display: block;
+  -webkit-line-clamp: unset;
+  overflow: visible;
+}
+.card-desc-toggle {
+  font-size: 0.75rem;
+  color: #58a6ff;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  margin-bottom: 10px;
+  font-family: inherit;
+}
+.card-desc-toggle:hover {
+  color: #79c0ff;
+  text-decoration: underline;
 }
 .card-stats {
   display: flex;
@@ -431,11 +451,72 @@ body::before {
   .hotness { margin-left: 0; margin-top: 4px; }
   .section { padding: 30px 0; }
   .stat-divider { display: none; }
+  .filter-bar { gap: 8px; }
+  .filter-bar input[type="text"] { min-width: 120px; }
 }
 @media (max-width: 400px) {
   .container { padding: 0 12px; }
   .card { padding: 16px; }
   .card-stats { gap: 6px; }
+}
+.filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 20px 0 8px;
+  flex-wrap: wrap;
+}
+.filter-bar .search-icon {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  fill: #6e7681;
+}
+.filter-bar input[type="text"] {
+  flex: 1;
+  min-width: 180px;
+  padding: 8px 14px;
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  color: #c9d1d9;
+  font-family: inherit;
+  font-size: 0.85rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.filter-bar input[type="text"]:focus {
+  border-color: #58a6ff;
+}
+.filter-bar input[type="text"]::placeholder {
+  color: #484f58;
+}
+.filter-bar select {
+  padding: 8px 14px;
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  color: #c9d1d9;
+  font-family: inherit;
+  font-size: 0.85rem;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.2s;
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236e7681' d='M2.22 4.47a.75.75 0 011.06 0L6 7.19l2.72-2.72a.75.75 0 011.06 1.06l-3.25 3.25a.75.75 0 01-1.06 0L2.22 5.53a.75.75 0 010-1.06z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  padding-right: 30px;
+}
+.filter-bar select:focus {
+  border-color: #58a6ff;
+}
+.filter-count {
+  font-size: 0.78rem;
+  color: #6e7681;
+  font-family: 'JetBrains Mono', monospace;
+  white-space: nowrap;
 }
 .lang-toggle {
   display: inline-flex;
@@ -484,6 +565,12 @@ body::before {
       <span id="timestamp-text">Loading...</span>
     </div>
   </header>
+  <div class="filter-bar" id="filter-bar" style="display:none;">
+    <svg class="search-icon" viewBox="0 0 16 16"><path d="M11.5 7a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zm-.82 4.74a6 6 0 111.06-1.06l3.04 3.04a.75.75 0 11-1.06 1.06l-3.04-3.04z"/></svg>
+    <input type="text" id="search-input" placeholder="Search repos...">
+    <select id="lang-filter"><option value="">All Languages</option></select>
+    <span class="filter-count" id="filter-count"></span>
+  </div>
   <main id="main-content">
     <div class="loading-state" id="loading">
       <div class="loading-spinner"></div>
@@ -505,7 +592,7 @@ body::before {
         Back to Top
       </a>
     </div>
-    <p class="footer-copy">&copy; 2026 GitHub AI Radar. Data sourced from the GitHub API.</p>
+    <p class="footer-copy">&copy; <script>document.write(new Date().getFullYear())</script> GitHub AI Radar. Data sourced from the GitHub API.</p>
   </footer>
 </div>
 <script>
@@ -531,6 +618,12 @@ const I18N = {
     no_data_msg: "Report is empty.",
     new_badge: "NEW",
     re_badge: "RE",
+    search_placeholder: "Search repos...",
+    all_langs: "All Languages",
+    showing: "Showing",
+    of: "of",
+    show_more: "Show more \u25be",
+    show_less: "Show less \u25b4",
   },
   zh: {
     subtitle: "每日 AI 热门项目追踪",
@@ -553,6 +646,12 @@ const I18N = {
     no_data_msg: "报告为空。",
     new_badge: "NEW",
     re_badge: "RE",
+    search_placeholder: "\u641c\u7d22\u4ed3\u5e93...",
+    all_langs: "\u6240\u6709\u8bed\u8a00",
+    showing: "\u663e\u793a",
+    of: "/",
+    show_more: "\u5c55\u5f00 \u25be",
+    show_less: "\u6536\u8d77 \u25b4",
   }
 };
 var currentLang = localStorage.getItem('preferred_lang') || 'en';
@@ -570,6 +669,7 @@ function fmt(n){if(n==null)return'-';if(n>=1e6)return(n/1e6).toFixed(1)+'M';if(n
 function fmtTime(s){try{var d=new Date(s);return d.toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit',timeZoneName:'short'});}catch(e){return s;}}
 function isNew(c){if(!c)return false;return(new Date()-new Date(c))/(864e5)<7;}
 function stripMd(s){if(!s)return '';s=s.replace(/\[([^\]]+)\]\([^)]+\)/g,'$1');s=s.replace(/<[^>]+>/g,'');s=s.replace(/[*_`~>]/g,'');return s.replace(/\s+/g,' ').trim();}
+function esc(s){if(!s)return '';return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function trunc(d,m){if(!d)return t('no_desc');d=stripMd(d);return d.length>m?d.slice(0,m).trim()+'...':d;}
 function langColor(l){return LANG_COLORS[l]||'#8b949e';}
 function rankBadge(c){
@@ -596,11 +696,15 @@ function card(r,i){
   var hc=r.hotness_score>=_hotnessThreshold?'hotness-high':'';
   var gs=r.growth_score||r.growth_rate_per_day||0;
   var p=(r.full_name||'').split('/'),o=p[0]||'',nm=p[1]||r.full_name;
-  return'<article class="card" data-rank="'+r.rank+'" style="animation-delay:'+(i*60)+'ms;">'+
+  var rawSummary=currentLang==='zh'?(r.summary||r.description):(r.summary_en||r.summary||r.description);
+  var fullText=stripMd(rawSummary||t('no_desc'));
+  var needsToggle=fullText.length>100;
+  return'<article class="card" data-rank="'+r.rank+'" data-lang="'+esc(r.language||'')+'" style="animation-delay:'+(i*60)+'ms;">'+
     '<div class="card-rank">#'+r.rank+'</div>'+
     '<div class="card-top"><div class="card-badges">'+(isNew(r.created_at)?'<span class="badge-new">'+t('new_badge')+'</span>':'')+rankBadge(r.rank_change)+'</div></div>'+
     '<a href="'+(r.url||'#')+'" target="_blank" rel="noopener noreferrer" class="card-name"><span class="owner">'+o+' /</span> '+nm+'</a>'+
-    '<p class="card-desc">'+trunc(r.summary||r.description,120)+'</p>'+
+    '<p class="card-desc">'+esc(fullText)+'</p>'+
+    (needsToggle?'<button class="card-desc-toggle" onclick="toggleDesc(this)">'+t('show_more')+'</button>':'')+
     '<div class="card-stats">'+
     (r.language?'<span class="lang-badge"><span class="lang-dot" style="background:'+langColor(r.language)+'"></span>'+r.language+'</span><span class="stat-divider"></span>':'')+
     '<span class="stat stat-stars">'+STAR+' '+fmt(r.stars)+'</span>'+
@@ -621,6 +725,50 @@ function observe(){
   });},{threshold:0.05,rootMargin:'0px 0px -30px 0px'});
   cards.forEach(function(c){obs.observe(c);});
 }
+function toggleDesc(btn){
+  var desc=btn.previousElementSibling;
+  var isExpanded=desc.classList.contains('expanded');
+  desc.classList.toggle('expanded');
+  btn.textContent=isExpanded?t('show_more'):t('show_less');
+}
+function populateLangFilter(data){
+  var langs={};
+  (data.ai_llm_core_top10||[]).concat(data.ai_app_top20||[]).forEach(function(r){
+    if(r.language)langs[r.language]=(langs[r.language]||0)+1;
+  });
+  var sel=document.getElementById('lang-filter');
+  sel.innerHTML='<option value="">'+t('all_langs')+'</option>';
+  Object.keys(langs).sort().forEach(function(l){
+    var opt=document.createElement('option');
+    opt.value=l;opt.textContent=l+' ('+langs[l]+')';
+    sel.appendChild(opt);
+  });
+}
+function applyFilters(){
+  var q=(document.getElementById('search-input').value||'').toLowerCase();
+  var langVal=document.getElementById('lang-filter').value;
+  var sections=document.querySelectorAll('.section');
+  var totalShown=0,totalAll=0;
+  sections.forEach(function(sec){
+    var cards=sec.querySelectorAll('.card');
+    var secShown=0;
+    cards.forEach(function(c){
+      totalAll++;
+      var name=(c.querySelector('.card-name')||{}).textContent||'';
+      var desc=(c.querySelector('.card-desc')||{}).textContent||'';
+      var cLang=c.getAttribute('data-lang')||'';
+      var matchQ=!q||name.toLowerCase().indexOf(q)>=0||desc.toLowerCase().indexOf(q)>=0;
+      var matchL=!langVal||cLang===langVal;
+      var show=matchQ&&matchL;
+      c.style.display=show?'':'none';
+      if(show){secShown++;totalShown++;}
+    });
+    sec.style.display=secShown>0?'':'none';
+  });
+  var fc=document.getElementById('filter-count');
+  if(q||langVal){fc.textContent=t('showing')+' '+totalShown+' '+t('of')+' '+totalAll;}
+  else{fc.textContent='';}
+}
 var _cachedData=null;
 function renderData(d){
     var main=document.getElementById('main-content'),ft=document.getElementById('footer'),ts=document.getElementById('timestamp-text');
@@ -632,6 +780,8 @@ function renderData(d){
     h+=section(t('app_title'),'&#x1F680;',t('top')+' '+(d.ai_app_top20?d.ai_app_top20.length:'20'),d.ai_app_top20);
     if(!h){main.innerHTML='<div class="error-state"><div class="error-icon">&#x1F4ED;</div><h2 class="error-title">'+t('no_data')+'</h2><p class="error-message">'+t('no_data_msg')+'</p></div>';return;}
     main.innerHTML=h;ft.style.display='block';
+    document.getElementById('filter-bar').style.display='flex';
+    populateLangFilter(d);
     applyStaticLang();
     requestAnimationFrame(function(){observe();});
 }
@@ -656,13 +806,23 @@ function applyStaticLang(){
   if(links.length>=1) links[0].innerHTML=links[0].querySelector('svg').outerHTML+' '+t('view_github');
   if(links.length>=2) links[1].innerHTML=links[1].querySelector('svg').outerHTML+' '+t('back_top');
   var copy=document.querySelector('.footer-copy');
-  if(copy) copy.innerHTML='&copy; 2026 '+t('copyright');
+  if(copy) copy.innerHTML='&copy; '+new Date().getFullYear()+' '+t('copyright');
+  var si=document.getElementById('search-input');
+  if(si) si.placeholder=t('search_placeholder');
+  var lf=document.getElementById('lang-filter');
+  if(lf&&lf.options.length>0) lf.options[0].textContent=t('all_langs');
+  document.querySelectorAll('.card-desc-toggle').forEach(function(btn){
+    var desc=btn.previousElementSibling;
+    btn.textContent=desc.classList.contains('expanded')?t('show_less'):t('show_more');
+  });
 }
 function setLang(lang){
   currentLang=lang;
   localStorage.setItem('preferred_lang',lang);
   var btns=document.querySelectorAll('#lang-toggle button');
   btns.forEach(function(b){b.classList.toggle('active',b.getAttribute('data-lang')===lang);});
+  document.getElementById('search-input').value='';
+  document.getElementById('filter-count').textContent='';
   loadData();
 }
 document.getElementById('lang-toggle').addEventListener('click',function(e){
@@ -671,6 +831,8 @@ document.getElementById('lang-toggle').addEventListener('click',function(e){
   var lang=btn.getAttribute('data-lang');
   if(lang&&lang!==currentLang) setLang(lang);
 });
+document.getElementById('search-input').addEventListener('input',applyFilters);
+document.getElementById('lang-filter').addEventListener('change',applyFilters);
 document.addEventListener('DOMContentLoaded',function(){
   var btns=document.querySelectorAll('#lang-toggle button');
   btns.forEach(function(b){b.classList.toggle('active',b.getAttribute('data-lang')===currentLang);});
