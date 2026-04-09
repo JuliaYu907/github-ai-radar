@@ -1542,7 +1542,7 @@ def main() -> None:
                         help="GitHub PAT (可选, 也可通过 GITHUB_TOKEN 环境变量设置)")
     parser.add_argument("--no-verify", action="store_true", help="跳过 SSL 证书验证")
     parser.add_argument("--output", type=str, default=None,
-                        help="输出报告基础路径 (不含扩展名); 默认 reports/YYYY-MM-DD/ai_trending_YYYY-MM-DD")
+                        help="输出报告基础路径 (不含扩展名); 默认 reports/YYYY-MM-DD/github_ai_hot_repo_YYYY-MM-DD")
     parser.add_argument("--config", type=str, default=None,
                         help="配置文件路径 (默认 config.yaml)")
     args = parser.parse_args()
@@ -1556,7 +1556,7 @@ def main() -> None:
         report_base = args.output.rsplit(".", 1)[0]
     else:
         dir_path, date_str = _report_dir(reports_dir)
-        report_base = os.path.join(dir_path, f"ai_trending_{date_str}")
+        report_base = os.path.join(dir_path, f"github_ai_hot_repo_{date_str}")
 
     if args.no_verify:
         SSL_VERIFY = False
