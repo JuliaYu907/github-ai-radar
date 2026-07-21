@@ -292,6 +292,18 @@ body::before {
   min-height: 2.55em;
   transition: all 0.3s ease;
 }
+.desc-source {
+  display: inline-block;
+  margin-right: 6px;
+  padding: 1px 6px;
+  border: 1px solid rgba(88,166,255,0.28);
+  border-radius: 5px;
+  color: #58a6ff;
+  font-size: 0.66rem;
+  font-weight: 700;
+  line-height: 1.35;
+  vertical-align: 1px;
+}
 .card-desc.expanded {
   display: block;
   -webkit-line-clamp: unset;
@@ -696,14 +708,15 @@ function card(r,i){
   var hc=r.hotness_score>=_hotnessThreshold?'hotness-high':'';
   var gs=r.growth_score||r.growth_rate_per_day||0;
   var p=(r.full_name||'').split('/'),o=p[0]||'',nm=p[1]||r.full_name;
-  var rawSummary=currentLang==='zh'?(r.summary||r.description):(r.summary_en||r.summary||r.description);
+  var rawSummary=r.intro||r.about||r.description||(currentLang==='zh'?r.summary:(r.summary_en||r.summary));
   var fullText=stripMd(rawSummary||t('no_desc'));
+  var sourceLabel=r.intro_source==='about+readme'?'About + README':(r.intro_source==='readme'?'README':'About');
   var needsToggle=fullText.length>100;
   return'<article class="card" data-rank="'+r.rank+'" data-lang="'+esc(r.language||'')+'" style="animation-delay:'+(i*60)+'ms;">'+
     '<div class="card-rank">#'+r.rank+'</div>'+
     '<div class="card-top"><div class="card-badges">'+(isNew(r.created_at)?'<span class="badge-new">'+t('new_badge')+'</span>':'')+rankBadge(r.rank_change)+'</div></div>'+
     '<a href="'+(r.url||'#')+'" target="_blank" rel="noopener noreferrer" class="card-name"><span class="owner">'+o+' /</span> '+nm+'</a>'+
-    '<p class="card-desc">'+esc(fullText)+'</p>'+
+    '<p class="card-desc"><span class="desc-source">'+sourceLabel+'</span>'+esc(fullText)+'</p>'+
     (needsToggle?'<button class="card-desc-toggle" onclick="toggleDesc(this)">'+t('show_more')+'</button>':'')+
     '<div class="card-stats">'+
     (r.language?'<span class="lang-badge"><span class="lang-dot" style="background:'+langColor(r.language)+'"></span>'+r.language+'</span><span class="stat-divider"></span>':'')+

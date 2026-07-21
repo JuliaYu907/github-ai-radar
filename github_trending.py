@@ -15,7 +15,6 @@ GitHub AI Radar — 过去 48 小时真正热门的 AI 仓库追踪器
 """
 
 import argparse
-import base64
 import io
 import json
 import math
@@ -74,6 +73,10 @@ DEFAULTS: dict[str, Any] = {
         "core_top_n": 10,
         "app_top_n": 20,
         "deduplicate": True,
+    },
+    "readme": {
+        "max_chars": 262144,
+        "summary_max_chars": 320,
     },
     "output": {
         "reports_dir": "reports",
@@ -592,12 +595,21 @@ def _is_junk_line(line: str) -> bool:
     # 标题、图片、HTML 标签、分割线
     if s.startswith(("#", "!", "<", "[!", "---", "***", "===")):
         return True
+    # Markdown admonition / quote notices are usually warnings, release notes,
+    # sponsorship messages, or installation notes rather than project identity.
+    if s.startswith(">") and _re.search(
+            r"\b(warning|caution|important|note|security|release|sponsor|support)\b",
+            s, _re.I):
+        return True
     # 徽章/HTML 元素行 (含内嵌 HTML 标签)
     if _re.match(r"^\[!\[", s) or _re.search(
             r"<(img|div|p|br|hr|table|a\s|!--|svg|video|source|picture|iframe)\b", s, _re.I):
         return True
     # BUG-5: 含 src= 属性的行 (HTML 残留, 如 img 标签)
     if _re.search(r'\bsrc\s*=\s*["\']', s, _re.I) and len(s) < 500:
+        return True
+    # Multi-line HTML badges often leave attribute-only fragments after tags.
+    if _re.search(r'\b(alt|href|target|align)\s*=\s*["\']', s, _re.I) and len(s) < 500:
         return True
     # BUG-5: 代码行 — import/from/require/include 语句
     if _re.match(r"^(import |from \S+ import |require\(|#include|using |package )", s):
@@ -635,8 +647,32 @@ def _clean_md_text(text: str) -> str:
     return text
 
 
+_BAD_SUMMARY_RE = _re.compile(
+    r"(?:\b(?:pip|npm|pnpm|yarn|cargo|brew)\s+(?:install|add)\b|"
+    r"\b(?:git\s+clone|docker\s+compose|curl\s+https?://|wget\s+https?://)\b|"
+    r"\birm\s+https?://|\biex\b|"
+    r"\[!?(?:warning|caution|important|note)\]|"
+    r"\b(?:security\s+warning|official\s+sources\s+only|release\s+notes?|"
+    r"what'?s\s+new|sponsor(?:ship)?|support\s+us|want\s+to\s+support)\b|"
+    r"\b(?:alt|src|href)\s*=|https?://\S+\.(?:svg|png|jpe?g|gif))",
+    _re.I,
+)
+
+
+def _is_valid_project_text(text: str) -> bool:
+    """Return whether extracted README prose is safe to show as project identity."""
+    cleaned = _clean_md_text(text)
+    if len(cleaned) < 30 or _BAD_SUMMARY_RE.search(cleaned):
+        return False
+    if "](" in cleaned or cleaned.count("http://") + cleaned.count("https://") > 2:
+        return False
+    # Reject fragments made mostly of punctuation / markup residue.
+    meaningful = _re.sub(r"[^\w\u4e00-\u9fff]+", "", cleaned)
+    return len(meaningful) >= 20
+
+
 def _extract_summary(md_text: str, max_len: int = 300,
-                     repo_name: str = "") -> str:
+                     repo_name: str = "", about: str = "") -> str:
     """从 README Markdown 中智能提取项目描述.
 
     策略 (按优先级):
@@ -645,6 +681,9 @@ def _extract_summary(md_text: str, max_len: int = 300,
       3. 找包含描述性关键词 (framework/tool/platform/library...) 的段落
       4. 回退到第一段 >= 30 字符的有意义段落
     """
+    # Remove comments before paragraph parsing; they often contain badges and
+    # generated navigation that look like prose after Markdown cleanup.
+    md_text = _re.sub(r"<!--.*?-->", "", md_text, flags=_re.S)
     lines = md_text.split("\n")
 
     # --- 第 1 步: 收集所有候选段落, 并记录每段前面的标题 ---
@@ -661,12 +700,17 @@ def _extract_summary(md_text: str, max_len: int = 300,
             paragraphs.append({"text": cleaned, "heading": last_heading, "index": idx})
         buf.clear()
 
+    in_code_fence = False
     for i, line in enumerate(lines):
         stripped = line.strip()
+        if stripped.startswith(("```", "~~~")):
+            _flush(i)
+            in_code_fence = not in_code_fence
+            continue
+        if in_code_fence:
+            continue
         if not stripped:
             _flush(i)
-            if len(paragraphs) >= 10:
-                break
             continue
         if stripped.startswith("#"):
             _flush(i)
@@ -688,7 +732,13 @@ def _extract_summary(md_text: str, max_len: int = 300,
 
     # 描述性标题关键词
     _DESC_HEADINGS = {"about", "overview", "introduction", "description",
-                      "what is", "summary", "getting started", "简介", "概述", "介绍"}
+                      "what is", "summary", "简介", "概述", "介绍", "项目介绍"}
+    _BAD_HEADINGS = {
+        "install", "installation", "quick start", "getting started", "usage",
+        "security", "warning", "release", "changelog", "what's new", "news", "updates", "roadmap",
+        "sponsor", "support", "contributing", "contributors", "license",
+        "安装", "快速开始", "使用", "安全", "新闻", "更新", "更新日志", "赞助", "贡献", "许可证",
+    }
     # 定义句式模式
     _DEF_PATTERN = _re.compile(
         r"\b(is an?|are|provides?|enables?|offers?|allows?|helps?)\b", _re.I)
@@ -700,13 +750,30 @@ def _extract_summary(md_text: str, max_len: int = 300,
         r"compiler|editor|browser|dashboard|monitor|pipeline|gateway|proxy|"
         r"extension|plugin|wrapper|cli|api|gui|ui|ide)\b", _re.I)
 
+    _STOPWORDS = {
+        "the", "and", "for", "with", "from", "that", "this", "into", "your",
+        "our", "you", "are", "can", "will", "using", "use", "open", "source",
+        "project", "system", "tool", "tools", "agent", "agents", "based",
+    }
+
+    def _anchor_words(value: str) -> set[str]:
+        return {
+            word for word in _re.findall(r"[a-z0-9][a-z0-9-]{2,}", value.lower())
+            if word not in _STOPWORDS
+        }
+
+    about_words = _anchor_words(about)
+
     best_score = -1
     best_text = ""
 
     for p in paragraphs:
         text = p["text"]
         heading = p["heading"]
+        if not _is_valid_project_text(text):
+            continue
         score = 0
+        overlap = len(about_words & _anchor_words(text)) if about_words else 0
 
         # 名称匹配: 段落包含项目名 (强信号)
         if short_name and len(short_name) > 2 and short_name in text.lower():
@@ -718,14 +785,25 @@ def _extract_summary(md_text: str, max_len: int = 300,
 
         # 描述性标题下: About / Overview / Introduction 等
         if any(kw in heading for kw in _DESC_HEADINGS):
-            score += 20
+            score += 45
+
+        if any(kw in heading for kw in _BAD_HEADINGS) and overlap < 2:
+            score -= 80
 
         # 包含描述性名词关键词
         if _DESC_KEYWORDS.search(text):
             score += 10
 
+        # GitHub About is author-controlled metadata. Candidate README prose
+        # that repeats its distinctive concepts is much more likely to be the
+        # actual project definition than an install or implementation detail.
+        if about_words:
+            score += min(overlap, 8) * 12
+            if overlap == 0:
+                score -= 20
+
         # 段落位置: 靠前的段落略有优势
-        score -= p["index"] * 0.1
+        score -= min(p["index"] * 0.05, 40)
 
         # 长度适中 (30-200 最佳)
         tlen = len(text)
@@ -736,10 +814,10 @@ def _extract_summary(md_text: str, max_len: int = 300,
 
         # 排除明显非描述段落
         lower = text.lower()
-        if lower.startswith(("install", "pip ", "npm ", "cargo ", "brew ", "docker ",
+        if lower.startswith(("install", "pip ", "npm ", "pnpm ", "yarn ", "cargo ", "brew ", "docker ",
                              "usage", "prerequisit", "require", "import ", "from ",
-                             "mkdir ", "cd ", "git clone", "curl ", "wget ")):
-            score -= 50
+                             "mkdir ", "cd ", "git clone", "curl ", "wget ", "irm ")):
+            score -= 100
         # 列表项开头
         if text.startswith(("- ", "* ", "1. ", "1) ")):
             score -= 30
@@ -757,8 +835,8 @@ def _extract_summary(md_text: str, max_len: int = 300,
             best_score = score
             best_text = text
 
-    if not best_text:
-        best_text = paragraphs[0]["text"]
+    if not best_text or best_score < 5:
+        return ""
 
     if len(best_text) > max_len:
         best_text = best_text[:max_len].rsplit(" ", 1)[0] + "..."
@@ -766,16 +844,16 @@ def _extract_summary(md_text: str, max_len: int = 300,
 
 
 def _fetch_readme_raw(full_name: str, token: Optional[str] = None,
-                      max_chars: int = 3000) -> str:
-    """通过 GitHub API 获取仓库 README 原始内容 (截断到 max_chars)."""
+                      max_chars: int = 262144) -> str:
+    """通过 GitHub API 获取 preferred README 原文 (截断到 max_chars)."""
     url = f"https://api.github.com/repos/{full_name}/readme"
     try:
-        resp = requests.get(url, headers=_headers(token), timeout=10, verify=ctx.ssl_verify)
+        headers = _headers(token)
+        headers["Accept"] = "application/vnd.github.raw+json"
+        resp = requests.get(url, headers=headers, timeout=15, verify=ctx.ssl_verify)
         if resp.status_code != 200:
             return ""
-        data = resp.json()
-        content = base64.b64decode(data.get("content", "")).decode("utf-8", errors="replace")
-        return content[:max_chars]
+        return resp.text[:max_chars]
     except Exception:
         return ""
 
@@ -1181,8 +1259,9 @@ def enrich_descriptions(repos: list[dict], token: Optional[str] = None,
     """
     api_cfg = ctx.cfg.get("api", {})
     interval = api_cfg.get("request_interval", 2)
-    llm_cfg = ctx.cfg.get("llm", {})
-    max_readme = llm_cfg.get("max_readme_chars", 3000)
+    readme_cfg = ctx.cfg.get("readme", {})
+    max_readme = readme_cfg.get("max_chars", 262144)
+    summary_max = readme_cfg.get("summary_max_chars", 320)
     targets = repos[:top_n]
 
     # 1. 抓取 README 原始内容
@@ -1201,9 +1280,17 @@ def enrich_descriptions(repos: list[dict], token: Optional[str] = None,
         name = r.get("full_name", "")
         raw = readmes.get(name, "")
         if raw:
-            ext = _extract_summary(raw, repo_name=name)
+            ext = _extract_summary(
+                raw,
+                max_len=summary_max,
+                repo_name=name,
+                about=r.get("description") or "",
+            )
             if ext:
                 extracts[name] = ext
+                # README evidence is stored independently from both the
+                # official GitHub About and any optional analytical summary.
+                r["_readme_summary"] = ext
 
     # 3. 尝试 LLM 分析性总结
     client, model = _get_llm_client()
@@ -1213,7 +1300,7 @@ def enrich_descriptions(repos: list[dict], token: Optional[str] = None,
         summaries = _llm_summarize_batch(targets, readmes, client, model)
         for r in targets:
             name = r.get("full_name", "")
-            if name in summaries and summaries[name]:
+            if name in summaries and _is_valid_project_text(summaries[name]):
                 r["_summary"] = summaries[name]
                 llm_count += 1
         console.print(f"    LLM 总结: {llm_count}/{len(targets)} 个仓库")
@@ -1244,18 +1331,8 @@ def enrich_descriptions(repos: list[dict], token: Optional[str] = None,
     if tpl_en_count:
         console.print(f"    英文模板总结: {tpl_en_count}/{len(targets)} 个仓库")
 
-    # 5. 最终回退: 用 README 摘录替换过短的 description
-    fallback_count = 0
-    for r in targets:
-        if r.get("_summary"):
-            continue
-        name = r.get("full_name", "")
-        ext = extracts.get(name, "")
-        if ext and len(ext) > len(r.get("description") or ""):
-            r["_readme_summary"] = ext
-            fallback_count += 1
-    if fallback_count:
-        console.print(f"    README 摘录回退: {fallback_count} 个仓库")
+    if extracts:
+        console.print(f"    README 核心段落: {len(extracts)}/{len(targets)} 个仓库")
 
 
 # ---------------------------------------------------------------------------
@@ -1342,11 +1419,48 @@ def _print_ranked(title: str, repos: list[dict], top_n: int) -> None:
 # 报告生成
 # ---------------------------------------------------------------------------
 
+def _compose_project_intro(about: str, readme: str,
+                           max_len: int = 480) -> tuple[str, str]:
+    """Compose faithful card copy while keeping its evidence source explicit."""
+    about = _clean_md_text(about or "")
+    readme = _clean_md_text(readme or "")
+    if readme and not _is_valid_project_text(readme):
+        readme = ""
+
+    if not about:
+        return readme[:max_len], "readme" if readme else ""
+    if not readme:
+        return about[:max_len], "about"
+
+    def _normalized(value: str) -> str:
+        return _re.sub(r"[^a-z0-9\u4e00-\u9fff]+", "", value.lower())
+
+    about_norm = _normalized(about)
+    readme_norm = _normalized(readme)
+    if about_norm in readme_norm or readme_norm in about_norm:
+        # Prefer the official About when both sources make the same claim.
+        return about[:max_len], "about"
+
+    intro = f"{about.rstrip('.。 ')}. {readme}"
+    if len(intro) > max_len:
+        intro = intro[:max_len].rsplit(" ", 1)[0].rstrip("，,;；") + "..."
+    return intro, "about+readme"
+
+
 def _repo_summary(r: dict, rank: int) -> dict:
+    about = r.get("description") or ""
+    readme_highlight = r.get("_readme_summary") or ""
+    intro, intro_source = _compose_project_intro(about, readme_highlight)
     summary: dict[str, Any] = {
         "rank": rank,
         "full_name": r.get("full_name"),
-        "description": r.get("_readme_summary") or r.get("description"),
+        # description remains the official GitHub About for backwards
+        # compatibility; README evidence must never overwrite it.
+        "description": about,
+        "about": about,
+        "readme_highlight": readme_highlight,
+        "intro": intro,
+        "intro_source": intro_source,
         "summary": r.get("_summary") or "",
         "summary_en": r.get("_summary_en") or "",
         "language": r.get("language"),
