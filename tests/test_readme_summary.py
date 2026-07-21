@@ -1,6 +1,11 @@
 import unittest
 
-from github_trending import _compose_project_intro, _extract_summary, _repo_summary
+from github_trending import (
+    _build_repo_context,
+    _compose_project_intro,
+    _extract_summary,
+    _repo_summary,
+)
 
 
 class ReadmeSummaryTests(unittest.TestCase):
@@ -131,6 +136,7 @@ relevant context across coding sessions.
             "full_name": "owner/project",
             "description": "Official GitHub About text.",
             "_readme_summary": "Project is a developer tool for reliable repository analysis.",
+            "_intro_zh": "这是一个用于可靠分析代码仓库的开发者工具。",
         }
 
         result = _repo_summary(repo, 1)
@@ -139,6 +145,26 @@ relevant context across coding sessions.
         self.assertEqual(result["about"], "Official GitHub About text.")
         self.assertIn("developer tool", result["readme_highlight"])
         self.assertEqual(result["intro_source"], "about+readme")
+        self.assertIn("Official GitHub About", result["intro_en"])
+        self.assertEqual(result["intro_zh"], "这是一个用于可靠分析代码仓库的开发者工具。")
+
+    def test_translation_context_excludes_popularity_metrics(self):
+        context = _build_repo_context(
+            {
+                "full_name": "owner/project",
+                "description": "An agent tool for repository analysis.",
+                "topics": ["ai-agent", "code-analysis"],
+                "stargazers_count": 999999,
+                "today_stars": 5000,
+                "_score": 42,
+            },
+            "The tool builds a persistent code graph for focused retrieval.",
+        )
+
+        self.assertIn("官方 GitHub About", context)
+        self.assertIn("README 核心段落", context)
+        self.assertNotIn("Stars", context)
+        self.assertNotIn("热度", context)
 
 
 if __name__ == "__main__":

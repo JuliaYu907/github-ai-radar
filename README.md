@@ -18,6 +18,8 @@ Discover the hottest AI repositories on GitHub from the past 48 hours, ranked by
 - **Growth-driven ranking** — Hotness scoring formula: `today_stars(40%) + growth_rate(30%) + recency(15%) + base_stars(15%)`
 - **Real growth rate** — Prioritizes historical report comparison for true daily gain, falls back to Trending daily increment, then to `stars/√age`
 - **New project detection** — Brand-new projects created within 48 hours that gain stars quickly are highlighted
+- **Accurate project introductions** — Combines each repository's official GitHub About text with its most informative README paragraphs while filtering badges, installation commands, warnings, and promotional noise
+- **Bilingual descriptions** — Keeps an evidence-based English introduction and generates a faithful Chinese translation for the dashboard's language tabs
 - **Dual rankings (deduplicated)**
   - AI/LLM Core Repos Top 10 (frameworks, models, training & inference tools)
   - AI Personal Apps Top 20 (CLI tools, local models, personal assistants, etc. — enterprise platforms filtered out, deduplicated against Core ranking)
@@ -31,21 +33,19 @@ After forking this repo, GitHub Actions will **run automatically every day**, co
 ### Steps
 
 1. **Fork** this repository
-2. In your forked repo, go to **Settings → Secrets and variables → Actions**
-3. Add a Repository Secret:
-   - Name: `GH_PAT`
-   - Value: Your [GitHub Personal Access Token](https://github.com/settings/tokens) (requires `public_repo` scope)
-4. Enable **GitHub Pages**:
+2. Enable **GitHub Pages**:
    - Go to **Settings → Pages**
    - Set Source to **GitHub Actions**
-5. Go to the **Actions** tab and enable workflows
-6. Click **Daily AI Trending Report → Run workflow** to trigger a manual run and verify everything works
+3. Go to the **Actions** tab and enable workflows
+4. Click **Daily AI Trending Report → Run workflow** to trigger a manual run and verify everything works
 
 After that, it runs automatically every day at UTC 08:00 (16:00 Beijing Time):
 - Reports appear in the `reports/` directory
 - Dashboard auto-updates at `https://<your-username>.github.io/github-ai-radar/`
 
-> **Token is optional**: It works without one, but the API rate limit drops from 30 req/min to 10 req/min, potentially missing some data.
+> No personal access token or LLM API key is required for GitHub Actions. The workflow uses its job-scoped `GITHUB_TOKEN` for GitHub API access and GitHub Models; the required `contents`, `pages`, `id-token`, and `models` permissions are already declared in `daily.yml`.
+
+To use a different OpenAI-compatible provider, optionally add `LLM_API_KEY`, `LLM_API_BASE`, and `LLM_MODEL` under **Settings → Secrets and variables → Actions**.
 
 ## Local Usage
 
@@ -68,10 +68,10 @@ python github_trending.py
 # Skip SSL verification (proxy/VPN environments)
 python github_trending.py --no-verify
 
-# Use a GitHub Token to increase API rate limit (10 → 30 req/min)
-python github_trending.py --token ghp_xxxxxxxxxxxx
+# Use a GitHub token to increase the API rate limit
+python github_trending.py --token <YOUR_GITHUB_TOKEN>
 # Or via environment variable:
-export GITHUB_TOKEN=ghp_xxxxxxxxxxxx
+export GITHUB_TOKEN=<YOUR_GITHUB_TOKEN>
 python github_trending.py
 
 # Use a custom config file
@@ -127,31 +127,34 @@ search_topics:
 output:
   formats: [json, markdown, html]
   pages_dir: docs
+
+# README extraction and bilingual introductions
+readme:
+  max_chars: 262144
+  summary_max_chars: 320
+
+llm:
+  enabled: true
+  batch_size: 10
+  max_summary_chars: 220
+  temperature: 0.1
 ```
 
 See [`config.yaml`](config.yaml) for all configuration options and classification keywords.
 
-### LLM Summaries (Optional)
+### Bilingual Project Introductions
 
-The project can generate analytical summaries for each repo using an OpenAI-compatible LLM. To enable:
+The English introduction is grounded in the repository's official GitHub About text and a filtered, scored selection of its README. The Chinese introduction is a faithful translation of that evidence rather than an invented marketing summary.
 
-1. Set environment variables or edit `config.yaml`:
-   ```bash
-   export LLM_API_KEY=sk-xxxxxxxxxxxx
-   export LLM_API_BASE=https://api.openai.com/v1   # optional
-   export LLM_MODEL=gpt-4o-mini                     # optional
-   ```
+GitHub Actions uses GitHub Models by default with the job-scoped `GITHUB_TOKEN`, so forks do not need an additional secret. For local runs or a custom OpenAI-compatible provider, export:
 
-2. Or configure in `config.yaml`:
-   ```yaml
-   llm:
-     enabled: true
-     api_key: ""        # or set LLM_API_KEY env var
-     api_base: ""       # OpenAI-compatible endpoint
-     model: "gpt-4o-mini"
-   ```
+```bash
+export LLM_API_KEY=<YOUR_LLM_API_KEY>
+export LLM_API_BASE=<YOUR_OPENAI_COMPATIBLE_ENDPOINT>
+export LLM_MODEL=<YOUR_MODEL_NAME>
+```
 
-Without LLM configuration, the system falls back to template-based summaries using README extraction + metadata analysis.
+If translation is unavailable, the dashboard still shows the accurate official About/README-based English introduction instead of fabricating content.
 
 ## Output Examples
 
@@ -173,6 +176,8 @@ Dark-themed card layout with gold/silver/bronze glow effects for the Top 3:
 
 - Rank, repository name (clickable), language badge
 - Total stars, today's increment, daily growth rate, hotness score
+- Introduction source badge: `About`, `README`, or `About + README`
+- `中文` / `EN` tabs switch between the actual `intro_zh` and `intro_en` fields
 - NEW badge (for projects created within the last 7 days)
 - Rank change indicators (↑ rising / ↓ falling / ★ new entry)
 
@@ -196,8 +201,8 @@ github-ai-radar/
 │       ├── github_ai_hot_repo_2026-04-08_zh.md
 │       └── github_ai_hot_repo_2026-04-08.json
 └── .github/workflows/
-    ├── daily.yml                      ← Daily auto-run
-    └── pages.yml                      ← GitHub Pages auto-deploy
+    ├── daily.yml                      ← Daily generation, commit, and Pages deployment
+    └── pages.yml                      ← Manual/docs-push Pages deployment fallback
 ```
 
 ## How It Works
@@ -238,6 +243,12 @@ github-ai-radar/
            │  rankings                │
            └───────┬──────────────────┘
                    ▼
+        ┌────────────────────────────────┐
+        │  Fetch About + README          │
+        │  Extract and score core text   │
+        │  Build intro_en + intro_zh     │
+        └───────────────┬────────────────┘
+                        ▼
         ┌────────────────────────────────┐
         │  Sort & output                 │
         │  JSON + Markdown + HTML        │

@@ -1164,34 +1164,23 @@ def _get_llm_client():
 
 
 def _build_repo_context(r: dict, readme_text: str) -> str:
-    """为单个仓库构建 LLM 输入上下文."""
+    """为单个仓库构建忠实翻译所需的权威内容上下文."""
     name = r.get("full_name", "")
     desc = r.get("description") or ""
-    lang = r.get("language") or "N/A"
-    stars = r.get("stargazers_count", 0)
-    forks = r.get("forks_count", 0)
-    issues = r.get("open_issues_count", 0)
     topics = ", ".join(r.get("topics", []))
-    today = r.get("today_stars", 0)
-    growth = r.get("_growth_rate", 0)
-    score = r.get("_score", 0)
-    created = r.get("created_at", "")
-    readme_snippet = readme_text.strip()[:2000] if readme_text else "(无 README)"
+    readme_snippet = readme_text.strip() if readme_text else "(无可靠 README 核心段落)"
 
     return (
         f"仓库: {name}\n"
-        f"GitHub 简介: {desc}\n"
-        f"语言: {lang} | Stars: {stars} | Forks: {forks} | Issues: {issues}\n"
-        f"Topics: {topics}\n"
-        f"今日 Stars: +{today} | 日增速: {growth:.1f} | 热度分: {score}\n"
-        f"创建时间: {created}\n"
-        f"README 节选:\n{readme_snippet}"
+        f"官方 GitHub About: {desc}\n"
+        f"README 核心段落: {readme_snippet}\n"
+        f"Topics（仅用于理解术语）: {topics}"
     )
 
 
 def _llm_summarize_batch(repos: list[dict], readmes: dict[str, str],
                           client, model: str) -> dict[str, str]:
-    """调用 LLM 批量生成分析性总结. 返回 {full_name: summary}."""
+    """调用 LLM 批量生成忠实中文简介. 返回 {full_name: intro_zh}."""
     llm_cfg = ctx.cfg.get("llm", {})
     temperature = llm_cfg.get("temperature", 0.3)
     max_chars = llm_cfg.get("max_summary_chars", 200)
@@ -1208,15 +1197,16 @@ def _llm_summarize_batch(repos: list[dict], readmes: dict[str, str],
             repo_blocks.append(f"--- 仓库 {idx}: ---\n{ctx}")
 
         prompt = (
-            "你是一位 GitHub AI 仓库分析师。请为以下每个仓库撰写一段简洁的中文分析性总结。\n\n"
+            "你是一名严谨的开源项目中文编辑。请根据官方 GitHub About 和筛选后的 README 核心段落，"
+            "为每个仓库生成忠实、自然的中文简介。\n\n"
             "要求:\n"
             f"- 每个总结控制在 {max_chars} 字以内, 1-2 句话\n"
-            "- 不要照搬 README 或 GitHub 简介的原话, 要用自己的语言概括\n"
-            "- 结合 Stars/Forks/Topics/语言/创建时间等元数据进行分析\n"
-            "- 指出项目的核心定位、技术特色、行业影响力\n"
-            "- 如果是新项目(创建不久但增长快), 要特别指出\n"
-            "- 风格参考: 「Google 的开源机器学习框架，深度学习领域的行业标杆。C++ 为核心、Python 为接口，"
-            "涵盖分布式训练、推理部署全链路。75k forks 居全榜最高，反映其作为基础设施级项目被广泛二次开发。」\n\n"
+            "- 准确说明项目是什么、解决什么问题，以及 README 明确写出的关键能力\n"
+            "- About 与 README 冲突时，以 About 的项目定位为准\n"
+            "- 保留项目名、模型名、协议名等专有名词，不翻译代码或产品名称\n"
+            "- 不得加入输入中没有的功能、组织归属、评价或推测\n"
+            "- 不得提及 Stars、Forks、热度、排名、增长、创建时间或社区影响力\n"
+            "- 不使用 Markdown、引号、前缀标签或宣传口号\n\n"
             "输出格式 (严格遵守, 每行一个仓库):\n"
             "1. <总结内容>\n"
             "2. <总结内容>\n"
@@ -1297,39 +1287,17 @@ def enrich_descriptions(repos: list[dict], token: Optional[str] = None,
     llm_count = 0
     if client:
         console.print(f"    LLM 总结中 (model={model})...")
-        summaries = _llm_summarize_batch(targets, readmes, client, model)
+        summaries = _llm_summarize_batch(targets, extracts, client, model)
         for r in targets:
             name = r.get("full_name", "")
-            if name in summaries and _is_valid_project_text(summaries[name]):
-                r["_summary"] = summaries[name]
+            translated = summaries.get(name, "")
+            if (translated and _is_valid_project_text(translated)
+                    and _re.search(r"[\u4e00-\u9fff]", translated)):
+                r["_intro_zh"] = translated
+                # Keep the historical field for Markdown report compatibility.
+                r["_summary"] = translated
                 llm_count += 1
         console.print(f"    LLM 总结: {llm_count}/{len(targets)} 个仓库")
-
-    # 4. 模板拼接法: 用 README 摘录 + 元数据生成分析性总结 (中文)
-    tpl_count = 0
-    for r in targets:
-        if r.get("_summary"):
-            continue
-        name = r.get("full_name", "")
-        readme_ext = extracts.get(name, "")
-        summary = _template_summarize(r, readme_ext, lang="zh")
-        if summary and len(summary) > 20:
-            r["_summary"] = summary
-            tpl_count += 1
-    if tpl_count:
-        console.print(f"    模板总结: {tpl_count}/{len(targets)} 个仓库")
-
-    # 4b. 模板拼接法: 英文总结
-    tpl_en_count = 0
-    for r in targets:
-        name = r.get("full_name", "")
-        readme_ext = extracts.get(name, "")
-        summary_en = _template_summarize(r, readme_ext, lang="en")
-        if summary_en and len(summary_en) > 20:
-            r["_summary_en"] = summary_en
-            tpl_en_count += 1
-    if tpl_en_count:
-        console.print(f"    英文模板总结: {tpl_en_count}/{len(targets)} 个仓库")
 
     if extracts:
         console.print(f"    README 核心段落: {len(extracts)}/{len(targets)} 个仓库")
@@ -1450,7 +1418,8 @@ def _compose_project_intro(about: str, readme: str,
 def _repo_summary(r: dict, rank: int) -> dict:
     about = r.get("description") or ""
     readme_highlight = r.get("_readme_summary") or ""
-    intro, intro_source = _compose_project_intro(about, readme_highlight)
+    intro_en, intro_source = _compose_project_intro(about, readme_highlight)
+    intro_zh = r.get("_intro_zh") or ""
     summary: dict[str, Any] = {
         "rank": rank,
         "full_name": r.get("full_name"),
@@ -1459,7 +1428,9 @@ def _repo_summary(r: dict, rank: int) -> dict:
         "description": about,
         "about": about,
         "readme_highlight": readme_highlight,
-        "intro": intro,
+        "intro": intro_en,
+        "intro_en": intro_en,
+        "intro_zh": intro_zh,
         "intro_source": intro_source,
         "summary": r.get("_summary") or "",
         "summary_en": r.get("_summary_en") or "",

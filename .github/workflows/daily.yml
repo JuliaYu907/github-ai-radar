@@ -13,6 +13,7 @@ jobs:
       contents: write
       pages: write
       id-token: write
+      models: read
 
     steps:
       - name: Checkout repository
@@ -33,9 +34,11 @@ jobs:
       - name: Generate report
         env:
           GITHUB_TOKEN: ${{ github.token }}
-          LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
-          LLM_API_BASE: ${{ secrets.LLM_API_BASE }}
-          LLM_MODEL: ${{ secrets.LLM_MODEL }}
+          # Custom provider secrets are optional. Without them, use GitHub
+          # Models with the job-scoped token so bilingual copy works by default.
+          LLM_API_KEY: ${{ secrets.LLM_API_KEY || github.token }}
+          LLM_API_BASE: ${{ secrets.LLM_API_BASE || 'https://models.github.ai/inference' }}
+          LLM_MODEL: ${{ secrets.LLM_MODEL || 'openai/gpt-4.1' }}
         run: python github_trending.py || (echo "First attempt failed, retrying..." && sleep 30 && python github_trending.py)
 
       - name: Cleanup old reports
