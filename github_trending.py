@@ -1193,8 +1193,8 @@ def _llm_summarize_batch(repos: list[dict], readmes: dict[str, str],
         for idx, r in enumerate(batch, 1):
             name = r.get("full_name", "")
             readme = readmes.get(name, "")
-            ctx = _build_repo_context(r, readme)
-            repo_blocks.append(f"--- 仓库 {idx}: ---\n{ctx}")
+            repo_context = _build_repo_context(r, readme)
+            repo_blocks.append(f"--- 仓库 {idx}: ---\n{repo_context}")
 
         prompt = (
             "你是一名严谨的开源项目中文编辑。请根据官方 GitHub About 和筛选后的 README 核心段落，"

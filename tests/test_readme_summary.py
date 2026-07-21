@@ -1,14 +1,54 @@
 import unittest
+from types import SimpleNamespace
 
 from github_trending import (
     _build_repo_context,
     _compose_project_intro,
     _extract_summary,
+    _llm_summarize_batch,
     _repo_summary,
+    ctx,
 )
 
 
 class ReadmeSummaryTests(unittest.TestCase):
+    def test_llm_batch_uses_global_config_without_shadowing_context(self):
+        class FakeCompletions:
+            @staticmethod
+            def create(**kwargs):
+                return SimpleNamespace(
+                    choices=[SimpleNamespace(
+                        message=SimpleNamespace(content="1. 这是一个代码分析工具。")
+                    )]
+                )
+
+        client = SimpleNamespace(
+            chat=SimpleNamespace(completions=FakeCompletions())
+        )
+        previous_cfg = ctx.cfg
+        ctx.cfg = {
+            "llm": {
+                "batch_size": 10,
+                "max_summary_chars": 220,
+                "temperature": 0.1,
+            }
+        }
+        try:
+            summaries = _llm_summarize_batch(
+                [{
+                    "full_name": "owner/project",
+                    "description": "A repository analysis tool.",
+                    "topics": ["code-analysis"],
+                }],
+                {"owner/project": "The tool builds a persistent code graph."},
+                client,
+                "test-model",
+            )
+        finally:
+            ctx.cfg = previous_cfg
+
+        self.assertEqual(summaries["owner/project"], "这是一个代码分析工具。")
+
     def test_finds_description_after_large_badge_header(self):
         badges = (
             '<p align="center">\n'
