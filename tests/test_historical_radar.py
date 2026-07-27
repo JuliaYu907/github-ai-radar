@@ -108,6 +108,20 @@ class HistoricalRadarTests(unittest.TestCase):
             status = json.loads((root / "history" / "run-status" / "2026-07-28.json").read_text(encoding="utf-8"))
             self.assertEqual(status["status"], "incomplete")
 
+    def test_watchlist_rule_matching_allows_missing_description(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "watchlist.yaml").write_text("rules:\n  - topic: ai-agent\n", encoding="utf-8")
+            candidate = repo("owner/no-description", 50)
+            candidate["description"] = None
+            result = generate_report(
+                self.config(root),
+                datetime(2026, 7, 28, tzinfo=timezone.utc),
+                self.adapters([candidate], [repo("owner/no-description", 50, today_stars=4)]),
+            )
+
+            self.assertTrue(result.complete)
+
     def test_second_complete_observation_uses_history_delta(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

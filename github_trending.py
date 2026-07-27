@@ -1877,7 +1877,7 @@ def generate_report(config: dict, now: datetime, adapters: RadarAdapters) -> Rad
         r["_score"], r["_score_breakdown"] = _score_with_evidence(r)
         core, app = _classify(r, kw)
         r["_categories"] = (["core"] if core else []) + (["app"] if app and _is_personal_use(r, kw) else [])
-        text = " ".join([r.get("full_name", ""), r.get("description", ""), " ".join(r.get("topics", []))]).lower()
+        text = " ".join([r.get("full_name") or "", r.get("description") or "", " ".join(r.get("topics") or [])]).lower()
         rule_match = any((rule.get("topic", "").lower() in {t.lower() for t in r.get("topics", [])}) or (rule.get("keyword", "").lower() in text) for rule in rules if isinstance(rule, dict))
         r["_watchlist"] = r.get("full_name") in watch_names or rule_match
         r["_discovery_status"] = "verified" if r["_growth_source"] in {"trending", "history_delta"} else "provisional"
