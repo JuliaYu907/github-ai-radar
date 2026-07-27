@@ -1458,6 +1458,8 @@ def _repo_summary(r: dict, rank: int) -> dict:
         "first_observed_at": r.get("_first_observed_at"),
         "trend_7d": r.get("_trend_7d", []),
         "trend_ready": r.get("_trend_ready", False),
+        "streak_days": r.get("_streak_days", 0),
+        "lifecycle": r.get("_lifecycle", "building"),
         "created_at": r.get("created_at"),
         "topics": r.get("topics", []),
         "url": r.get("html_url") or f"https://github.com/{r.get('full_name', '')}",
@@ -1898,6 +1900,15 @@ def generate_report(config: dict, now: datetime, adapters: RadarAdapters) -> Rad
         r["_first_observed_at"] = (previous[0].get("date") if previous else f"{ctx.now:%Y-%m-%d}")
         r["_trend_7d"] = [{"date": item.get("date"), "growth": item.get("growth_per_day"), "confidence": item.get("growth_confidence")} for item in previous[-6:]] + [{"date": f"{ctx.now:%Y-%m-%d}", "growth": r["_growth_rate"], "confidence": r["_growth_confidence"]}]
         r["_trend_ready"] = len(r["_trend_7d"]) >= 7
+        r["_streak_days"] = len(r["_trend_7d"])
+        if not r["_trend_ready"]:
+            r["_lifecycle"] = "building"
+        elif (ctx.now.date() - datetime.fromisoformat(r["_first_observed_at"]).date()).days < 7:
+            r["_lifecycle"] = "new"
+        else:
+            values = [point["growth"] or 0 for point in r["_trend_7d"]]
+            recent, earlier = sum(values[-3:]) / 3, sum(values[:3]) / 3
+            r["_lifecycle"] = "accelerating" if recent > earlier * 1.3 else ("cooling" if recent < earlier * .7 else "steady")
     _write_snapshot(pool)
     report = {"generated_at": ctx.now.isoformat(), "ai_llm_core_top10": [_repo_summary(r, i + 1) for i, r in enumerate(core)], "ai_app_top20": [_repo_summary(r, i + 1) for i, r in enumerate(apps)]}
     return RadarRun(True, report, core, apps)

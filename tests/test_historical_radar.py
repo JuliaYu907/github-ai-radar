@@ -137,6 +137,18 @@ class HistoricalRadarTests(unittest.TestCase):
             self.assertEqual(item["growth_confidence"], "high")
             self.assertEqual(item["growth_score"], 25.0)
 
+    def test_seven_complete_observations_enable_a_seven_day_trend(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root, config = Path(tmp), None
+            config = self.config(root)
+            for day in range(21, 28):
+                generate_report(config, datetime(2026, 7, day, tzinfo=timezone.utc), self.adapters([repo("owner/project", 100 + day)], [repo("owner/project", 100 + day, today_stars=3)]))
+            result = generate_report(config, datetime(2026, 7, 28, tzinfo=timezone.utc), self.adapters([repo("owner/project", 130)], [repo("owner/project", 130, today_stars=3)]))
+
+            item = result.report["ai_app_top20"][0]
+            self.assertTrue(item["trend_ready"])
+            self.assertEqual(len(item["trend_7d"]), 7)
+
 
 if __name__ == "__main__":
     unittest.main()
