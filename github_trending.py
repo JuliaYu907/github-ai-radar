@@ -26,7 +26,7 @@ import time
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any, Callable, Optional
 
 import urllib3
 import requests
@@ -82,6 +82,15 @@ DEFAULTS: dict[str, Any] = {
         "reports_dir": "reports",
         "formats": ["json", "markdown", "html"],
         "pages_dir": "docs",
+    },
+    "history": {
+        "directory": "docs/data/history",
+        "watchlist_path": "watchlist.yaml",
+        "discovery_pool_size": 100,
+        "retention_days": 365,
+        "min_api_repos": 1,
+        "min_trending_repos": 1,
+        "min_candidates": 1,
     },
 }
 
@@ -1440,7 +1449,15 @@ def _repo_summary(r: dict, rank: int) -> dict:
         "issues": r.get("open_issues_count", 0),
         "today_stars": r.get("today_stars", 0),
         "growth_score": r.get("_growth_rate", 0),
+        "growth_source": r.get("_growth_source"),
+        "growth_confidence": r.get("_growth_confidence"),
         "hotness_score": r.get("_score", 0),
+        "score_breakdown": r.get("_score_breakdown", {}),
+        "discovery_status": r.get("_discovery_status"),
+        "watchlist": r.get("_watchlist", False),
+        "first_observed_at": r.get("_first_observed_at"),
+        "trend_7d": r.get("_trend_7d", []),
+        "trend_ready": r.get("_trend_ready", False),
         "created_at": r.get("created_at"),
         "topics": r.get("topics", []),
         "url": r.get("html_url") or f"https://github.com/{r.get('full_name', '')}",
@@ -1718,6 +1735,173 @@ def generate_pages(core: list[dict], apps: list[dict], report_json_path: str) ->
 # main
 # ---------------------------------------------------------------------------
 
+@dataclass
+class RadarAdapters:
+    """External collectors used by a single, testable radar run."""
+    fetch_api: Callable[[], list[dict]]
+    fetch_trending: Callable[[], list[dict]]
+    fetch_watchlist: Callable[[list[str]], list[dict]]
+
+
+@dataclass
+class RadarRun:
+    complete: bool
+    report: dict[str, Any]
+    core: list[dict] = field(default_factory=list)
+    apps: list[dict] = field(default_factory=list)
+
+
+def _history_path() -> Path:
+    return Path(ctx.cfg.get("history", {}).get("directory", "docs/data/history"))
+
+
+def _load_watchlist() -> list[str]:
+    path = Path(ctx.cfg.get("history", {}).get("watchlist_path", "watchlist.yaml"))
+    if not path.exists():
+        return []
+    try:
+        data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    except (OSError, yaml.YAMLError):
+        return []
+    return [str(name).strip() for name in data.get("repositories", []) if str(name).strip()]
+
+
+def _watchlist_rules() -> list[dict]:
+    path = Path(ctx.cfg.get("history", {}).get("watchlist_path", "watchlist.yaml"))
+    if not path.exists():
+        return []
+    try:
+        return (yaml.safe_load(path.read_text(encoding="utf-8")) or {}).get("rules", [])
+    except (OSError, yaml.YAMLError):
+        return []
+
+
+def _repository_key(repo: dict) -> str:
+    return f"id:{repo['id']}" if repo.get("id") is not None else f"name:{(repo.get('full_name') or '').lower()}"
+
+
+def _load_history() -> dict[str, list[dict]]:
+    found: dict[str, list[dict]] = {}
+    for path in sorted(_history_path().glob("20??-??-??.json")):
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        for item in payload.get("repositories", []):
+            key = _repository_key(item)
+            found.setdefault(key, []).append(item)
+            if item.get("full_name"):
+                found.setdefault(f"name:{item['full_name'].lower()}", []).append(item)
+    return found
+
+
+def _measure_growth(repo: dict, history: dict[str, list[dict]]) -> tuple[float, str, str]:
+    if (today := (repo.get("today_stars", 0) or 0)) > 0:
+        return float(today), "trending", "high"
+    previous = history.get(_repository_key(repo), []) or history.get(f"name:{(repo.get('full_name') or '').lower()}", [])
+    if previous:
+        prior = previous[-1]
+        try:
+            observed = datetime.fromisoformat(prior["generated_at"].replace("Z", "+00:00"))
+            days = max((ctx.now - observed).total_seconds() / 86400, 0.01)
+            if days <= 7:
+                delta = (repo.get("stargazers_count", 0) or 0) - (prior.get("stars", 0) or 0)
+                return round(delta / days, 1), "history_delta", "high" if days <= 2 else "medium"
+        except (KeyError, TypeError, ValueError):
+            pass
+    try:
+        created = datetime.fromisoformat(repo["created_at"].replace("Z", "+00:00"))
+        age = max((ctx.now - created).total_seconds() / 86400, 0.5)
+        return round((repo.get("stargazers_count", 0) or 0) / age, 1), "age_estimate", "low"
+    except (KeyError, TypeError, ValueError):
+        return 0.0, "unknown", "low"
+
+
+def _score_with_evidence(repo: dict) -> tuple[float, dict[str, float]]:
+    cfg = ctx.cfg.get("scoring", {})
+    growth = max(repo.get("_growth_rate", 0.0), 0.0) if repo.get("_growth_source") in {"trending", "history_delta"} else 0.0
+    recency = 0.0
+    try:
+        pushed = datetime.fromisoformat(repo["pushed_at"].replace("Z", "+00:00"))
+        recency = max(0, 10 - (ctx.now - pushed).total_seconds() / 3600 * 0.2)
+    except (KeyError, TypeError, ValueError):
+        pass
+    parts = {
+        "today_stars": math.log2(1 + (repo.get("today_stars", 0) or 0)) * 3 * cfg.get("today_stars_weight", .4),
+        "growth_rate": math.log2(1 + growth) * 2 * cfg.get("growth_rate_weight", .3),
+        "recency": recency * cfg.get("recency_weight", .15),
+        "base_stars": math.log2(1 + (repo.get("stargazers_count", 0) or 0)) * cfg.get("base_stars_weight", .15),
+    }
+    return round(sum(parts.values()), 2), {k: round(v, 6) for k, v in parts.items()}
+
+
+def _write_json(path: Path, value: dict) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(value, ensure_ascii=False, indent=2), encoding="utf-8")
+
+
+def _write_snapshot(repos: list[dict]) -> None:
+    entries = [{"date": f"{ctx.now:%Y-%m-%d}", "id": r.get("id"), "full_name": r.get("full_name"), "stars": r.get("stargazers_count", 0),
+                "forks": r.get("forks_count", 0), "issues": r.get("open_issues_count", 0), "pushed_at": r.get("pushed_at"),
+                "today_stars": r.get("today_stars", 0), "today_stars_source": "trending" if r.get("today_stars", 0) else None, "growth_per_day": r.get("_growth_rate", 0),
+                "growth_source": r.get("_growth_source"), "growth_confidence": r.get("_growth_confidence"),
+                "hotness_score": r.get("_score", 0), "score_breakdown": r.get("_score_breakdown", {}),
+                "categories": r.get("_categories", []), "discovery_status": r.get("_discovery_status"), "watchlist": r.get("_watchlist", False),
+                "rank": r.get("_ranks", {}), "generated_at": ctx.now.isoformat()} for r in repos]
+    root = _history_path()
+    _write_json(root / f"{ctx.now:%Y-%m-%d}.json", {"schema_version": 1, "date": f"{ctx.now:%Y-%m-%d}", "generated_at": ctx.now.isoformat(), "repositories": entries})
+    cutoff = f"{(ctx.now - timedelta(days=ctx.cfg.get('history', {}).get('retention_days', 365))):%Y-%m-%d}.json"
+    for old in root.glob("20??-??-??.json"):
+        if old.name < cutoff:
+            old.unlink()
+
+
+def generate_report(config: dict, now: datetime, adapters: RadarAdapters) -> RadarRun:
+    """Run collection, historical evidence, ranking, and snapshot writing as one seam."""
+    ctx.cfg, ctx.now = _deep_merge(DEFAULTS, config), now
+    api, trending = adapters.fetch_api(), adapters.fetch_trending()
+    candidates = _merge(api, trending)
+    hcfg = ctx.cfg["history"]
+    if len(api) < hcfg["min_api_repos"] or len(trending) < hcfg["min_trending_repos"] or len(candidates) < hcfg["min_candidates"]:
+        _write_json(_history_path() / "run-status" / f"{ctx.now:%Y-%m-%d}.json", {"status": "incomplete", "generated_at": ctx.now.isoformat(), "api_count": len(api), "trending_count": len(trending), "candidate_count": len(candidates)})
+        return RadarRun(False, {"generated_at": ctx.now.isoformat(), "ai_llm_core_top10": [], "ai_app_top20": []})
+    watch_names = _load_watchlist()
+    watched = adapters.fetch_watchlist(watch_names) if watch_names else []
+    by_name = {(r.get("full_name") or "").lower(): r for r in candidates}
+    for r in watched:
+        by_name.setdefault((r.get("full_name") or "").lower(), r)
+    candidates, history, kw = list(by_name.values()), _load_history(), _get_sets()
+    rules = _watchlist_rules()
+    for r in candidates:
+        r["_growth_rate"], r["_growth_source"], r["_growth_confidence"] = _measure_growth(r, history)
+        r["_score"], r["_score_breakdown"] = _score_with_evidence(r)
+        core, app = _classify(r, kw)
+        r["_categories"] = (["core"] if core else []) + (["app"] if app and _is_personal_use(r, kw) else [])
+        text = " ".join([r.get("full_name", ""), r.get("description", ""), " ".join(r.get("topics", []))]).lower()
+        rule_match = any((rule.get("topic", "").lower() in {t.lower() for t in r.get("topics", [])}) or (rule.get("keyword", "").lower() in text) for rule in rules if isinstance(rule, dict))
+        r["_watchlist"] = r.get("full_name") in watch_names or rule_match
+        r["_discovery_status"] = "verified" if r["_growth_source"] in {"trending", "history_delta"} else "provisional"
+    pool = sorted([r for r in candidates if r["_categories"]], key=lambda r: r["_score"], reverse=True)[:hcfg["discovery_pool_size"]]
+    pool += [r for r in watched if r not in pool]
+    verified = lambda r: r["_growth_source"] in {"trending", "history_delta"}
+    core = sorted([r for r in candidates if "core" in r["_categories"] and verified(r)], key=lambda r: r["_score"], reverse=True)
+    apps = sorted([r for r in candidates if "app" in r["_categories"] and verified(r)], key=lambda r: r["_score"], reverse=True)
+    if ctx.cfg["rankings"].get("deduplicate", True):
+        core_names = {r.get("full_name", "").lower() for r in core[:ctx.cfg["rankings"]["core_top_n"]]}
+        apps = [r for r in apps if r.get("full_name", "").lower() not in core_names]
+    core, apps = core[:ctx.cfg["rankings"]["core_top_n"]], apps[:ctx.cfg["rankings"]["app_top_n"]]
+    for kind, ranked in (("core", core), ("app", apps)):
+        for rank, r in enumerate(ranked, 1):
+            r["_rank"], r["_ranks"] = rank, {kind: rank}
+    for r in core + apps:
+        previous = history.get(_repository_key(r), []) or history.get(f"name:{(r.get('full_name') or '').lower()}", [])
+        r["_first_observed_at"] = (previous[0].get("date") if previous else f"{ctx.now:%Y-%m-%d}")
+        r["_trend_7d"] = [{"date": item.get("date"), "growth": item.get("growth_per_day"), "confidence": item.get("growth_confidence")} for item in previous[-6:]] + [{"date": f"{ctx.now:%Y-%m-%d}", "growth": r["_growth_rate"], "confidence": r["_growth_confidence"]}]
+        r["_trend_ready"] = len(r["_trend_7d"]) >= 7
+    _write_snapshot(pool)
+    report = {"generated_at": ctx.now.isoformat(), "ai_llm_core_top10": [_repo_summary(r, i + 1) for i, r in enumerate(core)], "ai_app_top20": [_repo_summary(r, i + 1) for i, r in enumerate(apps)]}
+    return RadarRun(True, report, core, apps)
+
 def main() -> None:
 
     ctx.now = datetime.now(timezone.utc)
@@ -1749,68 +1933,18 @@ def main() -> None:
 
     output_formats = set(ctx.cfg.get("output", {}).get("formats", ["json", "markdown", "html"]))
 
-    # 1. 抓取
-    console.print("[cyan]>>> [1/6] Search API: AI topic + 新项目爆发查询...[/cyan]")
-    api_repos = fetch_ai_repos(token=args.token)
-    console.print(f"    API 共获取 {len(api_repos)} 个去重仓库")
-
-    console.print("[cyan]>>> [2/6] GitHub Trending (today_stars)...[/cyan]")
-    trending = fetch_trending()
-    console.print(f"    Trending 返回 {len(trending)} 条")
-
-    # 2. 加载历史数据
-    console.print("[cyan]>>> [3/6] 加载历史数据 & 计算增长速率...[/cyan]")
-    prev_data = _load_previous_report()
-
-    # 3. 合并 & 计算增长指标
-    all_repos = _merge(api_repos, trending)
-
-    # BUG-3: 为仅来自 Trending 的仓库补充完整元数据
-    _enrich_trending_metadata(all_repos, token=args.token)
-
-    for r in all_repos:
-        r["_growth_rate"] = _compute_growth_rate(r, prev_data)
-        r["_score"] = hotness_score(r)
-
-    # 4. 分类
-    console.print("[cyan]>>> [4/6] 分类 & 排序...[/cyan]")
-    kw = _get_sets()
-    core_list: list[dict] = []
-    app_list: list[dict] = []
-    for r in all_repos:
-        is_core, is_app = _classify(r, kw)
-        if is_core:
-            core_list.append(r)
-        if is_app:
-            app_list.append(r)
-
-    # 应用榜: 过滤掉企业级项目, 只保留个人使用向
-    app_list = [r for r in app_list if _is_personal_use(r, kw)]
-
-    core_list.sort(key=lambda x: x["_score"], reverse=True)
-    app_list.sort(key=lambda x: x["_score"], reverse=True)
-
-    # 去重: 核心榜出现过的仓库不再出现在应用榜
-    if ctx.cfg.get("rankings", {}).get("deduplicate", True):
-        core_n = ctx.cfg.get("rankings", {}).get("core_top_n", 10)
-        core_names = {r.get("full_name", "").lower() for r in core_list[:core_n]}
-        app_list = [r for r in app_list if r.get("full_name", "").lower() not in core_names]
-
-    # 添加排名信息
-    for i, r in enumerate(core_list):
-        r["_rank"] = i + 1
-    for i, r in enumerate(app_list):
-        r["_rank"] = i + 1
-
-    # BUG-1: 计算排名变化
-    _compute_rank_changes(core_list, prev_data, "ai_llm_core_top10")
-    _compute_rank_changes(app_list, prev_data, "ai_app_top20")
-
-    console.print(f"    分类完成: 核心 {len(core_list)} / 应用 {len(app_list)} (个人向, 已去重)")
-
-    if not core_list and not app_list:
-        console.print("[red]未获取到任何 AI 仓库数据。[/red]")
-        sys.exit(1)
+    console.print("[cyan]>>> [1/6] 采集、验证历史快照并排序...[/cyan]")
+    adapters = RadarAdapters(
+        fetch_api=lambda: fetch_ai_repos(token=args.token),
+        fetch_trending=fetch_trending,
+        fetch_watchlist=lambda names: [meta for name in names if (meta := _fetch_repo_metadata(name, args.token))],
+    )
+    run = generate_report(ctx.cfg, ctx.now, adapters)
+    if not run.complete:
+        console.print("[yellow]采集不完整，已写入运行状态；未更新报告或历史快照。[/yellow]")
+        return
+    core_list, app_list = run.core, run.apps
+    console.print(f"    分类完成: 核心 {len(core_list)} / 应用 {len(app_list)} (真实增长信号)")
 
     # 5. 抓取 README & LLM 分析性总结
     console.print("[cyan]>>> [5/6] 抓取 README & 生成分析性总结...[/cyan]")

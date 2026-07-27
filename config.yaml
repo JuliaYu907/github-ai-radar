@@ -313,3 +313,15 @@ output:
     - markdown
     - html                     # 生成 GitHub Pages 静态站
   pages_dir: docs              # GitHub Pages 输出目录
+
+# ---------------------------------------------------------------------------
+# 历史趋势雷达
+# ---------------------------------------------------------------------------
+history:
+  directory: docs/data/history # 每日 Top 100 + Watchlist 快照
+  watchlist_path: watchlist.yaml
+  discovery_pool_size: 100
+  retention_days: 365
+  min_api_repos: 1             # 低于阈值视为不完整运行，不污染历史
+  min_trending_repos: 1
+  min_candidates: 1
