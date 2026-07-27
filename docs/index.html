@@ -636,6 +636,9 @@ const I18N = {
     of: "of",
     show_more: "Show more \u25be",
     show_less: "Show less \u25b4",
+    evidence_trending: "Trending daily growth · high confidence",
+    evidence_history_delta: "Observed growth · high confidence",
+    evidence_age_estimate: "Estimated growth · low confidence",
   },
   zh: {
     subtitle: "每日 AI 热门项目追踪",
@@ -664,6 +667,9 @@ const I18N = {
     of: "/",
     show_more: "\u5c55\u5f00 \u25be",
     show_less: "\u6536\u8d77 \u25b4",
+    evidence_trending: "Trending 日增 · 高可信度",
+    evidence_history_delta: "快照增长 · 高可信度",
+    evidence_age_estimate: "估算增长 · 低可信度",
   }
 };
 var currentLang = localStorage.getItem('preferred_lang') || 'en';
@@ -692,6 +698,11 @@ function rankBadge(c){
   if(n>0)return'<span class="rank-change up">&#9650; +'+n+'</span>';
   if(n<0)return'<span class="rank-change down">&#9660; '+n+'</span>';
   return'<span class="rank-change same">&ndash; 0</span>';
+}
+function growthEvidence(r){
+  if(!r.growth_source)return'';
+  var key='evidence_'+r.growth_source;
+  return '<div class="card-desc" style="margin-top:8px;font-size:.72rem;color:#8b949e;">'+esc(t(key))+'</div>';
 }
 var STAR='<svg viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.75.75 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z" fill="#e3b341"/></svg>';
 var UP='<svg viewBox="0 0 16 16"><path d="M4.427 9.573l3.396-3.396a.25.25 0 01.354 0l3.396 3.396a.25.25 0 01-.177.427H4.604a.25.25 0 01-.177-.427z" fill="#3fb950"/></svg>';
@@ -726,7 +737,7 @@ function card(r,i){
     (r.today_stars?'<span class="stat-divider"></span><span class="stat stat-today">'+UP+' +'+fmt(r.today_stars)+' '+t('today')+'</span>':'')+
     (gs?'<span class="stat-divider"></span><span class="stat stat-growth">&#x1F4C8; '+gs.toFixed(1)+t('per_day')+'</span>':'')+
     '<span class="hotness '+hc+'"><span class="fire">&#x1F525;</span> '+(r.hotness_score!=null?r.hotness_score.toFixed(1):'-')+'</span>'+
-    '</div></article>';
+    '</div>'+growthEvidence(r)+'</article>';
 }
 function section(title,icon,badge,repos){
   if(!repos||!repos.length)return'';
