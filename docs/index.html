@@ -639,6 +639,10 @@ const I18N = {
     evidence_trending: "Trending daily growth · high confidence",
     evidence_history_delta: "Observed growth · high confidence",
     evidence_age_estimate: "Estimated growth · low confidence",
+    trend_building: "Trend data building",
+    streak: "day streak",
+    accelerating: "Accelerating", steady: "Steady", cooling: "Cooling", new: "New",
+    score_details: "Score details",
   },
   zh: {
     subtitle: "每日 AI 热门项目追踪",
@@ -670,6 +674,10 @@ const I18N = {
     evidence_trending: "Trending 日增 · 高可信度",
     evidence_history_delta: "快照增长 · 高可信度",
     evidence_age_estimate: "估算增长 · 低可信度",
+    trend_building: "趋势数据积累中",
+    streak: "天连续上榜",
+    accelerating: "加速中", steady: "稳定", cooling: "降温", new: "新项目",
+    score_details: "评分详情",
   }
 };
 var currentLang = localStorage.getItem('preferred_lang') || 'en';
@@ -704,6 +712,13 @@ function growthEvidence(r){
   var key='evidence_'+r.growth_source;
   return '<div class="card-desc" style="margin-top:8px;font-size:.72rem;color:#8b949e;">'+esc(t(key))+'</div>';
 }
+function trendPanel(r){
+  if(!r.trend_ready)return '<div class="card-desc" style="margin-top:8px;font-size:.72rem;color:#8b949e;">'+t('trend_building')+'</div>';
+  var xs=r.trend_7d||[],max=Math.max.apply(null,xs.map(function(x){return Math.abs(x.growth||0);}).concat([1]));
+  var bars=xs.map(function(x){var h=Math.max(3,Math.round(Math.abs(x.growth||0)/max*34));return '<span title="'+esc(x.date||'')+': '+(x.growth||0)+'" style="display:inline-block;width:10px;height:'+h+'px;background:#58a6ff;margin-right:3px;vertical-align:bottom;border-radius:2px"></span>';}).join('');
+  var breakdown=r.score_breakdown||{};
+  return '<details style="margin-top:10px"><summary style="cursor:pointer;color:#58a6ff;font-size:.78rem">'+t('score_details')+'</summary><div style="margin-top:8px;height:36px">'+bars+'</div><div class="card-desc" style="font-size:.72rem">'+r.streak_days+' '+t('streak')+' · '+t(r.lifecycle||'steady')+'<br>Today '+(breakdown.today_stars||0).toFixed(2)+' · Growth '+(breakdown.growth_rate||0).toFixed(2)+' · Active '+(breakdown.recency||0).toFixed(2)+' · Base '+(breakdown.base_stars||0).toFixed(2)+'</div></details>';
+}
 var STAR='<svg viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.75.75 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z" fill="#e3b341"/></svg>';
 var UP='<svg viewBox="0 0 16 16"><path d="M4.427 9.573l3.396-3.396a.25.25 0 01.354 0l3.396 3.396a.25.25 0 01-.177.427H4.604a.25.25 0 01-.177-.427z" fill="#3fb950"/></svg>';
 var _hotnessThreshold=12;
@@ -737,7 +752,7 @@ function card(r,i){
     (r.today_stars?'<span class="stat-divider"></span><span class="stat stat-today">'+UP+' +'+fmt(r.today_stars)+' '+t('today')+'</span>':'')+
     (gs?'<span class="stat-divider"></span><span class="stat stat-growth">&#x1F4C8; '+gs.toFixed(1)+t('per_day')+'</span>':'')+
     '<span class="hotness '+hc+'"><span class="fire">&#x1F525;</span> '+(r.hotness_score!=null?r.hotness_score.toFixed(1):'-')+'</span>'+
-    '</div>'+growthEvidence(r)+'</article>';
+    '</div>'+growthEvidence(r)+trendPanel(r)+'</article>';
 }
 function section(title,icon,badge,repos){
   if(!repos||!repos.length)return'';
