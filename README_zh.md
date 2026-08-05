@@ -20,9 +20,10 @@
 - **新项目捕获** — 48 小时内创建且快速获星的全新项目优先展示
 - **准确的项目简介** — 结合仓库官方 GitHub About 与 README 中信息量最高的核心段落，并过滤徽章、安装命令、警告和宣传噪声
 - **双语简介** — 保留基于原始资料的英文简介，并为看板语言标签生成忠实的中文翻译
-- **双榜单输出（去重）**
+- **三榜单输出**
   - AI/LLM 核心仓库 Top 10 (框架、模型、训练推理工具)
   - AI 个人应用 Top 20 (CLI 工具、本地模型、个人助手等，过滤企业级平台，与核心榜去重)
+  - 新兴热点 Top 10（只看真实增长信号，奖励新创建/首次发现/加速项目，并用 30 天冷却期避免重复上榜）
 - **完全可配置** — 通过 `config.yaml` 自定义关键词、评分权重、Top N 数量、搜索范围等
 - **多格式报告** — 终端 Rich 表格 + JSON + Markdown + GitHub Pages HTML
 
@@ -113,7 +114,14 @@ scoring:
 rankings:
   core_top_n: 10
   app_top_n: 20
+  emerging_top_n: 10
   deduplicate: true        # 核心榜出现的仓库不再出现在应用榜
+
+emerging:
+  cooldown_days: 30
+  max_repo_age_days: 180
+  max_first_observed_days: 7
+  min_growth_per_day: 10
 
 # 搜索 topic 列表（可自定义追踪领域）
 search_topics:

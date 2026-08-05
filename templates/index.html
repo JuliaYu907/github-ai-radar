@@ -614,6 +614,7 @@ const I18N = {
     loading: "Fetching latest AI radar data...",
     core_title: "AI / LLM Core",
     app_title: "AI Personal Apps",
+    emerging_title: "Emerging AI Hotspots",
     top: "Top",
     no_desc: "No description provided.",
     today: "today",
@@ -643,12 +644,18 @@ const I18N = {
     streak: "day streak",
     accelerating: "Accelerating", steady: "Steady", cooling: "Cooling", new: "New",
     score_details: "Score details",
+    emerging_recently_created: "recently created",
+    emerging_newly_discovered: "newly discovered",
+    emerging_accelerating: "accelerating",
+    emerging_low_prior_exposure: "low prior exposure",
+    emerging_score: "emerging score",
   },
   zh: {
     subtitle: "每日 AI 热门项目追踪",
     loading: "正在加载最新 AI 雷达数据...",
     core_title: "AI / LLM 核心",
     app_title: "AI 个人应用",
+    emerging_title: "新兴热点",
     top: "Top",
     no_desc: "暂无描述",
     today: "今日",
@@ -678,6 +685,11 @@ const I18N = {
     streak: "天连续上榜",
     accelerating: "加速中", steady: "稳定", cooling: "降温", new: "新项目",
     score_details: "评分详情",
+    emerging_recently_created: "近期创建",
+    emerging_newly_discovered: "首次发现",
+    emerging_accelerating: "增速加速",
+    emerging_low_prior_exposure: "近期低曝光",
+    emerging_score: "新兴指数",
   }
 };
 var currentLang = localStorage.getItem('preferred_lang') || 'en';
@@ -712,6 +724,13 @@ function growthEvidence(r){
   var key='evidence_'+r.growth_source;
   return '<div class="card-desc" style="margin-top:8px;font-size:.72rem;color:#8b949e;">'+esc(t(key))+'</div>';
 }
+function emergingEvidence(r){
+  var e=r.emerging_evidence||{},signals=e.signals||[];
+  if(!signals.length)return'';
+  var labels=signals.map(function(signal){return t('emerging_'+signal);});
+  if(e.acceleration_ratio!=null&&signals.indexOf('accelerating')>=0){labels.push(e.acceleration_ratio.toFixed(1)+'×');}
+  return '<div class="card-desc" style="margin-top:8px;font-size:.72rem;color:#d2a8ff;">&#x2728; '+esc(labels.join(' · '))+'</div>';
+}
 function trendPanel(r){
   if(!r.trend_ready)return '<div class="card-desc" style="margin-top:8px;font-size:.72rem;color:#8b949e;">'+t('trend_building')+'</div>';
   var xs=r.trend_7d||[],max=Math.max.apply(null,xs.map(function(x){return Math.abs(x.growth||0);}).concat([1]));
@@ -723,15 +742,17 @@ var STAR='<svg viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 .25a.75.75 0 
 var UP='<svg viewBox="0 0 16 16"><path d="M4.427 9.573l3.396-3.396a.25.25 0 01.354 0l3.396 3.396a.25.25 0 01-.177.427H4.604a.25.25 0 01-.177-.427z" fill="#3fb950"/></svg>';
 var _hotnessThreshold=12;
 function computeHotnessThreshold(data){
-  var all=[].concat(data.ai_llm_core_top10||[],data.ai_app_top20||[]);
+  var all=[].concat(data.ai_llm_core_top10||[],data.ai_app_top20||[],data.ai_emerging_top10||[]);
   var scores=all.map(function(r){return r.hotness_score||0;}).filter(function(s){return s>0;}).sort(function(a,b){return a-b;});
   if(!scores.length)return 12;
   var median=scores[Math.floor(scores.length/2)];
   var range=scores[scores.length-1]-scores[0];
   return Math.round((median+range*0.15)*10)/10;
 }
-function card(r,i){
-  var hc=r.hotness_score>=_hotnessThreshold?'hotness-high':'';
+function card(r,i,metric){
+  var isEmerging=metric==='emerging';
+  var displayScore=isEmerging?r.emerging_score:r.hotness_score;
+  var hc=!isEmerging&&r.hotness_score>=_hotnessThreshold?'hotness-high':'';
   var gs=r.growth_score||r.growth_rate_per_day||0;
   var p=(r.full_name||'').split('/'),o=p[0]||'',nm=p[1]||r.full_name;
   var rawSummary=currentLang==='zh'
@@ -751,12 +772,12 @@ function card(r,i){
     '<span class="stat stat-stars">'+STAR+' '+fmt(r.stars)+'</span>'+
     (r.today_stars?'<span class="stat-divider"></span><span class="stat stat-today">'+UP+' +'+fmt(r.today_stars)+' '+t('today')+'</span>':'')+
     (gs?'<span class="stat-divider"></span><span class="stat stat-growth">&#x1F4C8; '+gs.toFixed(1)+t('per_day')+'</span>':'')+
-    '<span class="hotness '+hc+'"><span class="fire">&#x1F525;</span> '+(r.hotness_score!=null?r.hotness_score.toFixed(1):'-')+'</span>'+
-    '</div>'+growthEvidence(r)+trendPanel(r)+'</article>';
+    '<span class="hotness '+hc+'" title="'+esc(isEmerging?t('emerging_score'):'Hotness')+'"><span class="fire">'+(isEmerging?'&#x2728;':'&#x1F525;')+'</span> '+(displayScore!=null?displayScore.toFixed(1):'-')+'</span>'+
+    '</div>'+growthEvidence(r)+(isEmerging?emergingEvidence(r):'')+trendPanel(r)+'</article>';
 }
-function section(title,icon,badge,repos){
+function section(title,icon,badge,repos,metric){
   if(!repos||!repos.length)return'';
-  return'<section class="section"><div class="section-header"><span class="section-icon">'+icon+'</span><h2 class="section-title">'+title+'</h2><span class="section-badge">'+badge+'</span></div><div class="card-grid">'+repos.map(function(r,i){return card(r,i);}).join('')+'</div></section>';
+  return'<section class="section"><div class="section-header"><span class="section-icon">'+icon+'</span><h2 class="section-title">'+title+'</h2><span class="section-badge">'+badge+'</span></div><div class="card-grid">'+repos.map(function(r,i){return card(r,i,metric);}).join('')+'</div></section>';
 }
 function observe(){
   var cards=document.querySelectorAll('.card');
@@ -774,7 +795,7 @@ function toggleDesc(btn){
 }
 function populateLangFilter(data){
   var langs={};
-  (data.ai_llm_core_top10||[]).concat(data.ai_app_top20||[]).forEach(function(r){
+  (data.ai_llm_core_top10||[]).concat(data.ai_app_top20||[],data.ai_emerging_top10||[]).forEach(function(r){
     if(r.language)langs[r.language]=(langs[r.language]||0)+1;
   });
   var sel=document.getElementById('lang-filter');
@@ -814,9 +835,10 @@ var _cachedData=null;
 function renderData(d){
     var main=document.getElementById('main-content'),ft=document.getElementById('footer'),ts=document.getElementById('timestamp-text');
     ts.textContent=d.generated_at?'Updated '+fmtTime(d.generated_at):'Data loaded';
-    document.getElementById('methodology-text').textContent=d.methodology||'Ranked by composite hotness score.';
+    document.getElementById('methodology-text').textContent=(d.methodology||'Ranked by composite hotness score.')+(d.emerging_methodology?' '+d.emerging_methodology:'');
     _hotnessThreshold=computeHotnessThreshold(d);
     var h='';
+    h+=section(t('emerging_title'),'&#x1F331;',t('top')+' '+(d.ai_emerging_top10?d.ai_emerging_top10.length:'10'),d.ai_emerging_top10,'emerging');
     h+=section(t('core_title'),'&#x1F9E0;',t('top')+' '+(d.ai_llm_core_top10?d.ai_llm_core_top10.length:'10'),d.ai_llm_core_top10);
     h+=section(t('app_title'),'&#x1F680;',t('top')+' '+(d.ai_app_top20?d.ai_app_top20.length:'20'),d.ai_app_top20);
     if(!h){main.innerHTML='<div class="error-state"><div class="error-icon">&#x1F4ED;</div><h2 class="error-title">'+t('no_data')+'</h2><p class="error-message">'+t('no_data_msg')+'</p></div>';return;}

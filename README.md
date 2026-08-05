@@ -20,9 +20,10 @@ Discover the hottest AI repositories on GitHub from the past 48 hours, ranked by
 - **New project detection** — Brand-new projects created within 48 hours that gain stars quickly are highlighted
 - **Accurate project introductions** — Combines each repository's official GitHub About text with its most informative README paragraphs while filtering badges, installation commands, warnings, and promotional noise
 - **Bilingual descriptions** — Keeps an evidence-based English introduction and generates a faithful Chinese translation for the dashboard's language tabs
-- **Dual rankings (deduplicated)**
+- **Three complementary rankings**
   - AI/LLM Core Repos Top 10 (frameworks, models, training & inference tools)
   - AI Personal Apps Top 20 (CLI tools, local models, personal assistants, etc. — enterprise platforms filtered out, deduplicated against Core ranking)
+  - Emerging AI Hotspots Top 10 (requires verified growth, rewards recent creation/discovery and acceleration, and uses a 30-day cooldown to prevent repeat entries)
 - **Fully configurable** — Customize keywords, scoring weights, Top N counts, search scope, and more via `config.yaml`
 - **Multi-format reports** — Terminal Rich tables + JSON + Markdown + GitHub Pages HTML
 
@@ -113,7 +114,14 @@ scoring:
 rankings:
   core_top_n: 10
   app_top_n: 20
+  emerging_top_n: 10
   deduplicate: true        # Repos in Core ranking won't appear in App ranking
+
+emerging:
+  cooldown_days: 30
+  max_repo_age_days: 180
+  max_first_observed_days: 7
+  min_growth_per_day: 10
 
 # Search topic list (customize to track any domain)
 search_topics:

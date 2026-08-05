@@ -47,7 +47,21 @@ scoring:
 rankings:
   core_top_n: 10               # AI/LLM 核心榜 Top N
   app_top_n: 20                # AI 应用榜 Top N
+  emerging_top_n: 10           # 新兴热点榜 Top N
   deduplicate: true            # 核心榜出现过的仓库不再出现在应用榜
+
+# ---------------------------------------------------------------------------
+# 新兴热点：奖励新项目、首次发现和加速增长，抑制老项目反复回榜
+# ---------------------------------------------------------------------------
+emerging:
+  lookback_days: 30            # 统计近期曝光/主榜上榜次数的窗口
+  cooldown_days: 30            # 入选新兴榜后多久内不重复入选
+  max_repo_age_days: 180       # 创建不超过此天数可视为新项目
+  max_first_observed_days: 7   # 首次进入雷达不超过此天数可视为新发现
+  max_stars_for_sleeper: 20000 # 较老项目只有低于此 Stars 才可作为“潜力黑马”
+  min_growth_per_day: 10       # 必须有真实日增且达到此门槛
+  max_prior_main_rank_days: 0  # 近 30 天主榜出现过即排除，确保榜单只收新面孔
+  min_acceleration_ratio: 1.5  # 达到此增速倍数时展示“加速”信号
 
 # ---------------------------------------------------------------------------
 # 新项目查询阈值（created:>time_window 内的新项目最少需要多少 star）

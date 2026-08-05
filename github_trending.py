@@ -72,7 +72,18 @@ DEFAULTS: dict[str, Any] = {
     "rankings": {
         "core_top_n": 10,
         "app_top_n": 20,
+        "emerging_top_n": 10,
         "deduplicate": True,
+    },
+    "emerging": {
+        "lookback_days": 30,
+        "cooldown_days": 30,
+        "max_repo_age_days": 180,
+        "max_first_observed_days": 7,
+        "max_stars_for_sleeper": 20000,
+        "min_growth_per_day": 10,
+        "max_prior_main_rank_days": 0,
+        "min_acceleration_ratio": 1.5,
     },
     "readme": {
         "max_chars": 262144,
@@ -1348,7 +1359,8 @@ def _fmt(n) -> str:
     return str(n)
 
 
-def _print_ranked(title: str, repos: list[dict], top_n: int) -> None:
+def _print_ranked(title: str, repos: list[dict], top_n: int,
+                  score_key: str = "_score", score_label: str = "Hot") -> None:
     table = Table(title=title, title_style="bold cyan", show_lines=False, pad_edge=False)
     table.add_column("#", style="dim", width=3, justify="right")
     table.add_column("Repository", style="bold white", min_width=28, no_wrap=True)
@@ -1356,7 +1368,7 @@ def _print_ranked(title: str, repos: list[dict], top_n: int) -> None:
     table.add_column("Stars", justify="right", style="yellow", width=7)
     table.add_column("+Today", justify="right", style="bold yellow", width=7)
     table.add_column("Growth/d", justify="right", style="bold magenta", width=9)
-    table.add_column("Hot", justify="right", style="bold red", width=5)
+    table.add_column(score_label, justify="right", style="bold red", width=max(5, len(score_label)))
 
     for i, r in enumerate(repos[:top_n], 1):
         today = r.get("today_stars", 0)
@@ -1367,7 +1379,7 @@ def _print_ranked(title: str, repos: list[dict], top_n: int) -> None:
             _fmt(r.get("stargazers_count", 0)),
             f"+{_fmt(today)}" if today else "-",
             f"{_fmt(growth)}/d" if growth else "-",
-            str(r.get("_score", 0)),
+            str(r.get(score_key, 0)),
         )
     console.print()
     console.print(table)
@@ -1464,6 +1476,8 @@ def _repo_summary(r: dict, rank: int) -> dict:
         "topics": r.get("topics", []),
         "url": r.get("html_url") or f"https://github.com/{r.get('full_name', '')}",
         "rank_change": r.get("_rank_change"),
+        "emerging_score": r.get("_emerging_score"),
+        "emerging_evidence": r.get("_emerging_evidence"),
     }
     return summary
 
@@ -1476,10 +1490,11 @@ def _report_dir(base: str = "reports") -> tuple[str, str]:
     return dir_path, date_str
 
 
-def save_report(core: list[dict], apps: list[dict], path: str) -> None:
+def save_report(core: list[dict], apps: list[dict], emerging: list[dict], path: str) -> None:
     os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
     core_n = ctx.cfg.get("rankings", {}).get("core_top_n", 10)
     app_n = ctx.cfg.get("rankings", {}).get("app_top_n", 20)
+    emerging_n = ctx.cfg.get("rankings", {}).get("emerging_top_n", 10)
     report = {
         "generated_at": ctx.now.isoformat(),
         "methodology": "Ranked by hotness_score = today_stars({w1}) + growth_rate({w2}) + recency({w3}) + base_stars({w4})".format(
@@ -1488,8 +1503,12 @@ def save_report(core: list[dict], apps: list[dict], path: str) -> None:
             w3=ctx.cfg.get("scoring", {}).get("recency_weight", 0.15),
             w4=ctx.cfg.get("scoring", {}).get("base_stars_weight", 0.15),
         ),
+        "emerging_methodology": "Emerging ranking requires verified growth, low prior exposure, recent creation or discovery, and applies a {days}-day cooldown after selection.".format(
+            days=ctx.cfg.get("emerging", {}).get("cooldown_days", 30),
+        ),
         "ai_llm_core_top10": [_repo_summary(r, i+1) for i, r in enumerate(core[:core_n])],
         "ai_app_top20": [_repo_summary(r, i+1) for i, r in enumerate(apps[:app_n])],
+        "ai_emerging_top10": [_repo_summary(r, i+1) for i, r in enumerate(emerging[:emerging_n])],
     }
     with open(path, "w", encoding="utf-8") as f:
         json.dump(report, f, ensure_ascii=False, indent=2)
@@ -1505,7 +1524,9 @@ MD_STRINGS = {
         "scope": "采集范围: 核心 {core} / 应用 {app} (个人向)",
         "core_section": "AI/LLM 核心仓库 Top {n}",
         "app_section": "AI 个人应用 Top {n}",
+        "emerging_section": "新兴热点 Top {n}",
         "header": "| # | 仓库 | 语言 | Stars | 今日增 | 日增速 | 热度 | 总结 |",
+        "emerging_header": "| # | 仓库 | 语言 | Stars | 今日增 | 日增速 | 新兴指数 | 总结 |",
         "separator": "|--:|------|------|------:|------:|------:|-----:|------|",
         "desc_note": "",
         "footer": "*报告由 [GitHub AI Radar](https://github.com/JuliaYu907/github-ai-radar) 自动生成*",
@@ -1519,7 +1540,9 @@ MD_STRINGS = {
         "scope": "Scope: Core {core} / App {app} (personal use)",
         "core_section": "AI/LLM Core Top {n}",
         "app_section": "AI Personal Apps Top {n}",
+        "emerging_section": "Emerging AI Hotspots Top {n}",
         "header": "| # | Repo | Lang | Stars | +Today | Growth | Hot | Summary |",
+        "emerging_header": "| # | Repo | Lang | Stars | +Today | Growth | Emerging | Summary |",
         "separator": "|--:|------|------|------:|------:|------:|-----:|---------|",
         "desc_note": "",
         "footer": "*Report generated by [GitHub AI Radar](https://github.com/JuliaYu907/github-ai-radar)*",
@@ -1622,12 +1645,13 @@ def _generate_trend_insights(core: list[dict], apps: list[dict], lang: str) -> l
     return lines
 
 
-def _build_md_lines(core: list[dict], apps: list[dict], lang: str,
+def _build_md_lines(core: list[dict], apps: list[dict], emerging: list[dict], lang: str,
                     core_count: int = 0, app_count: int = 0) -> list[str]:
     """构建 Markdown 报告内容行."""
     s = MD_STRINGS[lang]
     core_n = ctx.cfg.get("rankings", {}).get("core_top_n", 10)
     app_n = ctx.cfg.get("rankings", {}).get("app_top_n", 20)
+    emerging_n = ctx.cfg.get("rankings", {}).get("emerging_top_n", 10)
     scoring = ctx.cfg.get("scoring", {})
     hours = ctx.cfg.get("time_window_hours", 48)
     lines: list[str] = []
@@ -1646,10 +1670,11 @@ def _build_md_lines(core: list[dict], apps: list[dict], lang: str,
         lines.append(s["desc_note"])
         lines.append("")
 
-    def _table(section_title: str, repos: list[dict], top_n: int) -> None:
+    def _table(section_title: str, repos: list[dict], top_n: int,
+               score_key: str = "_score", is_emerging: bool = False) -> None:
         lines.append(f"## {section_title}")
         lines.append("")
-        lines.append(s["header"])
+        lines.append(s["emerging_header"] if is_emerging else s["header"])
         lines.append(s["separator"])
         for i, r in enumerate(repos[:top_n], 1):
             name = r.get("full_name", "")
@@ -1660,7 +1685,7 @@ def _build_md_lines(core: list[dict], apps: list[dict], lang: str,
             today_str = f"+{_fmt(today)}" if today else "-"
             growth = r.get("_growth_rate", 0)
             growth_str = f"{_fmt(growth)}/d" if growth else "-"
-            score = r.get("_score", 0)
+            score = r.get(score_key, 0)
             summary = (r.get("_summary_en") if lang == "en" else r.get("_summary")) or r.get("_readme_summary") or r.get("description") or ""
             # MISSING-9: NEW 标签
             new_badge = ""
@@ -1679,6 +1704,8 @@ def _build_md_lines(core: list[dict], apps: list[dict], lang: str,
 
     _table(s["core_section"].format(n=core_n), core, core_n)
     _table(s["app_section"].format(n=app_n), apps, app_n)
+    _table(s["emerging_section"].format(n=emerging_n), emerging, emerging_n,
+           score_key="_emerging_score", is_emerging=True)
 
     # MISSING-7: 趋势洞察
     insight_lines = _generate_trend_insights(core[:core_n], apps[:app_n], lang)
@@ -1689,12 +1716,12 @@ def _build_md_lines(core: list[dict], apps: list[dict], lang: str,
     return lines
 
 
-def save_md_report(core: list[dict], apps: list[dict], path_base: str,
+def save_md_report(core: list[dict], apps: list[dict], emerging: list[dict], path_base: str,
                    core_count: int = 0, app_count: int = 0) -> None:
     """生成中英文双语 Markdown 报告."""
     os.makedirs(os.path.dirname(path_base) or ".", exist_ok=True)
     for lang, suffix in [("zh", "_zh.md"), ("en", "_en.md")]:
-        lines = _build_md_lines(core, apps, lang, core_count, app_count)
+        lines = _build_md_lines(core, apps, emerging, lang, core_count, app_count)
         path = path_base + suffix
         with open(path, "w", encoding="utf-8") as f:
             f.write("\n".join(lines))
@@ -1751,6 +1778,7 @@ class RadarRun:
     report: dict[str, Any]
     core: list[dict] = field(default_factory=list)
     apps: list[dict] = field(default_factory=list)
+    emerging: list[dict] = field(default_factory=list)
 
 
 def _history_path() -> Path:
@@ -1794,13 +1822,59 @@ def _load_history() -> dict[str, list[dict]]:
             found.setdefault(key, []).append(item)
             if item.get("full_name"):
                 found.setdefault(f"name:{item['full_name'].lower()}", []).append(item)
+
+    # Bootstrap exposure history from legacy daily reports. This makes repeat
+    # suppression useful immediately instead of waiting 30 new snapshots.
+    reports_dir = Path(ctx.cfg.get("output", {}).get("reports_dir", "reports"))
+    for path in sorted(reports_dir.glob("20??-??-??/*.json")):
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        generated_at = payload.get("generated_at") or f"{path.parent.name}T00:00:00+00:00"
+        for section, category in (("ai_llm_core_top10", "core"), ("ai_app_top20", "app")):
+            for index, repo in enumerate(payload.get(section, []), 1):
+                full_name = repo.get("full_name")
+                if not full_name:
+                    continue
+                observation = {
+                    "date": path.parent.name,
+                    "generated_at": generated_at,
+                    "full_name": full_name,
+                    "stars": repo.get("stars", 0),
+                    "growth_per_day": repo.get("growth_score", 0),
+                    "growth_source": repo.get("growth_source"),
+                    "growth_confidence": repo.get("growth_confidence"),
+                    "rank": {category: repo.get("rank", index)},
+                    "legacy_report": True,
+                }
+                found.setdefault(f"name:{full_name.lower()}", []).append(observation)
     return found
+
+
+def _repo_history(repo: dict, history: dict[str, list[dict]]) -> list[dict]:
+    """Return observations for a repository without duplicating id/name aliases."""
+    observations = (
+        history.get(_repository_key(repo), [])
+        + history.get(f"name:{(repo.get('full_name') or '').lower()}", [])
+    )
+    unique: dict[str, dict] = {}
+    today = f"{ctx.now:%Y-%m-%d}"
+    for item in observations:
+        day = item.get("date") or str(item.get("generated_at", ""))[:10]
+        if day == today:
+            # A same-day workflow retry must reproduce the same ranking rather
+            # than treating its earlier partial output as prior exposure.
+            continue
+        # Official snapshots are loaded before legacy reports and win ties.
+        unique.setdefault(day, item)
+    return sorted(unique.values(), key=lambda item: item.get("date") or str(item.get("generated_at", ""))[:10])
 
 
 def _measure_growth(repo: dict, history: dict[str, list[dict]]) -> tuple[float, str, str]:
     if (today := (repo.get("today_stars", 0) or 0)) > 0:
         return float(today), "trending", "high"
-    previous = history.get(_repository_key(repo), []) or history.get(f"name:{(repo.get('full_name') or '').lower()}", [])
+    previous = _repo_history(repo, history)
     if previous:
         prior = previous[-1]
         try:
@@ -1815,7 +1889,7 @@ def _measure_growth(repo: dict, history: dict[str, list[dict]]) -> tuple[float, 
         created = datetime.fromisoformat(repo["created_at"].replace("Z", "+00:00"))
         age = max((ctx.now - created).total_seconds() / 86400, 0.5)
         return round((repo.get("stargazers_count", 0) or 0) / age, 1), "age_estimate", "low"
-    except (KeyError, TypeError, ValueError):
+    except (AttributeError, KeyError, TypeError, ValueError):
         return 0.0, "unknown", "low"
 
 
@@ -1826,7 +1900,7 @@ def _score_with_evidence(repo: dict) -> tuple[float, dict[str, float]]:
     try:
         pushed = datetime.fromisoformat(repo["pushed_at"].replace("Z", "+00:00"))
         recency = max(0, 10 - (ctx.now - pushed).total_seconds() / 3600 * 0.2)
-    except (KeyError, TypeError, ValueError):
+    except (AttributeError, KeyError, TypeError, ValueError):
         pass
     parts = {
         "today_stars": math.log2(1 + (repo.get("today_stars", 0) or 0)) * 3 * cfg.get("today_stars_weight", .4),
@@ -1835,6 +1909,125 @@ def _score_with_evidence(repo: dict) -> tuple[float, dict[str, float]]:
         "base_stars": math.log2(1 + (repo.get("stargazers_count", 0) or 0)) * cfg.get("base_stars_weight", .15),
     }
     return round(sum(parts.values()), 2), {k: round(v, 6) for k, v in parts.items()}
+
+
+def _parse_observation_date(item: dict) -> Optional[datetime]:
+    value = item.get("generated_at") or item.get("date")
+    if not value:
+        return None
+    try:
+        parsed = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+        return parsed if parsed.tzinfo else parsed.replace(tzinfo=timezone.utc)
+    except (TypeError, ValueError):
+        return None
+
+
+def _emerging_evidence(repo: dict, previous: list[dict]) -> tuple[bool, float, dict[str, Any]]:
+    """Score novelty and momentum while suppressing projects repeatedly exposed before."""
+    cfg = ctx.cfg.get("emerging", {})
+    growth = max(float(repo.get("_growth_rate", 0) or 0), 0.0)
+    verified = repo.get("_growth_source") in {"trending", "history_delta"}
+    lookback = int(cfg.get("lookback_days", 30))
+    cutoff = ctx.now - timedelta(days=lookback)
+
+    recent = [item for item in previous if (observed := _parse_observation_date(item)) and observed >= cutoff]
+    observation_days = len({item.get("date") or str(item.get("generated_at", ""))[:10] for item in recent})
+    main_rank_days = sum(
+        1 for item in recent
+        if set((item.get("rank") or {}).keys()) & {"core", "app"}
+    )
+
+    cooldown_cutoff = ctx.now - timedelta(days=int(cfg.get("cooldown_days", 30)))
+    emerging_rank_days = sum(
+        1 for item in previous
+        if "emerging" in (item.get("rank") or {})
+        and (observed := _parse_observation_date(item))
+        and observed >= cooldown_cutoff
+    )
+
+    first_observed_days = 0
+    if previous:
+        observed_dates = [value for item in previous if (value := _parse_observation_date(item))]
+        if observed_dates:
+            first_observed_days = max((ctx.now - min(observed_dates)).days, 0)
+
+    repo_age_days: Optional[int] = None
+    try:
+        created = datetime.fromisoformat(repo["created_at"].replace("Z", "+00:00"))
+        repo_age_days = max((ctx.now - created).days, 0)
+    except (AttributeError, KeyError, TypeError, ValueError):
+        pass
+
+    prior_growth = [
+        max(float(item.get("growth_per_day") or 0), 0.0)
+        for item in recent[-3:]
+        if item.get("growth_source") in {"trending", "history_delta"}
+    ]
+    baseline = sum(prior_growth) / len(prior_growth) if prior_growth else 0.0
+    acceleration_ratio = round(growth / baseline, 2) if baseline > 0 else None
+
+    max_age = int(cfg.get("max_repo_age_days", 180))
+    first_seen_limit = int(cfg.get("max_first_observed_days", 7))
+    sleeper_star_cap = int(cfg.get("max_stars_for_sleeper", 20000))
+    stars = int(repo.get("stargazers_count", 0) or 0)
+    recently_created = repo_age_days is not None and repo_age_days <= max_age
+    newly_discovered_sleeper = first_observed_days <= first_seen_limit and stars <= sleeper_star_cap
+    accelerating_sleeper = (
+        acceleration_ratio is not None
+        and acceleration_ratio >= float(cfg.get("min_acceleration_ratio", 1.5))
+        and stars <= sleeper_star_cap
+    )
+    low_prior_exposure = main_rank_days <= int(cfg.get("max_prior_main_rank_days", 0))
+
+    eligible = (
+        verified
+        and growth >= float(cfg.get("min_growth_per_day", 10))
+        and emerging_rank_days == 0
+        and low_prior_exposure
+        and (recently_created or newly_discovered_sleeper or accelerating_sleeper)
+    )
+
+    freshness_age = repo_age_days if repo_age_days is not None else max_age
+    freshness = max(0.0, 1 - freshness_age / max(max_age, 1)) * 5
+    discovery = max(0.0, 1 - first_observed_days / max(first_seen_limit, 1)) * 4
+    acceleration = min(max((acceleration_ratio or 1) - 1, 0), 3) * 2
+    exposure_penalty = main_rank_days * 2 + max(observation_days - 1, 0) * 0.25
+    score = round(
+        math.log2(1 + growth) * 3 + freshness + discovery + acceleration - exposure_penalty,
+        2,
+    )
+
+    signals = []
+    if recently_created:
+        signals.append("recently_created")
+    if newly_discovered_sleeper:
+        signals.append("newly_discovered")
+    if accelerating_sleeper:
+        signals.append("accelerating")
+    if main_rank_days == 0:
+        signals.append("low_prior_exposure")
+
+    evidence = {
+        "repo_age_days": repo_age_days,
+        "first_observed_days": first_observed_days,
+        "observations_in_lookback": observation_days,
+        "prior_main_rank_days": main_rank_days,
+        "prior_emerging_rank_days": emerging_rank_days,
+        "acceleration_ratio": acceleration_ratio,
+        "signals": signals,
+    }
+    return eligible, score, evidence
+
+
+def _rank_emerging(candidates: list[dict], history: dict[str, list[dict]]) -> list[dict]:
+    ranked = []
+    for repo in candidates:
+        eligible, score, evidence = _emerging_evidence(repo, _repo_history(repo, history))
+        repo["_emerging_score"] = score
+        repo["_emerging_evidence"] = evidence
+        if eligible and repo.get("_categories"):
+            ranked.append(repo)
+    return sorted(ranked, key=lambda repo: (repo["_emerging_score"], repo.get("_growth_rate", 0)), reverse=True)
 
 
 def _write_json(path: Path, value: dict) -> None:
@@ -1849,6 +2042,7 @@ def _write_snapshot(repos: list[dict]) -> None:
                 "growth_source": r.get("_growth_source"), "growth_confidence": r.get("_growth_confidence"),
                 "hotness_score": r.get("_score", 0), "score_breakdown": r.get("_score_breakdown", {}),
                 "categories": r.get("_categories", []), "discovery_status": r.get("_discovery_status"), "watchlist": r.get("_watchlist", False),
+                "emerging_score": r.get("_emerging_score"), "emerging_evidence": r.get("_emerging_evidence"),
                 "rank": r.get("_ranks", {}), "generated_at": ctx.now.isoformat()} for r in repos]
     root = _history_path()
     _write_json(root / f"{ctx.now:%Y-%m-%d}.json", {"schema_version": 1, "date": f"{ctx.now:%Y-%m-%d}", "generated_at": ctx.now.isoformat(), "repositories": entries})
@@ -1866,7 +2060,7 @@ def generate_report(config: dict, now: datetime, adapters: RadarAdapters) -> Rad
     hcfg = ctx.cfg["history"]
     if len(api) < hcfg["min_api_repos"] or len(trending) < hcfg["min_trending_repos"] or len(candidates) < hcfg["min_candidates"]:
         _write_json(_history_path() / "run-status" / f"{ctx.now:%Y-%m-%d}.json", {"status": "incomplete", "generated_at": ctx.now.isoformat(), "api_count": len(api), "trending_count": len(trending), "candidate_count": len(candidates)})
-        return RadarRun(False, {"generated_at": ctx.now.isoformat(), "ai_llm_core_top10": [], "ai_app_top20": []})
+        return RadarRun(False, {"generated_at": ctx.now.isoformat(), "ai_llm_core_top10": [], "ai_app_top20": [], "ai_emerging_top10": []})
     watch_names = _load_watchlist()
     watched = adapters.fetch_watchlist(watch_names) if watch_names else []
     by_name = {(r.get("full_name") or "").lower(): r for r in candidates}
@@ -1892,11 +2086,17 @@ def generate_report(config: dict, now: datetime, adapters: RadarAdapters) -> Rad
         core_names = {r.get("full_name", "").lower() for r in core[:ctx.cfg["rankings"]["core_top_n"]]}
         apps = [r for r in apps if r.get("full_name", "").lower() not in core_names]
     core, apps = core[:ctx.cfg["rankings"]["core_top_n"]], apps[:ctx.cfg["rankings"]["app_top_n"]]
+    emerging = _rank_emerging(candidates, history)[:ctx.cfg["rankings"].get("emerging_top_n", 10)]
     for kind, ranked in (("core", core), ("app", apps)):
         for rank, r in enumerate(ranked, 1):
-            r["_rank"], r["_ranks"] = rank, {kind: rank}
-    for r in core + apps:
-        previous = history.get(_repository_key(r), []) or history.get(f"name:{(r.get('full_name') or '').lower()}", [])
+            r["_rank"] = rank
+            r.setdefault("_ranks", {})[kind] = rank
+    for rank, r in enumerate(emerging, 1):
+        r.setdefault("_ranks", {})["emerging"] = rank
+
+    ranked_unique = list({(r.get("full_name") or "").lower(): r for r in core + apps + emerging}.values())
+    for r in ranked_unique:
+        previous = _repo_history(r, history)
         r["_first_observed_at"] = (previous[0].get("date") if previous else f"{ctx.now:%Y-%m-%d}")
         r["_trend_7d"] = [{"date": item.get("date"), "growth": item.get("growth_per_day"), "confidence": item.get("growth_confidence")} for item in previous[-6:]] + [{"date": f"{ctx.now:%Y-%m-%d}", "growth": r["_growth_rate"], "confidence": r["_growth_confidence"]}]
         r["_trend_ready"] = len(r["_trend_7d"]) >= 7
@@ -1909,9 +2109,17 @@ def generate_report(config: dict, now: datetime, adapters: RadarAdapters) -> Rad
             values = [point["growth"] or 0 for point in r["_trend_7d"]]
             recent, earlier = sum(values[-3:]) / 3, sum(values[:3]) / 3
             r["_lifecycle"] = "accelerating" if recent > earlier * 1.3 else ("cooling" if recent < earlier * .7 else "steady")
-    _write_snapshot(pool)
-    report = {"generated_at": ctx.now.isoformat(), "ai_llm_core_top10": [_repo_summary(r, i + 1) for i, r in enumerate(core)], "ai_app_top20": [_repo_summary(r, i + 1) for i, r in enumerate(apps)]}
-    return RadarRun(True, report, core, apps)
+    pool_by_name = {(r.get("full_name") or "").lower(): r for r in pool}
+    for r in emerging:
+        pool_by_name.setdefault((r.get("full_name") or "").lower(), r)
+    _write_snapshot(list(pool_by_name.values()))
+    report = {
+        "generated_at": ctx.now.isoformat(),
+        "ai_llm_core_top10": [_repo_summary(r, i + 1) for i, r in enumerate(core)],
+        "ai_app_top20": [_repo_summary(r, i + 1) for i, r in enumerate(apps)],
+        "ai_emerging_top10": [_repo_summary(r, i + 1) for i, r in enumerate(emerging)],
+    }
+    return RadarRun(True, report, core, apps, emerging)
 
 def main() -> None:
 
@@ -1954,8 +2162,8 @@ def main() -> None:
     if not run.complete:
         console.print("[yellow]采集不完整，已写入运行状态；未更新报告或历史快照。[/yellow]")
         return
-    core_list, app_list = run.core, run.apps
-    console.print(f"    分类完成: 核心 {len(core_list)} / 应用 {len(app_list)} (真实增长信号)")
+    core_list, app_list, emerging_list = run.core, run.apps, run.emerging
+    console.print(f"    分类完成: 核心 {len(core_list)} / 应用 {len(app_list)} / 新兴 {len(emerging_list)} (真实增长信号)")
 
     # 5. 抓取 README & LLM 分析性总结
     console.print("[cyan]>>> [5/6] 抓取 README & 生成分析性总结...[/cyan]")
@@ -1963,6 +2171,9 @@ def main() -> None:
     app_n = ctx.cfg.get("rankings", {}).get("app_top_n", 20)
     enrich_descriptions(core_list, token=args.token, top_n=core_n)
     enrich_descriptions(app_list, token=args.token, top_n=app_n)
+    covered = {(r.get("full_name") or "").lower() for r in core_list + app_list}
+    emerging_only = [r for r in emerging_list if (r.get("full_name") or "").lower() not in covered]
+    enrich_descriptions(emerging_only, token=args.token, top_n=len(emerging_only))
 
     # 6. 输出
     console.print("[cyan]>>> [6/6] 生成报告...[/cyan]")
@@ -1970,12 +2181,16 @@ def main() -> None:
     _print_ranked(f"AI/LLM Core — Top {core_n} (Hottest)", core_list, core_n)
     console.print()
     _print_ranked(f"AI Apps for Personal Use — Top {app_n} (Hottest)", app_list, app_n)
+    console.print()
+    emerging_n = ctx.cfg.get("rankings", {}).get("emerging_top_n", 10)
+    _print_ranked(f"Emerging AI Hotspots — Top {emerging_n} (Novel + Accelerating)",
+                  emerging_list, emerging_n, score_key="_emerging_score", score_label="Emerging")
 
     report_json = f"{report_base}.json"
     if "json" in output_formats:
-        save_report(core_list, app_list, report_json)
+        save_report(core_list, app_list, emerging_list, report_json)
     if "markdown" in output_formats:
-        save_md_report(core_list, app_list, report_base,
+        save_md_report(core_list, app_list, emerging_list, report_base,
                        core_count=len(core_list), app_count=len(app_list))
     if "html" in output_formats:
         generate_pages(core_list, app_list, report_json)

@@ -49,6 +49,7 @@ class HistoricalRadarTests(unittest.TestCase):
                 "min_trending_repos": 1,
                 "min_candidates": 1,
             },
+            "output": {"reports_dir": str(root / "reports")},
         }
 
     def adapters(self, api, trending, watched=None) -> RadarAdapters:
@@ -148,6 +149,150 @@ class HistoricalRadarTests(unittest.TestCase):
             item = result.report["ai_app_top20"][0]
             self.assertTrue(item["trend_ready"])
             self.assertEqual(len(item["trend_7d"]), 7)
+
+    def test_fresh_low_exposure_project_enters_emerging_ranking(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            candidate = repo("owner/fresh", 400, today_stars=80)
+            candidate["created_at"] = "2026-07-20T00:00:00Z"
+            result = generate_report(
+                self.config(root),
+                datetime(2026, 7, 28, tzinfo=timezone.utc),
+                self.adapters([candidate], [repo("owner/fresh", 400, today_stars=80)]),
+            )
+
+            emerging = result.report["ai_emerging_top10"]
+            self.assertEqual([item["full_name"] for item in emerging], ["owner/fresh"])
+            self.assertGreater(emerging[0]["emerging_score"], 0)
+            self.assertIn("recently_created", emerging[0]["emerging_evidence"]["signals"])
+            snapshot = json.loads((root / "history" / "2026-07-28.json").read_text(encoding="utf-8"))
+            stored = next(item for item in snapshot["repositories"] if item["full_name"] == "owner/fresh")
+            self.assertEqual(stored["rank"]["emerging"], 1)
+
+    def test_emerging_ranking_has_a_cooldown_to_prevent_repeat_entries(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            config = self.config(root)
+            candidate = repo("owner/fresh", 400, today_stars=80)
+            candidate["created_at"] = "2026-07-20T00:00:00Z"
+            generate_report(
+                config,
+                datetime(2026, 7, 28, tzinfo=timezone.utc),
+                self.adapters([candidate], [repo("owner/fresh", 400, today_stars=80)]),
+            )
+            next_day = repo("owner/fresh", 470, today_stars=70)
+            next_day["created_at"] = "2026-07-20T00:00:00Z"
+            result = generate_report(
+                config,
+                datetime(2026, 7, 29, tzinfo=timezone.utc),
+                self.adapters([next_day], [repo("owner/fresh", 470, today_stars=70)]),
+            )
+
+            self.assertEqual(result.report["ai_emerging_top10"], [])
+
+    def test_same_day_retry_keeps_the_emerging_ranking_idempotent(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            config = self.config(root)
+            candidate = repo("owner/fresh", 400, today_stars=80)
+            candidate["created_at"] = "2026-07-20T00:00:00Z"
+            adapters = self.adapters([candidate], [repo("owner/fresh", 400, today_stars=80)])
+
+            first = generate_report(config, datetime(2026, 7, 28, tzinfo=timezone.utc), adapters)
+            retry = generate_report(config, datetime(2026, 7, 28, 1, tzinfo=timezone.utc), adapters)
+
+            self.assertEqual(
+                [item["full_name"] for item in retry.report["ai_emerging_top10"]],
+                [item["full_name"] for item in first.report["ai_emerging_top10"]],
+            )
+
+    def test_old_established_project_is_not_mislabeled_as_emerging(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            established = repo("owner/established", 50000, today_stars=500)
+            established["created_at"] = "2024-01-01T00:00:00Z"
+            result = generate_report(
+                self.config(root),
+                datetime(2026, 7, 28, tzinfo=timezone.utc),
+                self.adapters([established], [repo("owner/established", 50000, today_stars=500)]),
+            )
+
+            self.assertEqual(result.report["ai_emerging_top10"], [])
+
+    def test_missing_repository_dates_do_not_break_emerging_detection(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            candidate = repo("owner/metadata-light", 100, today_stars=30)
+            candidate["created_at"] = None
+            candidate["pushed_at"] = None
+            result = generate_report(
+                self.config(root),
+                datetime(2026, 7, 28, tzinfo=timezone.utc),
+                self.adapters([candidate], [repo("owner/metadata-light", 100, today_stars=30)]),
+            )
+
+            self.assertEqual(
+                [item["full_name"] for item in result.report["ai_emerging_top10"]],
+                ["owner/metadata-light"],
+            )
+
+    def test_legacy_reports_bootstrap_repeat_exposure_suppression(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            for day in (26,):
+                report_dir = root / "reports" / f"2026-07-{day}"
+                report_dir.mkdir(parents=True)
+                payload = {
+                    "generated_at": f"2026-07-{day}T08:00:00+00:00",
+                    "ai_llm_core_top10": [],
+                    "ai_app_top20": [{"rank": 1, "full_name": "owner/repeater", "stars": 900}],
+                }
+                (report_dir / "report.json").write_text(json.dumps(payload), encoding="utf-8")
+            repeater = repo("owner/repeater", 1000, today_stars=50)
+            repeater["created_at"] = "2024-01-01T00:00:00Z"
+            result = generate_report(
+                self.config(root),
+                datetime(2026, 7, 28, tzinfo=timezone.utc),
+                self.adapters([repeater], [repo("owner/repeater", 1000, today_stars=50)]),
+            )
+
+            self.assertEqual(result.report["ai_emerging_top10"], [])
+
+    def test_low_exposure_sleeper_can_qualify_when_growth_accelerates(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            candidate = repo("owner/sleeper", 1000, today_stars=30)
+            candidate["created_at"] = "2024-01-01T00:00:00Z"
+            history_dir = root / "history"
+            history_dir.mkdir()
+            for day in (18, 19, 20):
+                payload = {
+                    "schema_version": 1,
+                    "date": f"2026-07-{day}",
+                    "generated_at": f"2026-07-{day}T08:00:00+00:00",
+                    "repositories": [{
+                        "date": f"2026-07-{day}",
+                        "generated_at": f"2026-07-{day}T08:00:00+00:00",
+                        "id": candidate["id"],
+                        "full_name": candidate["full_name"],
+                        "stars": 900 + day,
+                        "growth_per_day": 10,
+                        "growth_source": "trending",
+                        "growth_confidence": "high",
+                        "rank": {},
+                    }],
+                }
+                (history_dir / f"2026-07-{day}.json").write_text(json.dumps(payload), encoding="utf-8")
+            result = generate_report(
+                self.config(root),
+                datetime(2026, 7, 28, tzinfo=timezone.utc),
+                self.adapters([candidate], [repo("owner/sleeper", 1000, today_stars=30)]),
+            )
+
+            item = result.report["ai_emerging_top10"][0]
+            self.assertEqual(item["full_name"], "owner/sleeper")
+            self.assertEqual(item["emerging_evidence"]["acceleration_ratio"], 3.0)
+            self.assertIn("accelerating", item["emerging_evidence"]["signals"])
 
 
 if __name__ == "__main__":
