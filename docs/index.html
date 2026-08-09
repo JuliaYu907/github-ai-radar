@@ -580,7 +580,8 @@ body::before {
   <div class="filter-bar" id="filter-bar" style="display:none;">
     <svg class="search-icon" viewBox="0 0 16 16"><path d="M11.5 7a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zm-.82 4.74a6 6 0 111.06-1.06l3.04 3.04a.75.75 0 11-1.06 1.06l-3.04-3.04z"/></svg>
     <input type="text" id="search-input" placeholder="Search repos...">
-    <select id="lang-filter"><option value="">All Languages</option></select>
+    <select id="track-filter" aria-label="AI track"><option value="">All Tracks</option></select>
+    <select id="trend-filter" aria-label="Trend status"><option value="">All Trends</option></select>
     <span class="filter-count" id="filter-count"></span>
   </div>
   <main id="main-content">
@@ -632,7 +633,23 @@ const I18N = {
     new_badge: "NEW",
     re_badge: "RE",
     search_placeholder: "Search repos...",
-    all_langs: "All Languages",
+    all_tracks: "All Tracks",
+    all_trends: "All Trends",
+    track_coding: "Coding & Dev Tools",
+    track_agents: "Agents & Automation",
+    track_rag: "RAG & Knowledge",
+    track_models: "Models & Inference",
+    track_multimodal: "Multimodal & Media",
+    track_mcp: "MCP & Tooling",
+    track_local: "Local & Privacy",
+    track_research: "Research & Learning",
+    trend_new: "New",
+    trend_accelerating: "Accelerating",
+    trend_steady: "Steady",
+    trend_cooling: "Cooling",
+    trend_building_filter: "Building Data",
+    trend_watchlist: "Watchlist",
+    trend_high_confidence: "High Confidence",
     showing: "Showing",
     of: "of",
     show_more: "Show more \u25be",
@@ -673,7 +690,23 @@ const I18N = {
     new_badge: "NEW",
     re_badge: "RE",
     search_placeholder: "\u641c\u7d22\u4ed3\u5e93...",
-    all_langs: "\u6240\u6709\u8bed\u8a00",
+    all_tracks: "全部赛道",
+    all_trends: "全部趋势",
+    track_coding: "编程与开发工具",
+    track_agents: "Agent 与自动化",
+    track_rag: "RAG 与知识库",
+    track_models: "模型与推理",
+    track_multimodal: "多模态与内容创作",
+    track_mcp: "MCP 与工具生态",
+    track_local: "本地与隐私",
+    track_research: "研究与学习",
+    trend_new: "新发现",
+    trend_accelerating: "加速中",
+    trend_steady: "稳定增长",
+    trend_cooling: "降温",
+    trend_building_filter: "数据积累中",
+    trend_watchlist: "Watchlist",
+    trend_high_confidence: "高可信度",
     showing: "\u663e\u793a",
     of: "/",
     show_more: "\u5c55\u5f00 \u25be",
@@ -710,6 +743,28 @@ function stripMd(s){if(!s)return '';s=s.replace(/\[([^\]]+)\]\([^)]+\)/g,'$1');s
 function esc(s){if(!s)return '';return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function trunc(d,m){if(!d)return t('no_desc');d=stripMd(d);return d.length>m?d.slice(0,m).trim()+'...':d;}
 function langColor(l){return LANG_COLORS[l]||'#8b949e';}
+const TRACK_RULES = {
+  coding: ['coding-agent','code-generation','code-review','developer-tools','code-search','copilot','ide','cli'],
+  agents: ['ai-agent','agentic','multi-agent','automation','workflow','browser-use','assistant'],
+  rag: ['rag','retrieval','knowledge-graph','knowledge-base','vector-database','embedding','search'],
+  models: ['llm','transformer','inference','fine-tuning','training','quantization','model-serving','cuda'],
+  multimodal: ['multimodal','vision','image-generation','video','audio','speech','voice','music','3d'],
+  mcp: ['mcp','model-context-protocol','tool-use','function-calling','agent-skills'],
+  local: ['local-first','local-llm','self-hosted','offline','privacy','ollama','on-device'],
+  research: ['research','paper','benchmark','course','book','tutorial','education']
+};
+function repoTracks(r){
+  var hay=[r.full_name||'',r.description||'',r.about||'',r.summary||'',r.summary_en||''].concat(r.topics||[]).join(' ').toLowerCase();
+  return Object.keys(TRACK_RULES).filter(function(track){return TRACK_RULES[track].some(function(term){return hay.indexOf(term)>=0;});});
+}
+function repoTrends(r){
+  var values=[],lifecycle=r.lifecycle||'building';
+  values.push(lifecycle==='building'?'building':lifecycle);
+  if(isNew(r.created_at)&&values.indexOf('new')<0)values.push('new');
+  if(r.watchlist)values.push('watchlist');
+  if(r.growth_confidence==='high')values.push('high_confidence');
+  return values;
+}
 function rankBadge(c){
   if(c==null||c===undefined)return'';var v=String(c).toLowerCase();
   if(v==='new')return'<span class="rank-change new-entry">&#9733; '+t('new_badge')+'</span>';
@@ -761,7 +816,7 @@ function card(r,i,metric){
   var fullText=stripMd(rawSummary||t('no_desc'));
   var sourceLabel=r.intro_source==='about+readme'?'About + README':(r.intro_source==='readme'?'README':'About');
   var needsToggle=fullText.length>100;
-  return'<article class="card" data-rank="'+r.rank+'" data-lang="'+esc(r.language||'')+'" style="animation-delay:'+(i*60)+'ms;">'+
+  return'<article class="card" data-rank="'+r.rank+'" data-tracks="'+esc(repoTracks(r).join(' '))+'" data-trends="'+esc(repoTrends(r).join(' '))+'" style="animation-delay:'+(i*60)+'ms;">'+
     '<div class="card-rank">#'+r.rank+'</div>'+
     '<div class="card-top"><div class="card-badges">'+(isNew(r.created_at)?'<span class="badge-new">'+t('new_badge')+'</span>':'')+rankBadge(r.rank_change)+'</div></div>'+
     '<a href="'+(r.url||'#')+'" target="_blank" rel="noopener noreferrer" class="card-name"><span class="owner">'+o+' /</span> '+nm+'</a>'+
@@ -793,22 +848,18 @@ function toggleDesc(btn){
   desc.classList.toggle('expanded');
   btn.textContent=isExpanded?t('show_more'):t('show_less');
 }
-function populateLangFilter(data){
-  var langs={};
-  (data.ai_llm_core_top10||[]).concat(data.ai_app_top20||[],data.ai_emerging_top10||[]).forEach(function(r){
-    if(r.language)langs[r.language]=(langs[r.language]||0)+1;
-  });
-  var sel=document.getElementById('lang-filter');
-  sel.innerHTML='<option value="">'+t('all_langs')+'</option>';
-  Object.keys(langs).sort().forEach(function(l){
-    var opt=document.createElement('option');
-    opt.value=l;opt.textContent=l+' ('+langs[l]+')';
-    sel.appendChild(opt);
-  });
+function populateRadarFilters(data){
+  var repos=(data.ai_llm_core_top10||[]).concat(data.ai_app_top20||[],data.ai_emerging_top10||[]),tracks={},trends={};
+  repos.forEach(function(r){repoTracks(r).forEach(function(v){tracks[v]=(tracks[v]||0)+1;});repoTrends(r).forEach(function(v){trends[v]=(trends[v]||0)+1;});});
+  var trackSel=document.getElementById('track-filter'),trendSel=document.getElementById('trend-filter');
+  trackSel.innerHTML='<option value="">'+t('all_tracks')+'</option>';
+  Object.keys(TRACK_RULES).forEach(function(v){if(tracks[v])trackSel.innerHTML+='<option value="'+v+'">'+t('track_'+v)+' ('+tracks[v]+')</option>';});
+  trendSel.innerHTML='<option value="">'+t('all_trends')+'</option>';
+  ['new','accelerating','steady','cooling','building','watchlist','high_confidence'].forEach(function(v){if(trends[v])trendSel.innerHTML+='<option value="'+v+'">'+t('trend_'+(v==='building'?'building_filter':v))+' ('+trends[v]+')</option>';});
 }
 function applyFilters(){
   var q=(document.getElementById('search-input').value||'').toLowerCase();
-  var langVal=document.getElementById('lang-filter').value;
+  var trackVal=document.getElementById('track-filter').value,trendVal=document.getElementById('trend-filter').value;
   var sections=document.querySelectorAll('.section');
   var totalShown=0,totalAll=0;
   sections.forEach(function(sec){
@@ -818,17 +869,17 @@ function applyFilters(){
       totalAll++;
       var name=(c.querySelector('.card-name')||{}).textContent||'';
       var desc=(c.querySelector('.card-desc')||{}).textContent||'';
-      var cLang=c.getAttribute('data-lang')||'';
+      var cTracks=(c.getAttribute('data-tracks')||'').split(' '),cTrends=(c.getAttribute('data-trends')||'').split(' ');
       var matchQ=!q||name.toLowerCase().indexOf(q)>=0||desc.toLowerCase().indexOf(q)>=0;
-      var matchL=!langVal||cLang===langVal;
-      var show=matchQ&&matchL;
+      var matchTrack=!trackVal||cTracks.indexOf(trackVal)>=0,matchTrend=!trendVal||cTrends.indexOf(trendVal)>=0;
+      var show=matchQ&&matchTrack&&matchTrend;
       c.style.display=show?'':'none';
       if(show){secShown++;totalShown++;}
     });
     sec.style.display=secShown>0?'':'none';
   });
   var fc=document.getElementById('filter-count');
-  if(q||langVal){fc.textContent=t('showing')+' '+totalShown+' '+t('of')+' '+totalAll;}
+  if(q||trackVal||trendVal){fc.textContent=t('showing')+' '+totalShown+' '+t('of')+' '+totalAll;}
   else{fc.textContent='';}
 }
 var _cachedData=null;
@@ -844,7 +895,7 @@ function renderData(d){
     if(!h){main.innerHTML='<div class="error-state"><div class="error-icon">&#x1F4ED;</div><h2 class="error-title">'+t('no_data')+'</h2><p class="error-message">'+t('no_data_msg')+'</p></div>';return;}
     main.innerHTML=h;ft.style.display='block';
     document.getElementById('filter-bar').style.display='flex';
-    populateLangFilter(d);
+    populateRadarFilters(d);
     applyStaticLang();
     requestAnimationFrame(function(){observe();});
 }
@@ -872,8 +923,7 @@ function applyStaticLang(){
   if(copy) copy.innerHTML='&copy; '+new Date().getFullYear()+' '+t('copyright');
   var si=document.getElementById('search-input');
   if(si) si.placeholder=t('search_placeholder');
-  var lf=document.getElementById('lang-filter');
-  if(lf&&lf.options.length>0) lf.options[0].textContent=t('all_langs');
+  if(_cachedData)populateRadarFilters(_cachedData);
   document.querySelectorAll('.card-desc-toggle').forEach(function(btn){
     var desc=btn.previousElementSibling;
     btn.textContent=desc.classList.contains('expanded')?t('show_less'):t('show_more');
@@ -895,7 +945,8 @@ document.getElementById('lang-toggle').addEventListener('click',function(e){
   if(lang&&lang!==currentLang) setLang(lang);
 });
 document.getElementById('search-input').addEventListener('input',applyFilters);
-document.getElementById('lang-filter').addEventListener('change',applyFilters);
+document.getElementById('track-filter').addEventListener('change',applyFilters);
+document.getElementById('trend-filter').addEventListener('change',applyFilters);
 document.addEventListener('DOMContentLoaded',function(){
   var btns=document.querySelectorAll('#lang-toggle button');
   btns.forEach(function(b){b.classList.toggle('active',b.getAttribute('data-lang')===currentLang);});
