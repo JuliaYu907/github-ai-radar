@@ -464,7 +464,6 @@ body::before {
   .section { padding: 30px 0; }
   .stat-divider { display: none; }
   .filter-bar { gap: 8px; }
-  .filter-bar input[type="text"] { min-width: 120px; }
 }
 @media (max-width: 400px) {
   .container { padding: 0 12px; }
@@ -478,29 +477,47 @@ body::before {
   margin: 20px 0 8px;
   flex-wrap: wrap;
 }
-.filter-bar .search-icon {
+.search-box {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  width: 240px;
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  transition: width 0.2s, border-color 0.2s;
+}
+.search-box:focus-within { border-color: #58a6ff; }
+.search-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 34px;
+  flex-shrink: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+.search-box .search-icon {
   flex-shrink: 0;
   width: 16px;
   height: 16px;
   fill: #6e7681;
 }
-.filter-bar input[type="text"] {
-  flex: 1;
-  min-width: 180px;
-  padding: 8px 14px;
-  background: #161b22;
-  border: 1px solid #30363d;
-  border-radius: 8px;
+.search-box input[type="text"] {
+  width: 100%;
+  min-width: 0;
+  padding: 8px 12px 8px 0;
+  background: transparent;
+  border: 0;
   color: #c9d1d9;
   font-family: inherit;
   font-size: 0.85rem;
   outline: none;
-  transition: border-color 0.2s;
+  transition: width 0.2s, opacity 0.2s, padding 0.2s;
 }
-.filter-bar input[type="text"]:focus {
-  border-color: #58a6ff;
-}
-.filter-bar input[type="text"]::placeholder {
+.search-box input[type="text"]::placeholder {
   color: #484f58;
 }
 .filter-bar select {
@@ -529,6 +546,12 @@ body::before {
   color: #6e7681;
   font-family: 'JetBrains Mono', monospace;
   white-space: nowrap;
+}
+@media (max-width: 768px) {
+  .search-box { margin-left: 0; width: 38px; }
+  .search-box input[type="text"] { width: 0; padding: 0; opacity: 0; }
+  .search-box.expanded { width: min(100%, 260px); }
+  .search-box.expanded input[type="text"] { width: 100%; padding: 8px 12px 8px 0; opacity: 1; }
 }
 .lang-toggle {
   display: inline-flex;
@@ -578,10 +601,12 @@ body::before {
     </div>
   </header>
   <div class="filter-bar" id="filter-bar" style="display:none;">
-    <svg class="search-icon" viewBox="0 0 16 16"><path d="M11.5 7a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zm-.82 4.74a6 6 0 111.06-1.06l3.04 3.04a.75.75 0 11-1.06 1.06l-3.04-3.04z"/></svg>
-    <input type="text" id="search-input" placeholder="Search repos...">
     <select id="track-filter" aria-label="AI track"><option value="">All Tracks</option></select>
     <select id="trend-filter" aria-label="Trend status"><option value="">All Trends</option></select>
+    <div class="search-box" id="search-box">
+      <button class="search-toggle" id="search-toggle" type="button" aria-label="Search projects" aria-expanded="false"><svg class="search-icon" viewBox="0 0 16 16"><path d="M11.5 7a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zm-.82 4.74a6 6 0 111.06-1.06l3.04 3.04a.75.75 0 11-1.06 1.06l-3.04-3.04z"/></svg></button>
+      <input type="text" id="search-input" placeholder="Search repos...">
+    </div>
     <span class="filter-count" id="filter-count"></span>
   </div>
   <main id="main-content">
@@ -633,6 +658,7 @@ const I18N = {
     new_badge: "NEW",
     re_badge: "RE",
     search_placeholder: "Search repos...",
+    search_toggle: "Search projects",
     all_tracks: "All Tracks",
     all_trends: "All Trends",
     track_coding: "Coding & Dev Tools",
@@ -690,6 +716,7 @@ const I18N = {
     new_badge: "NEW",
     re_badge: "RE",
     search_placeholder: "\u641c\u7d22\u4ed3\u5e93...",
+    search_toggle: "搜索项目",
     all_tracks: "全部赛道",
     all_trends: "全部趋势",
     track_coding: "编程与开发工具",
@@ -765,6 +792,10 @@ function repoTrends(r){
   if(r.growth_confidence==='high')values.push('high_confidence');
   return values;
 }
+function repoSearchText(r){
+  var tracks=repoTracks(r);
+  return [r.full_name||'',r.description||'',r.about||'',r.summary||'',r.summary_en||''].concat(r.topics||[],tracks,tracks.map(function(v){return t('track_'+v);})).join(' ').toLowerCase();
+}
 function rankBadge(c){
   if(c==null||c===undefined)return'';var v=String(c).toLowerCase();
   if(v==='new')return'<span class="rank-change new-entry">&#9733; '+t('new_badge')+'</span>';
@@ -816,7 +847,7 @@ function card(r,i,metric){
   var fullText=stripMd(rawSummary||t('no_desc'));
   var sourceLabel=r.intro_source==='about+readme'?'About + README':(r.intro_source==='readme'?'README':'About');
   var needsToggle=fullText.length>100;
-  return'<article class="card" data-rank="'+r.rank+'" data-tracks="'+esc(repoTracks(r).join(' '))+'" data-trends="'+esc(repoTrends(r).join(' '))+'" style="animation-delay:'+(i*60)+'ms;">'+
+  return'<article class="card" data-rank="'+r.rank+'" data-tracks="'+esc(repoTracks(r).join(' '))+'" data-trends="'+esc(repoTrends(r).join(' '))+'" data-search="'+esc(repoSearchText(r))+'" style="animation-delay:'+(i*60)+'ms;">'+
     '<div class="card-rank">#'+r.rank+'</div>'+
     '<div class="card-top"><div class="card-badges">'+(isNew(r.created_at)?'<span class="badge-new">'+t('new_badge')+'</span>':'')+rankBadge(r.rank_change)+'</div></div>'+
     '<a href="'+(r.url||'#')+'" target="_blank" rel="noopener noreferrer" class="card-name"><span class="owner">'+o+' /</span> '+nm+'</a>'+
@@ -867,10 +898,9 @@ function applyFilters(){
     var secShown=0;
     cards.forEach(function(c){
       totalAll++;
-      var name=(c.querySelector('.card-name')||{}).textContent||'';
-      var desc=(c.querySelector('.card-desc')||{}).textContent||'';
+      var searchText=c.getAttribute('data-search')||'';
       var cTracks=(c.getAttribute('data-tracks')||'').split(' '),cTrends=(c.getAttribute('data-trends')||'').split(' ');
-      var matchQ=!q||name.toLowerCase().indexOf(q)>=0||desc.toLowerCase().indexOf(q)>=0;
+      var matchQ=!q||searchText.indexOf(q)>=0;
       var matchTrack=!trackVal||cTracks.indexOf(trackVal)>=0,matchTrend=!trendVal||cTrends.indexOf(trendVal)>=0;
       var show=matchQ&&matchTrack&&matchTrend;
       c.style.display=show?'':'none';
@@ -923,6 +953,8 @@ function applyStaticLang(){
   if(copy) copy.innerHTML='&copy; '+new Date().getFullYear()+' '+t('copyright');
   var si=document.getElementById('search-input');
   if(si) si.placeholder=t('search_placeholder');
+  var st=document.getElementById('search-toggle');
+  if(st) st.setAttribute('aria-label',t('search_toggle'));
   if(_cachedData)populateRadarFilters(_cachedData);
   document.querySelectorAll('.card-desc-toggle').forEach(function(btn){
     var desc=btn.previousElementSibling;
@@ -945,6 +977,12 @@ document.getElementById('lang-toggle').addEventListener('click',function(e){
   if(lang&&lang!==currentLang) setLang(lang);
 });
 document.getElementById('search-input').addEventListener('input',applyFilters);
+document.getElementById('search-toggle').addEventListener('click',function(){
+  var box=document.getElementById('search-box'),expanded=!box.classList.contains('expanded');
+  box.classList.toggle('expanded',expanded);
+  this.setAttribute('aria-expanded',String(expanded));
+  if(expanded)document.getElementById('search-input').focus();
+});
 document.getElementById('track-filter').addEventListener('change',applyFilters);
 document.getElementById('trend-filter').addEventListener('change',applyFilters);
 document.addEventListener('DOMContentLoaded',function(){
