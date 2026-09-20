@@ -1,0 +1,70 @@
+# GitHub AI Repo Trending Report
+
+> Generated at: 2026-09-20 12:44 UTC | Time window: last 48 hours
+>
+> Scoring formula: `today_stars(0.4) + growth_rate(0.3) + recency(0.15) + base_stars(0.15)`
+> Scope: Core 10 / App 20 (personal use)
+
+---
+
+## AI/LLM Core Top 10
+
+| # | Repo | Lang | Stars | +Today | Growth | Hot | Summary |
+|--:|------|------|------:|------:|------:|-----:|---------|
+| 1 | [affaan-m/ECC](https://github.com/affaan-m/ECC) | JavaScript | 263.3k | +1.0k | 1.0k/d | 21.79 | ECC is MIT-licensed open source. It works best with Claude Code today, has a supported Codex sync path, and provides capability-limited adapters for Cursor, OpenCode, Gemini, Zed, GitHub Copilot, Antigravity, Qwen, and other harnesses. See the support status matrix before assuming feature parity. |
+| 2 | [higgsfield-ai/higgsfield](https://github.com/higgsfield-ai/higgsfield) | Jupyter No | 5.2k | +461 | 461/d | 17.78 | Higgsfield is an open-source, fault-tolerant, highly scalable GPU orchestration, and a machine learning framework designed for training models with billions to trillions of parameters, such as Large Language Models (LLMs). |
+| 3 | [paperless-ngx/paperless-ngx](https://github.com/paperless-ngx/paperless-ngx) | Python | 45.4k | +32 | 32/d | 12.89 | Paperless-ngx is a document management system that transforms your physical documents into a searchable online archive so you can keep, well, less paper. |
+| 4 | [Tencent/WeKnora](https://github.com/Tencent/WeKnora) | Go | 27.8k | - | 598/d | 9.23 | It is organized around three core capabilities: RAG-based Quick Q&A for everyday lookups, a ReAct Agent that autonomously orchestrates retrieval, MCP tools, a tenant skill catalog, session-persistent Docker / E2B / Cube sandboxes and web search to handle complex multi-step tasks, and a brand-new Wiki Mode in which... |
+| 5 | [NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent) | Python | 247.3k | - | 293/d | 9.11 | The self-improving AI agent built by Nous Research. It's the only agent with a built-in learning loop — it creates skills from experience, improves them during use, nudges itself to persist knowledge, searches its own past conversations, and builds a deepening model of who you are across sessions. Run it on a $5 VPS,... |
+| 6 | [firecrawl/firecrawl](https://github.com/firecrawl/firecrawl) | TypeScript | 182.4k | - | 299/d | 9.06 | The API to search, scrape, and interact with the web at scale. 🔥 The web data API to find sources, extract content, and turn it into clean Markdown or structured data your agents can ship with. Open source and available as a hosted service. |
+| 7 | [langgenius/dify](https://github.com/langgenius/dify) | TypeScript | 156.6k | - | 151/d | 8.44 | Dify is an open-source LLM app development platform. Its intuitive interface combines AI workflow, RAG pipeline, agent capabilities, model management, observability features (including Opik, Langfuse, and Arize Phoenix) and more, letting you quickly go from prototype to production. Here's a list of the core features: |
+| 8 | [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman) | Go | 106.9k | - | 202/d | 8.44 | | /caveman [lite\|full\|ultra\|wenyan-lite\|wenyan-full\|wenyan-ultra\|off] | Shorter replies at the intensity you choose. | | cavecrew-investigator, cavecrew-builder, cavecrew-reviewer | Compressed subagent presets for locating, editing, and reviewing code. | | /caveman-commit | Terse Conventional Commit messages. |... |
+| 9 | [Comfy-Org/ComfyUI](https://github.com/Comfy-Org/ComfyUI) | Python | 134.0k | - | 161/d | 8.44 | ComfyUI is the AI creation engine for visual professionals who demand control over every model, every parameter, and every output. Its powerful and modular node graph interface empowers creatives to generate images, videos, 3D models, audio, and more... - ComfyUI natively supports the latest open-source state of the... |
+| 10 | [cactus-compute/needle](https://github.com/cactus-compute/needle) | Python | 11.8k | - | 395/d | 8.26 | A foundation model for mobiles, wearables, robots, smart home, automotive and microcontrollers. The whole model is a single 8-29 MB binary built on our Simple Attention Network, and we trade general chat capacity to beat models 10x its size on mobile tool calls and match 2-3x bigger models on extraction. |
+
+---
+
+## AI Personal Apps Top 20
+
+| # | Repo | Lang | Stars | +Today | Growth | Hot | Summary |
+|--:|------|------|------:|------:|------:|-----:|---------|
+| 1 | [trycua/cua](https://github.com/trycua/cua) | HTML | 24.9k | +1.0k | 1.0k/d | 21.63 | Bring your own agent and model, or explore CUA-S1 for specialized decisions. Cua provides the computer and automation tools. Computer-Use 2.0 describes an agent moving between code, APIs, and graphical interfaces within the same task. |
+| 2 | [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) | JavaScript | 97.4k | +729 | 729/d | 19.61 | Production-grade engineering skills for AI coding agents. |
+| 3 | [anthropics/claude-code](https://github.com/anthropics/claude-code) | TypeScript | 146.9k | +415 | 415/d | 18.24 | Claude Code is an agentic coding tool that lives in your terminal, understands your codebase, and helps you code faster by executing routine tasks, explaining complex code, and handling git workflows -- all through natural language commands. Use it in your terminal, IDE, or tag @claude on Github. |
+| 4 | [BuilderIO/agent-native](https://github.com/BuilderIO/agent-native) | TypeScript | 5.0k | +89 | 89/d | 13.53 | Agent-Native is an open-source TypeScript framework for building agents that pair autonomous work with a purpose-built UI. Define each capability once as an action: the agent uses it as a tool, and the UI calls it from code. |
+| 5 | [alibaba/open-code-review](https://github.com/alibaba/open-code-review) | Go | 38.1k | - | 934/d | 9.56 | Open Code Review is an AI-powered code review CLI tool. It originated as Alibaba Group's internal official AI code review assistant — over the past two years, it has served tens of thousands of developers and identified millions of code defects. After thorough validation at massive scale, we incubated it into an open... |
+| 6 | [heygen-com/hyperframes](https://github.com/heygen-com/hyperframes) | TypeScript | 51.8k | - | 273/d | 8.71 | The skills teach agents the HyperFrames production loop: plan the video, write valid HTML, wire seekable animations, add media, lint, preview, and render. They work with Claude Code, Cursor, Gemini CLI, Codex, and other coding agents that support skills. |
+| 7 | [Tencent/BrowserSkill](https://github.com/Tencent/BrowserSkill) | TypeScript | 5.9k | - | 317/d | 8.37 | - Reuse real login state: Agents can work with sites you are already signed into, without separate test accounts. - Keep working uninterrupted: browser tasks run in a separate, visible Agent Window, so you can keep using your own browser. - Support any Agent: any Agent that can call a shell can use BrowserSkill... |
+| 8 | [Shubhamsaboo/awesome-llm-apps](https://github.com/Shubhamsaboo/awesome-llm-apps) | Python | 139.1k | - | 152/d | 8.26 | 100+ open-source AI agents, agent skills, and RAG apps. Hand-built, tested end-to-end, Apache-2.0. |
+| 9 | [bojieli/ai-agent-book](https://github.com/bojieli/ai-agent-book) | Python | 48.9k | - | 225/d | 8.24 | > 📢 2.0 版变更（相较 1.4 版）：本仓库书稿版本已由 1.4 升级为 2.0。2.0 版将原第四章中的“异步交互”部分与原第九章中关于“多模态 Agent”的内容合并，重组为新的第六章“交互：观察与动作空间的扩展”。原第六章“Agent 的评估”、第七章“模型后训练”和第八章“Agent 的持续进化”依次后移一章，现分别为第七、八、九章。 > > 如果你看到的是旧版 PDF，建议下载最新版 PDF。新版还包含许多内容修正与调整，请以最新版为准。 |
+| 10 | [farion1231/cc-switch](https://github.com/farion1231/cc-switch) | Rust | 133.8k | - | 138/d | 8.24 | CC Switch supports nine tools: Claude Code, Claude Desktop, Codex, Gemini CLI, Grok Build, OpenCode, OpenClaw, Hermes, MiniMax Code. Each tool has dedicated provider presets and configuration management. |
+| 11 | [asgeirtj/system_prompts_leaks](https://github.com/asgeirtj/system_prompts_leaks) | JavaScript | 67.8k | - | 186/d | 8.16 | Leaked system prompts, captured verbatim — the hidden instructions and rules that ChatGPT, Claude, Gemini, Grok and every other AI chatbot receives before your first message. |
+| 12 | [diegosouzapw/OmniRoute](https://github.com/diegosouzapw/OmniRoute) | TypeScript | 68.4k | - | 347/d | 8.13 | Thanks to Cheaper Inference, an OmniRoute Open Source Friend, for backing this project! Cheaper Inference is a cost-ranked gateway that resells 42 frontier models — Claude, GPT-5.x, Gemini, Kimi K3, GLM, DeepSeek, Grok and MiniMax — behind one OpenAI-compatible endpoint, routing each request to the cheapest eligible... |
+| 13 | [huggingface/transformers](https://github.com/huggingface/transformers) | Python | 166.4k | - | 112/d | 8.11 | Transformers acts as the model-definition framework for state-of-the-art machine learning with text, computer vision, audio, video, and multimodal models, for both inference and training. |
+| 14 | [n8n-io/n8n](https://github.com/n8n-io/n8n) | TypeScript | 205.4k | - | 89/d | 8.05 | Fair-code platform to build and deploy AI agents and workflows. Combine a visual canvas with custom code, run it self-hosted or in the cloud, and connect to 1500+ integrations. AI automation you can trust with real work, from prototype to production. |
+| 15 | [TencentCloud/Octop](https://github.com/TencentCloud/Octop) | Python | 4.3k | - | 230/d | 8.02 | Octop is a self-hosted AI assistant platform for households and small teams. It runs a single process that serves a web dashboard, a CLI, IM channels (Feishu, DingTalk, QQ, Discord, WeCom, and more), and cron automation — all sharing one control-plane database under /.octop/ (SQLite by default; PostgreSQL optional). |
+| 16 | [mksglu/context-mode](https://github.com/mksglu/context-mode) | TypeScript | 23.7k | - | 135/d | 7.92 | Context Mode is an MCP server that solves all four sides of this problem: |
+| 17 | [vastsa/PI-Desktop](https://github.com/vastsa/PI-Desktop) | TypeScript | 4.6k | - | 201/d | 7.91 | Bring projects, agents, models, plugins, and workflows into one persistent desktop environment. |
+| 18 | [OpenHands/OpenHands](https://github.com/OpenHands/OpenHands) | TypeScript | 88.6k | - | 96/d | 7.9 | The most powerful way to run OpenHands is on a server in the cloud. This allows your agents to continue running even when your laptop is shut, and makes it easier to trigger your agents through third-party services like Slack, GitHub, and Datadog. See SELFHOSTING.md for details, especially with respect to security... |
+| 19 | [router-for-me/CLIProxyAPI](https://github.com/router-for-me/CLIProxyAPI) | Go | 52.6k | - | 108/d | 7.88 | CLIProxyAPI is a proxy server that provides OpenAI/Gemini/Claude/Codex/Grok compatible API interfaces for CLI. |
+| 20 | [headroomlabs-ai/headroom](https://github.com/headroomlabs-ai/headroom) | Python | 73.2k | - | 170/d | 7.85 | Headroom compresses everything your AI agent reads — tool outputs, logs, RAG chunks, files, and conversation history — before it reaches the LLM. Same answers, fraction of the tokens. Compression runs on your machine; no prompt or file content is sent anywhere to be compressed. |
+
+---
+
+## Emerging AI Hotspots Top 10
+
+| # | Repo | Lang | Stars | +Today | Growth | Emerging | Summary |
+|--:|------|------|------:|------:|------:|-----:|---------|
+
+---
+
+## Trend Insights
+
+1. **Language Distribution**: Top languages: TypeScript(11), Python(9), Go(4), JavaScript(3), Jupyter Notebook(1)
+2. **Hot Topics**: 大语言模型(14), AI Agent(14), MCP 协议(10), RAG 检索增强(4), 生成式 AI(3), 机器学习(2)
+3. **Hottest Today**: [affaan-m/ECC](https://github.com/affaan-m/ECC) gained +1.0k stars today
+4. **Active Established Projects**: ECC, agent-skills, claude-code continue to maintain high activity
+
+---
+
+*Report generated by [GitHub AI Radar](https://github.com/JuliaYu907/github-ai-radar)*
