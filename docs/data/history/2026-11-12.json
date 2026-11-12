@@ -1,0 +1,4031 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-12",
+  "generated_at": "2026-11-12T16:25:38.106872+00:00",
+  "repositories": [
+    {
+      "date": "2026-11-12",
+      "id": 1299769220,
+      "full_name": "openai/codex-security",
+      "stars": 12200,
+      "forks": 968,
+      "issues": 142,
+      "pushed_at": "2026-11-12T10:06:19Z",
+      "today_stars": 663,
+      "today_stars_source": "trending",
+      "growth_per_day": 663.0,
+      "growth_source": "trending",
+      "growth_confidence": "high",
+      "hotness_score": 20.22,
+      "score_breakdown": {
+        "today_stars": 11.250047,
+        "growth_rate": 5.625024,
+        "recency": 1.310341,
+        "base_stars": 2.036207
+      },
+      "categories": [
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 37.19,
+      "emerging_evidence": {
+        "repo_age_days": 121,
+        "first_observed_days": 1,
+        "observations_in_lookback": 1,
+        "prior_main_rank_days": 1,
+        "prior_emerging_rank_days": 1,
+        "acceleration_ratio": 33.15,
+        "signals": [
+          "recently_created",
+          "newly_discovered",
+          "accelerating"
+        ]
+      },
+      "rank": {
+        "app": 1
+      },
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": null,
+      "full_name": "addyosmani/agent-skills",
+      "stars": 116478,
+      "forks": 12199,
+      "issues": 0,
+      "pushed_at": null,
+      "today_stars": 812,
+      "today_stars_source": "trending",
+      "growth_per_day": 812.0,
+      "growth_source": "trending",
+      "growth_confidence": "high",
+      "hotness_score": 19.93,
+      "score_breakdown": {
+        "today_stars": 11.600534,
+        "growth_rate": 5.800267,
+        "recency": 0.0,
+        "base_stars": 2.524457
+      },
+      "categories": [
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 25.35,
+      "emerging_evidence": {
+        "repo_age_days": null,
+        "first_observed_days": 189,
+        "observations_in_lookback": 2,
+        "prior_main_rank_days": 2,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 1.3,
+        "signals": []
+      },
+      "rank": {
+        "app": 2
+      },
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": null,
+      "full_name": "Alishahryar1/free-claude-code",
+      "stars": 69021,
+      "forks": 10735,
+      "issues": 0,
+      "pushed_at": null,
+      "today_stars": 461,
+      "today_stars_source": "trending",
+      "growth_per_day": 461.0,
+      "growth_source": "trending",
+      "growth_confidence": "high",
+      "hotness_score": 18.34,
+      "score_breakdown": {
+        "today_stars": 10.622099,
+        "growth_rate": 5.311049,
+        "recency": 0.0,
+        "base_stars": 2.411215
+      },
+      "categories": [
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 26.56,
+      "emerging_evidence": {
+        "repo_age_days": null,
+        "first_observed_days": 202,
+        "observations_in_lookback": 0,
+        "prior_main_rank_days": 0,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": null,
+        "signals": [
+          "low_prior_exposure"
+        ]
+      },
+      "rank": {
+        "app": 3
+      },
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 1336502227,
+      "full_name": "CopilotKit/OpenBot",
+      "stars": 11361,
+      "forks": 1410,
+      "issues": 82,
+      "pushed_at": "2026-11-12T15:44:46Z",
+      "today_stars": 291,
+      "today_stars_source": "trending",
+      "growth_per_day": 291.0,
+      "growth_source": "trending",
+      "growth_confidence": "high",
+      "hotness_score": 18.24,
+      "score_breakdown": {
+        "today_stars": 9.827789,
+        "growth_rate": 4.913895,
+        "recency": 1.479566,
+        "base_stars": 2.020789
+      },
+      "categories": [
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 15.51,
+      "emerging_evidence": {
+        "repo_age_days": 87,
+        "first_observed_days": 13,
+        "observations_in_lookback": 13,
+        "prior_main_rank_days": 5,
+        "prior_emerging_rank_days": 1,
+        "acceleration_ratio": 1.68,
+        "signals": [
+          "recently_created",
+          "accelerating"
+        ]
+      },
+      "rank": {
+        "app": 4
+      },
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 1008713177,
+      "full_name": "QwenLM/qwen-code",
+      "stars": 29652,
+      "forks": 3388,
+      "issues": 2220,
+      "pushed_at": "2026-11-12T16:21:19Z",
+      "today_stars": 151,
+      "today_stars_source": "trending",
+      "growth_per_day": 151.0,
+      "growth_source": "trending",
+      "growth_confidence": "high",
+      "hotness_score": 16.77,
+      "score_breakdown": {
+        "today_stars": 8.697513,
+        "growth_rate": 4.348757,
+        "recency": 1.497841,
+        "base_stars": 2.228384
+      },
+      "categories": [
+        "core",
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 25.74,
+      "emerging_evidence": {
+        "repo_age_days": 504,
+        "first_observed_days": 0,
+        "observations_in_lookback": 0,
+        "prior_main_rank_days": 0,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": null,
+        "signals": [
+          "low_prior_exposure"
+        ]
+      },
+      "rank": {
+        "core": 1
+      },
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": null,
+      "full_name": "ashhart/TensorFold",
+      "stars": 1871,
+      "forks": 390,
+      "issues": 0,
+      "pushed_at": null,
+      "today_stars": 58,
+      "today_stars_source": "trending",
+      "growth_per_day": 58.0,
+      "growth_source": "trending",
+      "growth_confidence": "high",
+      "hotness_score": 12.22,
+      "score_breakdown": {
+        "today_stars": 7.059172,
+        "growth_rate": 3.529586,
+        "recency": 0.0,
+        "base_stars": 1.630555
+      },
+      "categories": [
+        "core"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 21.65,
+      "emerging_evidence": {
+        "repo_age_days": null,
+        "first_observed_days": 0,
+        "observations_in_lookback": 0,
+        "prior_main_rank_days": 0,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": null,
+        "signals": [
+          "newly_discovered",
+          "low_prior_exposure"
+        ]
+      },
+      "rank": {
+        "core": 2,
+        "emerging": 1
+      },
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 1209966933,
+      "full_name": "morluto/rea",
+      "stars": 454642,
+      "forks": 111695,
+      "issues": 1775,
+      "pushed_at": "2026-11-12T15:53:47Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 2658.6,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 11.13,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 6.826196,
+        "recency": 1.484074,
+        "base_stars": 2.819156
+      },
+      "categories": [
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": -28.62,
+      "emerging_evidence": {
+        "repo_age_days": 212,
+        "first_observed_days": 37,
+        "observations_in_lookback": 28,
+        "prior_main_rank_days": 28,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 0.87,
+        "signals": []
+      },
+      "rank": {
+        "app": 5
+      },
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 1131513930,
+      "full_name": "ZhuLinsen/daily_stock_analysis",
+      "stars": 71042,
+      "forks": 57113,
+      "issues": 52,
+      "pushed_at": "2026-11-12T15:19:55Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 1065.4,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 9.92,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 6.03512,
+        "recency": 1.467141,
+        "base_stars": 2.417461
+      },
+      "categories": [
+        "core",
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 25.12,
+      "emerging_evidence": {
+        "repo_age_days": 306,
+        "first_observed_days": 216,
+        "observations_in_lookback": 3,
+        "prior_main_rank_days": 3,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 1.72,
+        "signals": []
+      },
+      "rank": {
+        "core": 3
+      },
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 1177402105,
+      "full_name": "heygen-com/hyperframes",
+      "stars": 83291,
+      "forks": 7689,
+      "issues": 248,
+      "pushed_at": "2026-11-12T16:14:15Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 607.4,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 9.5,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 5.549326,
+        "recency": 1.494307,
+        "base_stars": 2.451884
+      },
+      "categories": [
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": -34.94,
+      "emerging_evidence": {
+        "repo_age_days": 247,
+        "first_observed_days": 201,
+        "observations_in_lookback": 28,
+        "prior_main_rank_days": 28,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 1.03,
+        "signals": []
+      },
+      "rank": {
+        "app": 6
+      },
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 787076358,
+      "full_name": "firecrawl/firecrawl",
+      "stars": 201189,
+      "forks": 10564,
+      "issues": 793,
+      "pushed_at": "2026-11-12T16:25:31Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 363.9,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 9.25,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 5.106814,
+        "recency": 1.499941,
+        "base_stars": 2.64273
+      },
+      "categories": [
+        "core",
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": -37.22,
+      "emerging_evidence": {
+        "repo_age_days": 940,
+        "first_observed_days": 213,
+        "observations_in_lookback": 28,
+        "prior_main_rank_days": 28,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 0.97,
+        "signals": []
+      },
+      "rank": {
+        "core": 4
+      },
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 770153867,
+      "full_name": "harry0703/MoneyPrinterTurbo",
+      "stars": 142807,
+      "forks": 22852,
+      "issues": 81,
+      "pushed_at": "2026-11-12T12:32:54Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 384.2,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 9.11,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 5.153678,
+        "recency": 1.383632,
+        "base_stars": 2.568558
+      },
+      "categories": [
+        "core",
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": -34.73,
+      "emerging_evidence": {
+        "repo_age_days": 976,
+        "first_observed_days": 168,
+        "observations_in_lookback": 27,
+        "prior_main_rank_days": 27,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 0.83,
+        "signals": []
+      },
+      "rank": {
+        "core": 5
+      },
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 1200597263,
+      "full_name": "Graphify-Labs/graphify",
+      "stars": 146577,
+      "forks": 14050,
+      "issues": 1650,
+      "pushed_at": "2026-11-11T23:25:36Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 565.7,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 9.05,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 5.487865,
+        "recency": 0.989982,
+        "base_stars": 2.574196
+      },
+      "categories": [
+        "core",
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": -19.56,
+      "emerging_evidence": {
+        "repo_age_days": 223,
+        "first_observed_days": 131,
+        "observations_in_lookback": 21,
+        "prior_main_rank_days": 21,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 1.0,
+        "signals": []
+      },
+      "rank": {
+        "core": 6
+      },
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 1024554267,
+      "full_name": "NousResearch/hermes-agent",
+      "stars": 262913,
+      "forks": 59153,
+      "issues": 53906,
+      "pushed_at": "2026-11-12T16:23:30Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 267.8,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 9.04,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 4.842234,
+        "recency": 1.498932,
+        "base_stars": 2.700635
+      },
+      "categories": [
+        "core",
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": -38.54,
+      "emerging_evidence": {
+        "repo_age_days": 477,
+        "first_observed_days": 217,
+        "observations_in_lookback": 28,
+        "prior_main_rank_days": 28,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 0.81,
+        "signals": []
+      },
+      "rank": {
+        "core": 7
+      },
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 1031912724,
+      "full_name": "farion1231/cc-switch",
+      "stars": 153910,
+      "forks": 10105,
+      "issues": 948,
+      "pushed_at": "2026-11-12T15:38:34Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 275.6,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 8.93,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 4.866994,
+        "recency": 1.476466,
+        "base_stars": 2.584761
+      },
+      "categories": [
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": -38.42,
+      "emerging_evidence": {
+        "repo_age_days": 465,
+        "first_observed_days": 215,
+        "observations_in_lookback": 28,
+        "prior_main_rank_days": 28,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 0.91,
+        "signals": []
+      },
+      "rank": {
+        "app": 7
+      },
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 1157102282,
+      "full_name": "cheaper-inference/OmniRoute",
+      "stars": 86787,
+      "forks": 13260,
+      "issues": 494,
+      "pushed_at": "2026-11-12T16:04:57Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 303.7,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 8.9,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 4.950747,
+        "recency": 1.489657,
+        "base_stars": 2.460781
+      },
+      "categories": [
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": -37.9,
+      "emerging_evidence": {
+        "repo_age_days": 272,
+        "first_observed_days": 107,
+        "observations_in_lookback": 28,
+        "prior_main_rank_days": 28,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 1.05,
+        "signals": []
+      },
+      "rank": {
+        "app": 8
+      },
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 1056618941,
+      "full_name": "homeassistant-ai/ha-mcp",
+      "stars": 7665,
+      "forks": 464,
+      "issues": 15,
+      "pushed_at": "2026-11-12T14:18:05Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 571.5,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 8.87,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 5.496679,
+        "recency": 1.436224,
+        "base_stars": 1.935639
+      },
+      "categories": [
+        "core",
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 24.18,
+      "emerging_evidence": {
+        "repo_age_days": 424,
+        "first_observed_days": 2,
+        "observations_in_lookback": 3,
+        "prior_main_rank_days": 3,
+        "prior_emerging_rank_days": 1,
+        "acceleration_ratio": 1.17,
+        "signals": [
+          "newly_discovered"
+        ]
+      },
+      "rank": {
+        "core": 8
+      },
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 1048065319,
+      "full_name": "thedotmack/claude-mem",
+      "stars": 116466,
+      "forks": 10104,
+      "issues": 107,
+      "pushed_at": "2026-11-12T08:04:02Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 356.1,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 8.86,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 5.088111,
+        "recency": 1.249199,
+        "base_stars": 2.524434
+      },
+      "categories": [
+        "core",
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": -31.06,
+      "emerging_evidence": {
+        "repo_age_days": 437,
+        "first_observed_days": 218,
+        "observations_in_lookback": 27,
+        "prior_main_rank_days": 25,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 0.79,
+        "signals": []
+      },
+      "rank": {
+        "core": 9
+      },
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 872119017,
+      "full_name": "D4Vinci/Scrapling",
+      "stars": 102013,
+      "forks": 10617,
+      "issues": 25,
+      "pushed_at": "2026-11-11T19:16:10Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 515.0,
+      "growth_source": "history_delta",
+      "growth_confidence": "medium",
+      "hotness_score": 8.77,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 5.406736,
+        "recency": 0.865266,
+        "base_stars": 2.495761
+      },
+      "categories": [
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 9.28,
+      "emerging_evidence": {
+        "repo_age_days": 759,
+        "first_observed_days": 190,
+        "observations_in_lookback": 8,
+        "prior_main_rank_days": 8,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 0.87,
+        "signals": []
+      },
+      "rank": {
+        "app": 9
+      },
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 1170821064,
+      "full_name": "paperclipai/paperclip",
+      "stars": 113333,
+      "forks": 18807,
+      "issues": 6826,
+      "pushed_at": "2026-11-12T16:24:37Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 222.2,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 8.7,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 4.681316,
+        "recency": 1.499491,
+        "base_stars": 2.518533
+      },
+      "categories": [
+        "core",
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": -12.59,
+      "emerging_evidence": {
+        "repo_age_days": 255,
+        "first_observed_days": 18,
+        "observations_in_lookback": 17,
+        "prior_main_rank_days": 16,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 0.76,
+        "signals": []
+      },
+      "rank": {
+        "core": 10
+      },
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 1201476594,
+      "full_name": "career-ops-hq/career-ops",
+      "stars": 82147,
+      "forks": 15080,
+      "issues": 415,
+      "pushed_at": "2026-11-12T16:12:19Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 239.7,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 8.69,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 4.746655,
+        "recency": 1.493341,
+        "base_stars": 2.448891
+      },
+      "categories": [
+        "core",
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": -37.02,
+      "emerging_evidence": {
+        "repo_age_days": 221,
+        "first_observed_days": 107,
+        "observations_in_lookback": 28,
+        "prior_main_rank_days": 27,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 0.9,
+        "signals": []
+      },
+      "rank": {
+        "app": 10
+      },
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 1042367133,
+      "full_name": "github/spec-kit",
+      "stars": 149500,
+      "forks": 13433,
+      "issues": 227,
+      "pushed_at": "2026-11-12T16:21:53Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 182.4,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 8.59,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 4.51131,
+        "recency": 1.498124,
+        "base_stars": 2.578469
+      },
+      "categories": [
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": -15.44,
+      "emerging_evidence": {
+        "repo_age_days": 447,
+        "first_observed_days": 218,
+        "observations_in_lookback": 25,
+        "prior_main_rank_days": 16,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 0.8,
+        "signals": []
+      },
+      "rank": {
+        "app": 11
+      },
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 1201173969,
+      "full_name": "JuliusBrussee/caveman",
+      "stars": 119320,
+      "forks": 6933,
+      "issues": 85,
+      "pushed_at": "2026-11-12T07:27:22Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 261.0,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 8.58,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 4.820054,
+        "recency": 1.230866,
+        "base_stars": 2.529673
+      },
+      "categories": [
+        "core",
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": -34.57,
+      "emerging_evidence": {
+        "repo_age_days": 222,
+        "first_observed_days": 217,
+        "observations_in_lookback": 28,
+        "prior_main_rank_days": 26,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 1.04,
+        "signals": []
+      },
+      "rank": {
+        "app": 12
+      },
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 193215554,
+      "full_name": "n8n-io/n8n",
+      "stars": 210303,
+      "forks": 61489,
+      "issues": 1224,
+      "pushed_at": "2026-11-12T16:27:15Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 152.3,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 8.51,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 4.356128,
+        "recency": 1.500807,
+        "base_stars": 2.652318
+      },
+      "categories": [
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": -22.19,
+      "emerging_evidence": {
+        "repo_age_days": 2700,
+        "first_observed_days": 218,
+        "observations_in_lookback": 28,
+        "prior_main_rank_days": 19,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 1.39,
+        "signals": []
+      },
+      "rank": {
+        "app": 13
+      },
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 1187630119,
+      "full_name": "NVIDIA/SkillSpector",
+      "stars": 25634,
+      "forks": 2263,
+      "issues": 162,
+      "pushed_at": "2026-11-12T13:41:11Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 280.4,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 8.5,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 4.881887,
+        "recency": 1.417774,
+        "base_stars": 2.196874
+      },
+      "categories": [
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 10.92,
+      "emerging_evidence": {
+        "repo_age_days": 236,
+        "first_observed_days": 154,
+        "observations_in_lookback": 14,
+        "prior_main_rank_days": 6,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 1.88,
+        "signals": []
+      },
+      "rank": {
+        "app": 14
+      },
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 589831718,
+      "full_name": "Comfy-Org/ComfyUI",
+      "stars": 146492,
+      "forks": 17458,
+      "issues": 5528,
+      "pushed_at": "2026-11-12T14:54:59Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 159.1,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 8.42,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 4.393698,
+        "recency": 1.454674,
+        "base_stars": 2.574071
+      },
+      "categories": [
+        "core",
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": -40.78,
+      "emerging_evidence": {
+        "repo_age_days": 1395,
+        "first_observed_days": 218,
+        "observations_in_lookback": 28,
+        "prior_main_rank_days": 28,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 0.8,
+        "signals": []
+      },
+      "rank": {
+        "app": 15
+      },
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 643445235,
+      "full_name": "lobehub/lobehub",
+      "stars": 85157,
+      "forks": 16255,
+      "issues": 1318,
+      "pushed_at": "2026-11-12T16:27:33Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 154.3,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 8.32,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 4.367348,
+        "recency": 1.500957,
+        "base_stars": 2.456678
+      },
+      "categories": [
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 3.09,
+      "emerging_evidence": {
+        "repo_age_days": 1271,
+        "first_observed_days": 218,
+        "observations_in_lookback": 28,
+        "prior_main_rank_days": 6,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 0.75,
+        "signals": []
+      },
+      "rank": {
+        "app": 16
+      },
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 1161958643,
+      "full_name": "vercel-labs/agent-desktop",
+      "stars": 22580,
+      "forks": 1676,
+      "issues": 222,
+      "pushed_at": "2026-11-11T06:09:45Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 679.2,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 8.29,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 5.645889,
+        "recency": 0.472057,
+        "base_stars": 2.169423
+      },
+      "categories": [
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 5.98,
+      "emerging_evidence": {
+        "repo_age_days": 265,
+        "first_observed_days": 9,
+        "observations_in_lookback": 10,
+        "prior_main_rank_days": 10,
+        "prior_emerging_rank_days": 1,
+        "acceleration_ratio": 0.82,
+        "signals": []
+      },
+      "rank": {
+        "app": 17
+      },
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 1139971460,
+      "full_name": "rtk-ai/rtk",
+      "stars": 86352,
+      "forks": 5526,
+      "issues": 1681,
+      "pushed_at": "2026-11-12T13:48:42Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 132.9,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 8.12,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 4.239007,
+        "recency": 1.421532,
+        "base_stars": 2.459694
+      },
+      "categories": [
+        "core",
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 3.43,
+      "emerging_evidence": {
+        "repo_age_days": 293,
+        "first_observed_days": 217,
+        "observations_in_lookback": 26,
+        "prior_main_rank_days": 6,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 1.24,
+        "signals": []
+      },
+      "rank": {
+        "app": 18
+      },
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 1100776768,
+      "full_name": "anthropics/claude-plugins-official",
+      "stars": 47013,
+      "forks": 4886,
+      "issues": 1291,
+      "pushed_at": "2026-11-12T16:06:34Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 138.8,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 8.09,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 4.276332,
+        "recency": 1.490466,
+        "base_stars": 2.32812
+      },
+      "categories": [
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": -15.37,
+      "emerging_evidence": {
+        "repo_age_days": 356,
+        "first_observed_days": 177,
+        "observations_in_lookback": 28,
+        "prior_main_rank_days": 15,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 0.95,
+        "signals": []
+      },
+      "rank": {
+        "app": 19
+      },
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 155220641,
+      "full_name": "huggingface/transformers",
+      "stars": 168907,
+      "forks": 35227,
+      "issues": 1074,
+      "pushed_at": "2026-11-12T16:22:54Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 90.2,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 8.01,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 3.906577,
+        "recency": 1.498632,
+        "base_stars": 2.604882
+      },
+      "categories": [
+        "core",
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 12.35,
+      "emerging_evidence": {
+        "repo_age_days": 2936,
+        "first_observed_days": 218,
+        "observations_in_lookback": 27,
+        "prior_main_rank_days": 1,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 1.66,
+        "signals": []
+      },
+      "rank": {
+        "app": 20
+      },
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 1224172037,
+      "full_name": "t8y2/dbx",
+      "stars": 30179,
+      "forks": 2749,
+      "issues": 1801,
+      "pushed_at": "2026-11-12T16:10:12Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 132.9,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 7.96,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 4.239007,
+        "recency": 1.492282,
+        "base_stars": 2.232196
+      },
+      "categories": [
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 0.45,
+      "emerging_evidence": {
+        "repo_age_days": 197,
+        "first_observed_days": 44,
+        "observations_in_lookback": 28,
+        "prior_main_rank_days": 7,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 0.81,
+        "signals": []
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 771302083,
+      "full_name": "OpenHands/OpenHands",
+      "stars": 93330,
+      "forks": 12476,
+      "issues": 1160,
+      "pushed_at": "2026-11-12T15:46:33Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 98.0,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 7.93,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 3.977614,
+        "recency": 1.480457,
+        "base_stars": 2.47651
+      },
+      "categories": [
+        "core",
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 13.24,
+      "emerging_evidence": {
+        "repo_age_days": 974,
+        "first_observed_days": 218,
+        "observations_in_lookback": 28,
+        "prior_main_rank_days": 0,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 1.05,
+        "signals": [
+          "low_prior_exposure"
+        ]
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 658928958,
+      "full_name": "ollama/ollama",
+      "stars": 186784,
+      "forks": 19042,
+      "issues": 4640,
+      "pushed_at": "2026-11-12T03:21:12Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 123.2,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 7.91,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 4.173913,
+        "recency": 1.107782,
+        "base_stars": 2.626653
+      },
+      "categories": [
+        "core",
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": -3.27,
+      "emerging_evidence": {
+        "repo_age_days": 1234,
+        "first_observed_days": 218,
+        "observations_in_lookback": 27,
+        "prior_main_rank_days": 9,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 1.18,
+        "signals": []
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 701547123,
+      "full_name": "open-webui/open-webui",
+      "stars": 158478,
+      "forks": 23043,
+      "issues": 281,
+      "pushed_at": "2026-11-12T14:24:23Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 86.4,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 7.9,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 3.869737,
+        "recency": 1.439374,
+        "base_stars": 2.59109
+      },
+      "categories": [
+        "core",
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": -5.15,
+      "emerging_evidence": {
+        "repo_age_days": 1132,
+        "first_observed_days": 218,
+        "observations_in_lookback": 27,
+        "prior_main_rank_days": 9,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 0.9,
+        "signals": []
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 1185590488,
+      "full_name": "rohitg00/ai-engineering-from-scratch",
+      "stars": 78560,
+      "forks": 13988,
+      "issues": 63,
+      "pushed_at": "2026-11-12T15:53:46Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 95.1,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 7.88,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 3.951879,
+        "recency": 1.484066,
+        "base_stars": 2.439229
+      },
+      "categories": [
+        "core",
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": -23.49,
+      "emerging_evidence": {
+        "repo_age_days": 238,
+        "first_observed_days": 176,
+        "observations_in_lookback": 22,
+        "prior_main_rank_days": 19,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 0.41,
+        "signals": []
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 1012087571,
+      "full_name": "router-for-me/CLIProxyAPI",
+      "stars": 58388,
+      "forks": 8949,
+      "issues": 868,
+      "pushed_at": "2026-11-12T15:59:34Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 100.9,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 7.86,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 4.002606,
+        "recency": 1.486966,
+        "base_stars": 2.375011
+      },
+      "categories": [
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 5.26,
+      "emerging_evidence": {
+        "repo_age_days": 498,
+        "first_observed_days": 107,
+        "observations_in_lookback": 28,
+        "prior_main_rank_days": 4,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 0.92,
+        "signals": []
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 1162410458,
+      "full_name": "Thysrael/Horizon",
+      "stars": 13920,
+      "forks": 1984,
+      "issues": 16,
+      "pushed_at": "2026-11-12T00:02:45Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 249.4,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 7.85,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 4.780854,
+        "recency": 1.008557,
+        "base_stars": 2.064746
+      },
+      "categories": [
+        "core",
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 16.92,
+      "emerging_evidence": {
+        "repo_age_days": 265,
+        "first_observed_days": 8,
+        "observations_in_lookback": 7,
+        "prior_main_rank_days": 3,
+        "prior_emerging_rank_days": 1,
+        "acceleration_ratio": 1.26,
+        "signals": []
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 626805178,
+      "full_name": "langgenius/dify",
+      "stars": 161047,
+      "forks": 25463,
+      "issues": 1249,
+      "pushed_at": "2026-11-12T16:22:40Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 71.8,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 7.8,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 3.71152,
+        "recency": 1.498516,
+        "base_stars": 2.59457
+      },
+      "categories": [
+        "core",
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": -8.19,
+      "emerging_evidence": {
+        "repo_age_days": 1310,
+        "first_observed_days": 218,
+        "observations_in_lookback": 28,
+        "prior_main_rank_days": 10,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 0.71,
+        "signals": []
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 881458615,
+      "full_name": "browser-use/browser-use",
+      "stars": 120831,
+      "forks": 13501,
+      "issues": 610,
+      "pushed_at": "2026-11-12T02:11:28Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 122.3,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 7.77,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 4.167617,
+        "recency": 1.072916,
+        "base_stars": 2.532396
+      },
+      "categories": [
+        "core",
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 9.34,
+      "emerging_evidence": {
+        "repo_age_days": 742,
+        "first_observed_days": 218,
+        "observations_in_lookback": 23,
+        "prior_main_rank_days": 3,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 0.94,
+        "signals": []
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 969302809,
+      "full_name": "hesreallyhim/awesome-claude-code",
+      "stars": 57855,
+      "forks": 4944,
+      "issues": 1272,
+      "pushed_at": "2026-11-12T15:05:55Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 91.2,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 7.75,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 3.916017,
+        "recency": 1.460141,
+        "base_stars": 2.373027
+      },
+      "categories": [
+        "core",
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 11.15,
+      "emerging_evidence": {
+        "repo_age_days": 571,
+        "first_observed_days": 107,
+        "observations_in_lookback": 28,
+        "prior_main_rank_days": 1,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 1.16,
+        "signals": []
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 1305213943,
+      "full_name": "DuarteSantos8/openGym",
+      "stars": 21089,
+      "forks": 2846,
+      "issues": 351,
+      "pushed_at": "2026-11-12T05:28:54Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 161.1,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 7.73,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 4.404444,
+        "recency": 1.171632,
+        "base_stars": 2.154641
+      },
+      "categories": [
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": -32.95,
+      "emerging_evidence": {
+        "repo_age_days": 116,
+        "first_observed_days": 37,
+        "observations_in_lookback": 28,
+        "prior_main_rank_days": 25,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 0.8,
+        "signals": [
+          "recently_created"
+        ]
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 599547518,
+      "full_name": "vllm-project/vllm",
+      "stars": 96824,
+      "forks": 24733,
+      "issues": 10285,
+      "pushed_at": "2026-11-12T16:16:21Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 72.8,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 7.7,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 3.723329,
+        "recency": 1.495357,
+        "base_stars": 2.484464
+      },
+      "categories": [
+        "core",
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 0.01,
+      "emerging_evidence": {
+        "repo_age_days": 1372,
+        "first_observed_days": 218,
+        "observations_in_lookback": 28,
+        "prior_main_rank_days": 6,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 1.07,
+        "signals": []
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 574523116,
+      "full_name": "f/prompts.chat",
+      "stars": 176987,
+      "forks": 22569,
+      "issues": 83,
+      "pushed_at": "2026-11-12T08:47:33Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 79.6,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 7.69,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 3.799625,
+        "recency": 1.270957,
+        "base_stars": 2.614994
+      },
+      "categories": [
+        "core",
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": -5.0,
+      "emerging_evidence": {
+        "repo_age_days": 1438,
+        "first_observed_days": 218,
+        "observations_in_lookback": 17,
+        "prior_main_rank_days": 10,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 0.54,
+        "signals": []
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 1129940957,
+      "full_name": "headroomlabs-ai/headroom",
+      "stars": 79458,
+      "forks": 6215,
+      "issues": 295,
+      "pushed_at": "2026-11-12T07:27:38Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 99.0,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 7.66,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 3.986314,
+        "recency": 1.230999,
+        "base_stars": 2.441688
+      },
+      "categories": [
+        "core",
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 4.13,
+      "emerging_evidence": {
+        "repo_age_days": 308,
+        "first_observed_days": 143,
+        "observations_in_lookback": 27,
+        "prior_main_rank_days": 5,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 1.35,
+        "signals": []
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 1164477708,
+      "full_name": "mksglu/context-mode",
+      "stars": 33964,
+      "forks": 2328,
+      "issues": 5,
+      "pushed_at": "2026-11-12T15:57:20Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 88.3,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 7.63,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 3.888353,
+        "recency": 1.485849,
+        "base_stars": 2.257764
+      },
+      "categories": [
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": -10.55,
+      "emerging_evidence": {
+        "repo_age_days": 262,
+        "first_observed_days": 202,
+        "observations_in_lookback": 28,
+        "prior_main_rank_days": 12,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 1.38,
+        "signals": []
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 1309102418,
+      "full_name": "makecindy/cindy",
+      "stars": 9938,
+      "forks": 1236,
+      "issues": 3219,
+      "pushed_at": "2026-11-12T16:24:14Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 114.5,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 7.6,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 4.111049,
+        "recency": 1.499299,
+        "base_stars": 1.991833
+      },
+      "categories": [
+        "core",
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 6.43,
+      "emerging_evidence": {
+        "repo_age_days": 112,
+        "first_observed_days": 19,
+        "observations_in_lookback": 18,
+        "prior_main_rank_days": 6,
+        "prior_emerging_rank_days": 1,
+        "acceleration_ratio": 1.12,
+        "signals": [
+          "recently_created"
+        ]
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 955620917,
+      "full_name": "upstash/context7",
+      "stars": 64682,
+      "forks": 3240,
+      "issues": 63,
+      "pushed_at": "2026-11-12T12:50:44Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 79.6,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 7.59,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 3.799625,
+        "recency": 1.392549,
+        "base_stars": 2.397165
+      },
+      "categories": [
+        "core",
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 10.77,
+      "emerging_evidence": {
+        "repo_age_days": 595,
+        "first_observed_days": 205,
+        "observations_in_lookback": 26,
+        "prior_main_rank_days": 1,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 1.01,
+        "signals": []
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 717197250,
+      "full_name": "QuantumNous/new-api",
+      "stars": 51830,
+      "forks": 12635,
+      "issues": 1461,
+      "pushed_at": "2026-11-12T15:30:47Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 71.8,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 7.53,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 3.71152,
+        "recency": 1.472574,
+        "base_stars": 2.349229
+      },
+      "categories": [
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 12.34,
+      "emerging_evidence": {
+        "repo_age_days": 1097,
+        "first_observed_days": 107,
+        "observations_in_lookback": 27,
+        "prior_main_rank_days": 0,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 1.14,
+        "signals": [
+          "low_prior_exposure"
+        ]
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 575865240,
+      "full_name": "AstrBotDevs/AstrBot",
+      "stars": 46770,
+      "forks": 3532,
+      "issues": 1196,
+      "pushed_at": "2026-11-12T15:03:14Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 71.8,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 7.5,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 3.71152,
+        "recency": 1.458799,
+        "base_stars": 2.326999
+      },
+      "categories": [
+        "core",
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": -11.94,
+      "emerging_evidence": {
+        "repo_age_days": 1435,
+        "first_observed_days": 115,
+        "observations_in_lookback": 27,
+        "prior_main_rank_days": 12,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 0.82,
+        "signals": []
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 671269505,
+      "full_name": "BerriAI/litellm",
+      "stars": 63171,
+      "forks": 13224,
+      "issues": 5151,
+      "pushed_at": "2026-11-12T16:25:36Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 60.2,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 7.45,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 3.561276,
+        "recency": 1.499982,
+        "base_stars": 2.39205
+      },
+      "categories": [
+        "core",
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 11.06,
+      "emerging_evidence": {
+        "repo_age_days": 1204,
+        "first_observed_days": 107,
+        "observations_in_lookback": 28,
+        "prior_main_rank_days": 0,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 0.9,
+        "signals": [
+          "low_prior_exposure"
+        ]
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 676672661,
+      "full_name": "langchain-ai/langgraph",
+      "stars": 44864,
+      "forks": 7730,
+      "issues": 486,
+      "pushed_at": "2026-11-12T16:20:15Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 64.0,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 7.43,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 3.613421,
+        "recency": 1.497307,
+        "base_stars": 2.317995
+      },
+      "categories": [
+        "core"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 12.61,
+      "emerging_evidence": {
+        "repo_age_days": 1190,
+        "first_observed_days": 107,
+        "observations_in_lookback": 27,
+        "prior_main_rank_days": 0,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 1.52,
+        "signals": [
+          "low_prior_exposure"
+        ]
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 552661142,
+      "full_name": "langchain-ai/langchain",
+      "stars": 149405,
+      "forks": 25113,
+      "issues": 735,
+      "pushed_at": "2026-11-12T14:08:06Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 48.5,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 7.39,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 3.377614,
+        "recency": 1.431232,
+        "base_stars": 2.578332
+      },
+      "categories": [
+        "core"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 10.14,
+      "emerging_evidence": {
+        "repo_age_days": 1487,
+        "first_observed_days": 107,
+        "observations_in_lookback": 28,
+        "prior_main_rank_days": 0,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 0.93,
+        "signals": [
+          "low_prior_exposure"
+        ]
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 725205304,
+      "full_name": "unslothai/unsloth",
+      "stars": 79379,
+      "forks": 7396,
+      "issues": 472,
+      "pushed_at": "2026-11-12T16:19:28Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 52.4,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 7.38,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 3.443261,
+        "recency": 1.496916,
+        "base_stars": 2.441473
+      },
+      "categories": [
+        "core",
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 10.79,
+      "emerging_evidence": {
+        "repo_age_days": 1078,
+        "first_observed_days": 107,
+        "observations_in_lookback": 28,
+        "prior_main_rank_days": 0,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 1.16,
+        "signals": [
+          "low_prior_exposure"
+        ]
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 730534580,
+      "full_name": "infiniflow/ragflow",
+      "stars": 94091,
+      "forks": 11313,
+      "issues": 1283,
+      "pushed_at": "2026-11-12T13:09:01Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 56.3,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 7.38,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 3.504278,
+        "recency": 1.401691,
+        "base_stars": 2.478268
+      },
+      "categories": [
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 11.02,
+      "emerging_evidence": {
+        "repo_age_days": 1066,
+        "first_observed_days": 218,
+        "observations_in_lookback": 27,
+        "prior_main_rank_days": 0,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 0.72,
+        "signals": [
+          "low_prior_exposure"
+        ]
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 1134426800,
+      "full_name": "sickn33/agentic-awesome-skills",
+      "stars": 49599,
+      "forks": 7182,
+      "issues": 6,
+      "pushed_at": "2026-11-12T16:24:45Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 58.2,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 7.37,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 3.532515,
+        "recency": 1.499557,
+        "base_stars": 2.339708
+      },
+      "categories": [
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 7.41,
+      "emerging_evidence": {
+        "repo_age_days": 301,
+        "first_observed_days": 118,
+        "observations_in_lookback": 26,
+        "prior_main_rank_days": 2,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 0.94,
+        "signals": []
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 1054793726,
+      "full_name": "ChromeDevTools/chrome-devtools-mcp",
+      "stars": 55158,
+      "forks": 4596,
+      "issues": 124,
+      "pushed_at": "2026-11-12T14:46:27Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 57.2,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 7.33,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 3.517768,
+        "recency": 1.450407,
+        "base_stars": 2.362696
+      },
+      "categories": [
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 11.38,
+      "emerging_evidence": {
+        "repo_age_days": 427,
+        "first_observed_days": 216,
+        "observations_in_lookback": 28,
+        "prior_main_rank_days": 0,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 1.27,
+        "signals": [
+          "low_prior_exposure"
+        ]
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 925270205,
+      "full_name": "trycua/cua",
+      "stars": 32246,
+      "forks": 2421,
+      "issues": 1443,
+      "pushed_at": "2026-11-12T16:26:01Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 55.3,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 7.24,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 3.489038,
+        "recency": 1.500191,
+        "base_stars": 2.246532
+      },
+      "categories": [
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 8.7,
+      "emerging_evidence": {
+        "repo_age_days": 650,
+        "first_observed_days": 199,
+        "observations_in_lookback": 28,
+        "prior_main_rank_days": 1,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 0.84,
+        "signals": []
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 652712035,
+      "full_name": "lyogavin/airllm",
+      "stars": 42246,
+      "forks": 4354,
+      "issues": 156,
+      "pushed_at": "2026-11-12T06:14:26Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 72.8,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 7.22,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 3.723329,
+        "recency": 1.194399,
+        "base_stars": 2.304984
+      },
+      "categories": [
+        "core",
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": -3.85,
+      "emerging_evidence": {
+        "repo_age_days": 1248,
+        "first_observed_days": 161,
+        "observations_in_lookback": 28,
+        "prior_main_rank_days": 8,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 1.14,
+        "signals": []
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 599320067,
+      "full_name": "langflow-ai/langflow",
+      "stars": 156572,
+      "forks": 10396,
+      "issues": 1315,
+      "pushed_at": "2026-11-12T16:20:48Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 35.9,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 7.21,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 3.123329,
+        "recency": 1.497582,
+        "base_stars": 2.588471
+      },
+      "categories": [
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 9.42,
+      "emerging_evidence": {
+        "repo_age_days": 1372,
+        "first_observed_days": 218,
+        "observations_in_lookback": 27,
+        "prior_main_rank_days": 0,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 1.15,
+        "signals": [
+          "low_prior_exposure"
+        ]
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 655806940,
+      "full_name": "microsoft/generative-ai-for-beginners",
+      "stars": 123410,
+      "forks": 66328,
+      "issues": 22,
+      "pushed_at": "2026-11-12T03:43:22Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 58.8,
+      "growth_source": "history_delta",
+      "growth_confidence": "medium",
+      "hotness_score": 7.2,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 3.541244,
+        "recency": 1.118866,
+        "base_stars": 2.536967
+      },
+      "categories": [
+        "core",
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 11.64,
+      "emerging_evidence": {
+        "repo_age_days": 1241,
+        "first_observed_days": 218,
+        "observations_in_lookback": 18,
+        "prior_main_rank_days": 1,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 1.09,
+        "signals": []
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 642497346,
+      "full_name": "langfuse/langfuse",
+      "stars": 37359,
+      "forks": 4212,
+      "issues": 1167,
+      "pushed_at": "2026-11-12T16:25:36Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 49.5,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 7.17,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 3.394927,
+        "recency": 1.499982,
+        "base_stars": 2.278381
+      },
+      "categories": [
+        "core"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 10.22,
+      "emerging_evidence": {
+        "repo_age_days": 1273,
+        "first_observed_days": 203,
+        "observations_in_lookback": 28,
+        "prior_main_rank_days": 0,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 0.92,
+        "signals": [
+          "low_prior_exposure"
+        ]
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 740303686,
+      "full_name": "sgl-project/sglang",
+      "stars": 38792,
+      "forks": 10411,
+      "issues": 6721,
+      "pushed_at": "2026-11-12T15:48:30Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 46.6,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 7.11,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 3.343734,
+        "recency": 1.481432,
+        "base_stars": 2.286526
+      },
+      "categories": [
+        "core",
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 8.47,
+      "emerging_evidence": {
+        "repo_age_days": 1039,
+        "first_observed_days": 107,
+        "observations_in_lookback": 26,
+        "prior_main_rank_days": 1,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 0.83,
+        "signals": []
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 1108837393,
+      "full_name": "code-yeongyu/oh-my-openagent",
+      "stars": 70879,
+      "forks": 5844,
+      "issues": 2634,
+      "pushed_at": "2026-11-12T16:26:40Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 38.8,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 7.11,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 3.188818,
+        "recency": 1.500516,
+        "base_stars": 2.416964
+      },
+      "categories": [
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 11.4,
+      "emerging_evidence": {
+        "repo_age_days": 344,
+        "first_observed_days": 218,
+        "observations_in_lookback": 27,
+        "prior_main_rank_days": 0,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 1.98,
+        "signals": [
+          "low_prior_exposure"
+        ]
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 1258301311,
+      "full_name": "rlaope/oh-my-hermes",
+      "stars": 5537,
+      "forks": 450,
+      "issues": 20,
+      "pushed_at": "2026-11-12T16:22:41Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 73.7,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 7.1,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 3.733822,
+        "recency": 1.498524,
+        "base_stars": 1.865272
+      },
+      "categories": [
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 12.17,
+      "emerging_evidence": {
+        "repo_age_days": 162,
+        "first_observed_days": 59,
+        "observations_in_lookback": 21,
+        "prior_main_rank_days": 1,
+        "prior_emerging_rank_days": 1,
+        "acceleration_ratio": 1.0,
+        "signals": [
+          "recently_created"
+        ]
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 662766482,
+      "full_name": "The-PR-Agent/pr-agent",
+      "stars": 15995,
+      "forks": 2183,
+      "issues": 44,
+      "pushed_at": "2026-11-12T15:00:58Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 57.2,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 7.07,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 3.517768,
+        "recency": 1.457666,
+        "base_stars": 2.094814
+      },
+      "categories": [
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 5.84,
+      "emerging_evidence": {
+        "repo_age_days": 1225,
+        "first_observed_days": 8,
+        "observations_in_lookback": 8,
+        "prior_main_rank_days": 5,
+        "prior_emerging_rank_days": 1,
+        "acceleration_ratio": 0.44,
+        "signals": []
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 1293600453,
+      "full_name": "TencentCloud/Octop",
+      "stars": 11984,
+      "forks": 1677,
+      "issues": 707,
+      "pushed_at": "2026-11-12T12:25:37Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 67.0,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 7.06,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 3.652478,
+        "recency": 1.379991,
+        "base_stars": 2.032341
+      },
+      "categories": [
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 12.42,
+      "emerging_evidence": {
+        "repo_age_days": 127,
+        "first_observed_days": 56,
+        "observations_in_lookback": 26,
+        "prior_main_rank_days": 1,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 1.47,
+        "signals": [
+          "recently_created"
+        ]
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 846698999,
+      "full_name": "aaif-goose/goose",
+      "stars": 56497,
+      "forks": 6581,
+      "issues": 537,
+      "pushed_at": "2026-11-12T16:16:41Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 35.9,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 6.99,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 3.123329,
+        "recency": 1.495524,
+        "base_stars": 2.367887
+      },
+      "categories": [
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 8.97,
+      "emerging_evidence": {
+        "repo_age_days": 810,
+        "first_observed_days": 188,
+        "observations_in_lookback": 28,
+        "prior_main_rank_days": 0,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 1.05,
+        "signals": [
+          "low_prior_exposure"
+        ]
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 979115477,
+      "full_name": "bytedance/deer-flow",
+      "stars": 85285,
+      "forks": 12015,
+      "issues": 1086,
+      "pushed_at": "2026-11-12T14:30:49Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 34.0,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 6.98,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 3.07757,
+        "recency": 1.442591,
+        "base_stars": 2.457003
+      },
+      "categories": [
+        "core",
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 8.64,
+      "emerging_evidence": {
+        "repo_age_days": 554,
+        "first_observed_days": 218,
+        "observations_in_lookback": 28,
+        "prior_main_rank_days": 0,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 0.88,
+        "signals": [
+          "low_prior_exposure"
+        ]
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 458648791,
+      "full_name": "paperless-ngx/paperless-ngx",
+      "stars": 48056,
+      "forks": 3382,
+      "issues": 6,
+      "pushed_at": "2026-11-12T12:18:34Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 41.7,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 6.96,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 3.249698,
+        "recency": 1.376466,
+        "base_stars": 2.332869
+      },
+      "categories": [
+        "core",
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 9.5,
+      "emerging_evidence": {
+        "repo_age_days": 1733,
+        "first_observed_days": 206,
+        "observations_in_lookback": 28,
+        "prior_main_rank_days": 0,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 0.96,
+        "signals": [
+          "low_prior_exposure"
+        ]
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 1166102148,
+      "full_name": "DeusData/codebase-memory-mcp",
+      "stars": 48561,
+      "forks": 4020,
+      "issues": 551,
+      "pushed_at": "2026-11-11T23:14:51Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 63.1,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 6.92,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 3.601351,
+        "recency": 0.984607,
+        "base_stars": 2.335131
+      },
+      "categories": [
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 12.2,
+      "emerging_evidence": {
+        "repo_age_days": 260,
+        "first_observed_days": 148,
+        "observations_in_lookback": 26,
+        "prior_main_rank_days": 0,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 1.22,
+        "signals": [
+          "low_prior_exposure"
+        ]
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 1027384981,
+      "full_name": "langchain-ai/deepagents",
+      "stars": 31243,
+      "forks": 4414,
+      "issues": 231,
+      "pushed_at": "2026-11-12T16:24:05Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 34.9,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 6.84,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 3.099547,
+        "recency": 1.499224,
+        "base_stars": 2.239694
+      },
+      "categories": [
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 8.75,
+      "emerging_evidence": {
+        "repo_age_days": 472,
+        "first_observed_days": 107,
+        "observations_in_lookback": 28,
+        "prior_main_rank_days": 0,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 0.96,
+        "signals": [
+          "low_prior_exposure"
+        ]
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 1307001698,
+      "full_name": "FlashML-org/FreeToken",
+      "stars": 17073,
+      "forks": 1692,
+      "issues": 469,
+      "pushed_at": "2026-11-12T11:18:46Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 46.6,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 6.8,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 3.343734,
+        "recency": 1.346566,
+        "base_stars": 2.108927
+      },
+      "categories": [
+        "core",
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 12.3,
+      "emerging_evidence": {
+        "repo_age_days": 114,
+        "first_observed_days": 9,
+        "observations_in_lookback": 10,
+        "prior_main_rank_days": 2,
+        "prior_emerging_rank_days": 1,
+        "acceleration_ratio": 0.72,
+        "signals": [
+          "recently_created"
+        ]
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 1147094660,
+      "full_name": "HKUDS/nanobot",
+      "stars": 50043,
+      "forks": 8734,
+      "issues": 869,
+      "pushed_at": "2026-11-12T15:27:24Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 30.1,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 6.79,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 2.975306,
+        "recency": 1.470882,
+        "base_stars": 2.341636
+      },
+      "categories": [
+        "core",
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 8.37,
+      "emerging_evidence": {
+        "repo_age_days": 284,
+        "first_observed_days": 214,
+        "observations_in_lookback": 28,
+        "prior_main_rank_days": 0,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 1.12,
+        "signals": [
+          "low_prior_exposure"
+        ]
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 1301657572,
+      "full_name": "superdesigndev/treg",
+      "stars": 7878,
+      "forks": 720,
+      "issues": 313,
+      "pushed_at": "2026-11-12T16:11:07Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 45.6,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 6.76,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 3.325355,
+        "recency": 1.492741,
+        "base_stars": 1.94157
+      },
+      "categories": [
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 5.54,
+      "emerging_evidence": {
+        "repo_age_days": 120,
+        "first_observed_days": 50,
+        "observations_in_lookback": 28,
+        "prior_main_rank_days": 3,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 0.71,
+        "signals": [
+          "recently_created"
+        ]
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 655515393,
+      "full_name": "CopilotKit/CopilotKit",
+      "stars": 38667,
+      "forks": 4821,
+      "issues": 438,
+      "pushed_at": "2026-11-12T15:30:15Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 29.1,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 6.71,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 2.947015,
+        "recency": 1.472307,
+        "base_stars": 2.285828
+      },
+      "categories": [
+        "core",
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 9.67,
+      "emerging_evidence": {
+        "repo_age_days": 1242,
+        "first_observed_days": 159,
+        "observations_in_lookback": 24,
+        "prior_main_rank_days": 0,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 1.34,
+        "signals": [
+          "low_prior_exposure"
+        ]
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 958531089,
+      "full_name": "VectifyAI/PageIndex",
+      "stars": 40399,
+      "forks": 3475,
+      "issues": 171,
+      "pushed_at": "2026-11-12T11:21:04Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 33.0,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 6.7,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 3.052478,
+        "recency": 1.347716,
+        "base_stars": 2.29531
+      },
+      "categories": [
+        "core",
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 10.01,
+      "emerging_evidence": {
+        "repo_age_days": 590,
+        "first_observed_days": 188,
+        "observations_in_lookback": 22,
+        "prior_main_rank_days": 0,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 0.68,
+        "signals": [
+          "low_prior_exposure"
+        ]
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 1157171418,
+      "full_name": "jundot/omlx",
+      "stars": 23564,
+      "forks": 2123,
+      "issues": 464,
+      "pushed_at": "2026-11-12T16:07:15Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 32.0,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 6.7,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 3.026636,
+        "recency": 1.490807,
+        "base_stars": 2.178654
+      },
+      "categories": [
+        "core"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 9.71,
+      "emerging_evidence": {
+        "repo_age_days": 272,
+        "first_observed_days": 86,
+        "observations_in_lookback": 25,
+        "prior_main_rank_days": 0,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 1.29,
+        "signals": [
+          "low_prior_exposure"
+        ]
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 535360445,
+      "full_name": "ultralytics/ultralytics",
+      "stars": 63325,
+      "forks": 11988,
+      "issues": 78,
+      "pushed_at": "2026-11-12T15:26:24Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 24.3,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 6.66,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 2.796639,
+        "recency": 1.470382,
+        "base_stars": 2.392577
+      },
+      "categories": [
+        "core"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 7.23,
+      "emerging_evidence": {
+        "repo_age_days": 1522,
+        "first_observed_days": 107,
+        "observations_in_lookback": 28,
+        "prior_main_rank_days": 0,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 0.87,
+        "signals": [
+          "low_prior_exposure"
+        ]
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 291438522,
+      "full_name": "siyuan-note/siyuan",
+      "stars": 47205,
+      "forks": 3115,
+      "issues": 10,
+      "pushed_at": "2026-11-12T13:00:13Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 27.2,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 6.62,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 2.890574,
+        "recency": 1.397291,
+        "base_stars": 2.329002
+      },
+      "categories": [
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 9.63,
+      "emerging_evidence": {
+        "repo_age_days": 2265,
+        "first_observed_days": 107,
+        "observations_in_lookback": 25,
+        "prior_main_rank_days": 0,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 1.59,
+        "signals": [
+          "low_prior_exposure"
+        ]
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 614765452,
+      "full_name": "Significant-Gravitas/AutoGPT",
+      "stars": 188009,
+      "forks": 45869,
+      "issues": 708,
+      "pushed_at": "2026-11-12T16:20:38Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 16.5,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 6.6,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 2.47757,
+        "recency": 1.497499,
+        "base_stars": 2.628067
+      },
+      "categories": [
+        "core",
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 5.89,
+      "emerging_evidence": {
+        "repo_age_days": 1337,
+        "first_observed_days": 218,
+        "observations_in_lookback": 27,
+        "prior_main_rank_days": 0,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 0.99,
+        "signals": [
+          "low_prior_exposure"
+        ]
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 805155266,
+      "full_name": "CherryHQ/cherry-studio",
+      "stars": 53457,
+      "forks": 5213,
+      "issues": 2675,
+      "pushed_at": "2026-11-12T16:23:13Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 22.3,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 6.58,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 2.725355,
+        "recency": 1.498791,
+        "base_stars": 2.355918
+      },
+      "categories": [
+        "core",
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 7.13,
+      "emerging_evidence": {
+        "repo_age_days": 902,
+        "first_observed_days": 107,
+        "observations_in_lookback": 27,
+        "prior_main_rank_days": 0,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 0.7,
+        "signals": [
+          "low_prior_exposure"
+        ]
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 1273015953,
+      "full_name": "shy3130/tick-stock-panel",
+      "stars": 7649,
+      "forks": 1869,
+      "issues": 63,
+      "pushed_at": "2026-11-12T09:47:24Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 45.6,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 6.56,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 3.325355,
+        "recency": 1.300882,
+        "base_stars": 1.935187
+      },
+      "categories": [
+        "core",
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 12.29,
+      "emerging_evidence": {
+        "repo_age_days": 147,
+        "first_observed_days": 48,
+        "observations_in_lookback": 22,
+        "prior_main_rank_days": 0,
+        "prior_emerging_rank_days": 1,
+        "acceleration_ratio": 0.51,
+        "signals": [
+          "recently_created",
+          "low_prior_exposure"
+        ]
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 1293238217,
+      "full_name": "JetBrains/thinkrail",
+      "stars": 8196,
+      "forks": 519,
+      "issues": 256,
+      "pushed_at": "2026-11-12T15:05:38Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 34.9,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 6.51,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 3.099547,
+        "recency": 1.459999,
+        "base_stars": 1.950132
+      },
+      "categories": [
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 0.97,
+      "emerging_evidence": {
+        "repo_age_days": 127,
+        "first_observed_days": 18,
+        "observations_in_lookback": 17,
+        "prior_main_rank_days": 6,
+        "prior_emerging_rank_days": 1,
+        "acceleration_ratio": 0.5,
+        "signals": [
+          "recently_created"
+        ]
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 1198306812,
+      "full_name": "HKUDS/Vibe-Trading",
+      "stars": 38107,
+      "forks": 6197,
+      "issues": 22,
+      "pushed_at": "2026-11-11T09:40:22Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 65.0,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 6.49,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 3.626636,
+        "recency": 0.577366,
+        "base_stars": 2.282671
+      },
+      "categories": [
+        "core",
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 8.13,
+      "emerging_evidence": {
+        "repo_age_days": 225,
+        "first_observed_days": 161,
+        "observations_in_lookback": 27,
+        "prior_main_rank_days": 2,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 1.25,
+        "signals": []
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 1162516847,
+      "full_name": "MakazhanAlpamys/Soup",
+      "stars": 10498,
+      "forks": 1736,
+      "issues": 291,
+      "pushed_at": "2026-11-12T15:49:28Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 31.0,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 6.49,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 3.0,
+        "recency": 1.481916,
+        "base_stars": 2.003695
+      },
+      "categories": [
+        "core",
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 6.5,
+      "emerging_evidence": {
+        "repo_age_days": 265,
+        "first_observed_days": 88,
+        "observations_in_lookback": 27,
+        "prior_main_rank_days": 1,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 0.59,
+        "signals": []
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 942771284,
+      "full_name": "github/github-mcp-server",
+      "stars": 34413,
+      "forks": 5338,
+      "issues": 453,
+      "pushed_at": "2026-11-12T16:24:41Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 22.3,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 6.49,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 2.725355,
+        "recency": 1.499524,
+        "base_stars": 2.260606
+      },
+      "categories": [
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 9.37,
+      "emerging_evidence": {
+        "repo_age_days": 617,
+        "first_observed_days": 107,
+        "observations_in_lookback": 19,
+        "prior_main_rank_days": 0,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 1.12,
+        "signals": [
+          "low_prior_exposure"
+        ]
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 138552196,
+      "full_name": "nautechsystems/nautilus_trader",
+      "stars": 31481,
+      "forks": 4268,
+      "issues": 115,
+      "pushed_at": "2026-11-12T14:13:08Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 24.3,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 6.47,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 2.796639,
+        "recency": 1.433749,
+        "base_stars": 2.241336
+      },
+      "categories": [
+        "core",
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 7.23,
+      "emerging_evidence": {
+        "repo_age_days": 3062,
+        "first_observed_days": 148,
+        "observations_in_lookback": 28,
+        "prior_main_rank_days": 0,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 0.82,
+        "signals": [
+          "low_prior_exposure"
+        ]
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 1158588224,
+      "full_name": "AlexsJones/llmfit",
+      "stars": 38946,
+      "forks": 2520,
+      "issues": 63,
+      "pushed_at": "2026-11-12T07:19:38Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 27.2,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 6.4,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 2.890574,
+        "recency": 1.226999,
+        "base_stars": 2.287384
+      },
+      "categories": [
+        "core"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 8.7,
+      "emerging_evidence": {
+        "repo_age_days": 270,
+        "first_observed_days": 217,
+        "observations_in_lookback": 24,
+        "prior_main_rank_days": 0,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 0.55,
+        "signals": [
+          "low_prior_exposure"
+        ]
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 1331882604,
+      "full_name": "scenario-labs/skills",
+      "stars": 3725,
+      "forks": 328,
+      "issues": 21,
+      "pushed_at": "2026-11-12T11:29:02Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 41.7,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 6.38,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 3.249698,
+        "recency": 1.351699,
+        "base_stars": 1.779512
+      },
+      "categories": [
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 10.94,
+      "emerging_evidence": {
+        "repo_age_days": 92,
+        "first_observed_days": 8,
+        "observations_in_lookback": 8,
+        "prior_main_rank_days": 3,
+        "prior_emerging_rank_days": 1,
+        "acceleration_ratio": 0.81,
+        "signals": [
+          "recently_created"
+        ]
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 1276665883,
+      "full_name": "Tencent/BrowserSkill",
+      "stars": 10344,
+      "forks": 746,
+      "issues": 143,
+      "pushed_at": "2026-11-12T16:07:08Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 27.2,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 6.38,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 2.890574,
+        "recency": 1.490749,
+        "base_stars": 2.000497
+      },
+      "categories": [
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 9.23,
+      "emerging_evidence": {
+        "repo_age_days": 143,
+        "first_observed_days": 56,
+        "observations_in_lookback": 26,
+        "prior_main_rank_days": 0,
+        "prior_emerging_rank_days": 1,
+        "acceleration_ratio": 0.6,
+        "signals": [
+          "recently_created",
+          "low_prior_exposure"
+        ]
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 615869301,
+      "full_name": "mudler/LocalAI",
+      "stars": 50336,
+      "forks": 4596,
+      "issues": 189,
+      "pushed_at": "2026-11-12T14:45:24Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 17.5,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 6.32,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 2.525672,
+        "recency": 1.449882,
+        "base_stars": 2.3429
+      },
+      "categories": [
+        "core",
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 6.38,
+      "emerging_evidence": {
+        "repo_age_days": 1334,
+        "first_observed_days": 107,
+        "observations_in_lookback": 26,
+        "prior_main_rank_days": 0,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 0.98,
+        "signals": [
+          "low_prior_exposure"
+        ]
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 617502359,
+      "full_name": "vastsa/PI-Desktop",
+      "stars": 7945,
+      "forks": 772,
+      "issues": 247,
+      "pushed_at": "2026-11-12T15:05:05Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 28.1,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 6.32,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 2.917768,
+        "recency": 1.459724,
+        "base_stars": 1.943402
+      },
+      "categories": [
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 7.84,
+      "emerging_evidence": {
+        "repo_age_days": 1331,
+        "first_observed_days": 64,
+        "observations_in_lookback": 28,
+        "prior_main_rank_days": 0,
+        "prior_emerging_rank_days": 1,
+        "acceleration_ratio": 0.63,
+        "signals": [
+          "low_prior_exposure"
+        ]
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 762304524,
+      "full_name": "ComposioHQ/composio",
+      "stars": 31046,
+      "forks": 4945,
+      "issues": 144,
+      "pushed_at": "2026-11-12T16:21:22Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 15.8,
+      "growth_source": "history_delta",
+      "growth_confidence": "medium",
+      "hotness_score": 6.18,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 2.442234,
+        "recency": 1.497866,
+        "base_stars": 2.238325
+      },
+      "categories": [
+        "core",
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 6.96,
+      "emerging_evidence": {
+        "repo_age_days": 993,
+        "first_observed_days": 107,
+        "observations_in_lookback": 22,
+        "prior_main_rank_days": 0,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 0.88,
+        "signals": [
+          "low_prior_exposure"
+        ]
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 1161163182,
+      "full_name": "tinyhumansai/openhuman",
+      "stars": 42668,
+      "forks": 4217,
+      "issues": 370,
+      "pushed_at": "2026-11-12T14:08:16Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 15.5,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 6.17,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 2.426636,
+        "recency": 1.431316,
+        "base_stars": 2.307135
+      },
+      "categories": [
+        "core",
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 6.38,
+      "emerging_evidence": {
+        "repo_age_days": 266,
+        "first_observed_days": 80,
+        "observations_in_lookback": 24,
+        "prior_main_rank_days": 0,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 0.94,
+        "signals": [
+          "low_prior_exposure"
+        ]
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 633262635,
+      "full_name": "onyx-dot-app/onyx",
+      "stars": 33355,
+      "forks": 4729,
+      "issues": 691,
+      "pushed_at": "2026-11-12T16:19:52Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 15.3,
+      "growth_source": "history_delta",
+      "growth_confidence": "medium",
+      "hotness_score": 6.17,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 2.41608,
+        "recency": 1.497116,
+        "base_stars": 2.253849
+      },
+      "categories": [
+        "core",
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 5.83,
+      "emerging_evidence": {
+        "repo_age_days": 1295,
+        "first_observed_days": 107,
+        "observations_in_lookback": 26,
+        "prior_main_rank_days": 0,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 0.91,
+        "signals": [
+          "low_prior_exposure"
+        ]
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 10744183,
+      "full_name": "netdata/netdata",
+      "stars": 81382,
+      "forks": 6730,
+      "issues": 447,
+      "pushed_at": "2026-11-12T15:13:07Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 12.6,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 6.17,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 2.259321,
+        "recency": 1.463741,
+        "base_stars": 2.446866
+      },
+      "categories": [
+        "core"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 6.05,
+      "emerging_evidence": {
+        "repo_age_days": 4895,
+        "first_observed_days": 107,
+        "observations_in_lookback": 22,
+        "prior_main_rank_days": 0,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 0.66,
+        "signals": [
+          "low_prior_exposure"
+        ]
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 1077819522,
+      "full_name": "pascalorg/editor",
+      "stars": 25462,
+      "forks": 3166,
+      "issues": 55,
+      "pushed_at": "2026-11-12T16:05:01Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 16.5,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 6.16,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 2.47757,
+        "recency": 1.489691,
+        "base_stars": 2.195417
+      },
+      "categories": [
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 7.14,
+      "emerging_evidence": {
+        "repo_age_days": 391,
+        "first_observed_days": 66,
+        "observations_in_lookback": 22,
+        "prior_main_rank_days": 0,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 1.0,
+        "signals": [
+          "low_prior_exposure"
+        ]
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 1128204614,
+      "full_name": "1jehuang/jcode",
+      "stars": 21717,
+      "forks": 2526,
+      "issues": 847,
+      "pushed_at": "2026-11-12T15:12:11Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 17.5,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 6.15,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 2.525672,
+        "recency": 1.463274,
+        "base_stars": 2.160991
+      },
+      "categories": [
+        "core",
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 6.13,
+      "emerging_evidence": {
+        "repo_age_days": 311,
+        "first_observed_days": 196,
+        "observations_in_lookback": 27,
+        "prior_main_rank_days": 0,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 0.61,
+        "signals": [
+          "low_prior_exposure"
+        ]
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 1008304614,
+      "full_name": "semantica-agi/semantica",
+      "stars": 14570,
+      "forks": 1720,
+      "issues": 132,
+      "pushed_at": "2026-11-12T07:31:26Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 24.9,
+      "growth_source": "history_delta",
+      "growth_confidence": "medium",
+      "hotness_score": 6.12,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 2.816928,
+        "recency": 1.232899,
+        "base_stars": 2.074622
+      },
+      "categories": [
+        "core",
+        "app"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 10.33,
+      "emerging_evidence": {
+        "repo_age_days": 505,
+        "first_observed_days": 96,
+        "observations_in_lookback": 18,
+        "prior_main_rank_days": 0,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 1.25,
+        "signals": [
+          "low_prior_exposure"
+        ]
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    },
+    {
+      "date": "2026-11-12",
+      "id": 136202695,
+      "full_name": "mlflow/mlflow",
+      "stars": 28784,
+      "forks": 6610,
+      "issues": 2221,
+      "pushed_at": "2026-11-12T16:22:41Z",
+      "today_stars": 0,
+      "today_stars_source": null,
+      "growth_per_day": 14.5,
+      "growth_source": "history_delta",
+      "growth_confidence": "medium",
+      "hotness_score": 6.09,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 2.372518,
+        "recency": 1.498524,
+        "base_stars": 2.221954
+      },
+      "categories": [
+        "core"
+      ],
+      "discovery_status": "verified",
+      "watchlist": false,
+      "emerging_score": 8.11,
+      "emerging_evidence": {
+        "repo_age_days": 3082,
+        "first_observed_days": 107,
+        "observations_in_lookback": 16,
+        "prior_main_rank_days": 0,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 0.99,
+        "signals": [
+          "low_prior_exposure"
+        ]
+      },
+      "rank": {},
+      "generated_at": "2026-11-12T16:25:38.106872+00:00"
+    }
+  ]
+}
