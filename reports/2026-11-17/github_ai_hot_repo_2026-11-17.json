@@ -1,0 +1,2913 @@
+{
+  "generated_at": "2026-11-17T17:11:57.699952+00:00",
+  "methodology": "Ranked by hotness_score = today_stars(0.4) + growth_rate(0.3) + recency(0.15) + base_stars(0.15)",
+  "emerging_methodology": "Emerging ranking requires verified growth, low prior exposure, recent creation or discovery, and applies a 30-day cooldown after selection.",
+  "ai_llm_core_top10": [
+    {
+      "rank": 1,
+      "full_name": "affaan-m/ECC",
+      "description": "The agent harness performance optimization system. Skills, instincts, memory, security, and research-first development for Claude Code, Codex, Opencode, Cursor and beyond.",
+      "about": "The agent harness performance optimization system. Skills, instincts, memory, security, and research-first development for Claude Code, Codex, Opencode, Cursor and beyond.",
+      "readme_highlight": "ECC is MIT-licensed open source. It works best with Claude Code today, has native Codex and Qoder plugin paths, and provides capability-limited adapters for Cursor, OpenCode, Gemini, Zed, GitHub Copilot, Antigravity, Qwen, and other harnesses. See the support status matrix before assuming feature parity.",
+      "intro": "The agent harness performance optimization system. Skills, instincts, memory, security, and research-first development for Claude Code, Codex, Opencode, Cursor and beyond. ECC is MIT-licensed open source. It works best with Claude Code today, has native Codex and Qoder plugin paths, and provides capability-limited adapters for Cursor, OpenCode, Gemini, Zed, GitHub Copilot, Antigravity, Qwen, and other harnesses. See the support status matrix before assuming feature parity.",
+      "intro_en": "The agent harness performance optimization system. Skills, instincts, memory, security, and research-first development for Claude Code, Codex, Opencode, Cursor and beyond. ECC is MIT-licensed open source. It works best with Claude Code today, has native Codex and Qoder plugin paths, and provides capability-limited adapters for Cursor, OpenCode, Gemini, Zed, GitHub Copilot, Antigravity, Qwen, and other harnesses. See the support status matrix before assuming feature parity.",
+      "intro_zh": "",
+      "intro_source": "about+readme",
+      "summary": "",
+      "summary_en": "",
+      "language": "JavaScript",
+      "stars": 305213,
+      "forks": 44943,
+      "issues": 152,
+      "today_stars": 902,
+      "growth_score": 902.0,
+      "growth_source": "trending",
+      "growth_confidence": "high",
+      "hotness_score": 21.59,
+      "score_breakdown": {
+        "today_stars": 11.782299,
+        "growth_rate": 5.891149,
+        "recency": 1.184903,
+        "base_stars": 2.732919
+      },
+      "discovery_status": "verified",
+      "watchlist": false,
+      "first_observed_at": "2026-05-19",
+      "trend_7d": [
+        {
+          "date": "2026-11-06",
+          "growth": 692.9,
+          "confidence": "medium"
+        },
+        {
+          "date": "2026-11-07",
+          "growth": 621.1,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-09",
+          "growth": 547.5,
+          "confidence": "medium"
+        },
+        {
+          "date": "2026-11-10",
+          "growth": 560.5,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-15",
+          "growth": 599.8,
+          "confidence": "medium"
+        },
+        {
+          "date": "2026-11-16",
+          "growth": 738.9,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-17",
+          "growth": 902.0,
+          "confidence": "high"
+        }
+      ],
+      "trend_ready": true,
+      "streak_days": 7,
+      "lifecycle": "steady",
+      "created_at": "2026-01-18T00:51:51Z",
+      "topics": [
+        "ai-agents",
+        "anthropic",
+        "claude",
+        "claude-code",
+        "developer-tools",
+        "llm",
+        "mcp",
+        "productivity"
+      ],
+      "url": "https://github.com/affaan-m/ECC",
+      "rank_change": null,
+      "emerging_score": -3.2,
+      "emerging_evidence": {
+        "repo_age_days": 303,
+        "first_observed_days": 182,
+        "observations_in_lookback": 15,
+        "prior_main_rank_days": 15,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 1.42,
+        "signals": []
+      }
+    },
+    {
+      "rank": 2,
+      "full_name": "Graphify-Labs/graphify",
+      "description": "Turn any codebase, with its docs, SQL schemas, configs, and PDFs, into a queryable knowledge graph. A /graphify skill for Claude Code, Cursor, Codex, and Gemini CLI: local deterministic AST parsing, every edge explained, no vector store.",
+      "about": "Turn any codebase, with its docs, SQL schemas, configs, and PDFs, into a queryable knowledge graph. A /graphify skill for Claude Code, Cursor, Codex, and Gemini CLI: local deterministic AST parsing, every edge explained, no vector store.",
+      "readme_highlight": "Type /graphify in your AI coding assistant and it maps your entire project (code, docs, PDFs, images, videos) into a knowledge graph you can query instead of grepping through files.",
+      "intro": "Turn any codebase, with its docs, SQL schemas, configs, and PDFs, into a queryable knowledge graph. A /graphify skill for Claude Code, Cursor, Codex, and Gemini CLI: local deterministic AST parsing, every edge explained, no vector store. Type /graphify in your AI coding assistant and it maps your entire project (code, docs, PDFs, images, videos) into a knowledge graph you can query instead of grepping through files.",
+      "intro_en": "Turn any codebase, with its docs, SQL schemas, configs, and PDFs, into a queryable knowledge graph. A /graphify skill for Claude Code, Cursor, Codex, and Gemini CLI: local deterministic AST parsing, every edge explained, no vector store. Type /graphify in your AI coding assistant and it maps your entire project (code, docs, PDFs, images, videos) into a knowledge graph you can query instead of grepping through files.",
+      "intro_zh": "",
+      "intro_source": "about+readme",
+      "summary": "",
+      "summary_en": "",
+      "language": "Python",
+      "stars": 149487,
+      "forks": 14368,
+      "issues": 1645,
+      "today_stars": 0,
+      "growth_score": 617.7,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 9.6,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 5.563858,
+        "recency": 1.454853,
+        "base_stars": 2.578451
+      },
+      "discovery_status": "verified",
+      "watchlist": false,
+      "first_observed_at": "2026-07-04",
+      "trend_7d": [
+        {
+          "date": "2026-11-10",
+          "growth": 596.6,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-11",
+          "growth": 548.1,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-12",
+          "growth": 565.7,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-13",
+          "growth": 550.1,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-15",
+          "growth": 529.1,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-16",
+          "growth": 655.8,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-17",
+          "growth": 617.7,
+          "confidence": "high"
+        }
+      ],
+      "trend_ready": true,
+      "streak_days": 7,
+      "lifecycle": "steady",
+      "created_at": "2026-04-03T15:49:07Z",
+      "topics": [
+        "ai-agents",
+        "antigravity",
+        "ast",
+        "claude-code",
+        "code-analysis",
+        "code-search",
+        "codex",
+        "cursor",
+        "developer-tools",
+        "gemini",
+        "graphify",
+        "graphrag",
+        "knowledge-graph",
+        "leiden",
+        "llm",
+        "mcp",
+        "openclaw",
+        "rag",
+        "skills",
+        "tree-sitter"
+      ],
+      "url": "https://github.com/Graphify-Labs/graphify",
+      "rank_change": null,
+      "emerging_score": -21.29,
+      "emerging_evidence": {
+        "repo_age_days": 228,
+        "first_observed_days": 136,
+        "observations_in_lookback": 22,
+        "prior_main_rank_days": 22,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 1.07,
+        "signals": []
+      }
+    },
+    {
+      "rank": 3,
+      "full_name": "NousResearch/hermes-agent",
+      "description": "The agent that grows with you",
+      "about": "The agent that grows with you",
+      "readme_highlight": "The self-improving AI agent built by Nous Research. It's the only agent with a built-in learning loop — it creates skills from experience, improves them during use, nudges itself to persist knowledge, searches its own past conversations, and builds a deepening model of who you are across sessions. Run it on a $5 VPS,...",
+      "intro": "The agent that grows with you. The self-improving AI agent built by Nous Research. It's the only agent with a built-in learning loop — it creates skills from experience, improves them during use, nudges itself to persist knowledge, searches its own past conversations, and builds a deepening model of who you are across sessions. Run it on a $5 VPS,...",
+      "intro_en": "The agent that grows with you. The self-improving AI agent built by Nous Research. It's the only agent with a built-in learning loop — it creates skills from experience, improves them during use, nudges itself to persist knowledge, searches its own past conversations, and builds a deepening model of who you are across sessions. Run it on a $5 VPS,...",
+      "intro_zh": "",
+      "intro_source": "about+readme",
+      "summary": "",
+      "summary_en": "",
+      "language": "Python",
+      "stars": 264145,
+      "forks": 59581,
+      "issues": 53445,
+      "today_stars": 0,
+      "growth_score": 304.8,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 9.15,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 4.953867,
+        "recency": 1.499203,
+        "base_stars": 2.701646
+      },
+      "discovery_status": "verified",
+      "watchlist": false,
+      "first_observed_at": "2026-04-09",
+      "trend_7d": [
+        {
+          "date": "2026-11-11",
+          "growth": 313.9,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-12",
+          "growth": 267.8,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-13",
+          "growth": 235.5,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-14",
+          "growth": 169.1,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-15",
+          "growth": 251.1,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-16",
+          "growth": 259.2,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-17",
+          "growth": 304.8,
+          "confidence": "high"
+        }
+      ],
+      "trend_ready": true,
+      "streak_days": 7,
+      "lifecycle": "steady",
+      "created_at": "2025-07-22T22:22:28Z",
+      "topics": [
+        "ai",
+        "ai-agent",
+        "ai-agents",
+        "anthropic",
+        "chatgpt",
+        "claude",
+        "claude-code",
+        "codex",
+        "hermes",
+        "hermes-agent",
+        "llm",
+        "nous-research",
+        "openai"
+      ],
+      "url": "https://github.com/NousResearch/hermes-agent",
+      "rank_change": null,
+      "emerging_score": -37.28,
+      "emerging_evidence": {
+        "repo_age_days": 482,
+        "first_observed_days": 222,
+        "observations_in_lookback": 28,
+        "prior_main_rank_days": 28,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 1.35,
+        "signals": []
+      }
+    },
+    {
+      "rank": 4,
+      "full_name": "firecrawl/firecrawl",
+      "description": "Supercharge your AI agents with data from the web and beyond. Building the library for superintelligence. 🔥",
+      "about": "Supercharge your AI agents with data from the web and beyond. Building the library for superintelligence. 🔥",
+      "readme_highlight": "Are you an AI agent? Fetch this skill to sign up your user, get an API key, and start building with Firecrawl.",
+      "intro": "Supercharge your AI agents with data from the web and beyond. Building the library for superintelligence. 🔥. Are you an AI agent? Fetch this skill to sign up your user, get an API key, and start building with Firecrawl.",
+      "intro_en": "Supercharge your AI agents with data from the web and beyond. Building the library for superintelligence. 🔥. Are you an AI agent? Fetch this skill to sign up your user, get an API key, and start building with Firecrawl.",
+      "intro_zh": "",
+      "intro_source": "about+readme",
+      "summary": "",
+      "summary_en": "",
+      "language": "TypeScript",
+      "stars": 202562,
+      "forks": 10604,
+      "issues": 817,
+      "today_stars": 0,
+      "growth_score": 281.3,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 9.03,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 4.884651,
+        "recency": 1.499553,
+        "base_stars": 2.644202
+      },
+      "discovery_status": "verified",
+      "watchlist": false,
+      "first_observed_at": "2026-04-13",
+      "trend_7d": [
+        {
+          "date": "2026-11-11",
+          "growth": 424.0,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-12",
+          "growth": 363.9,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-13",
+          "growth": 298.2,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-14",
+          "growth": 245.8,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-15",
+          "growth": 237.4,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-16",
+          "growth": 299.0,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-17",
+          "growth": 281.3,
+          "confidence": "high"
+        }
+      ],
+      "trend_ready": true,
+      "streak_days": 7,
+      "lifecycle": "steady",
+      "created_at": "2024-04-15T21:02:29Z",
+      "topics": [
+        "ai",
+        "ai-agents",
+        "ai-crawler",
+        "ai-scraping",
+        "ai-search",
+        "crawler",
+        "data-extraction",
+        "html-to-markdown",
+        "llm",
+        "markdown",
+        "scraper",
+        "scraping",
+        "web-crawler",
+        "web-data",
+        "web-data-extraction",
+        "web-scraper",
+        "web-scraping",
+        "web-search",
+        "webscraping"
+      ],
+      "url": "https://github.com/firecrawl/firecrawl",
+      "rank_change": null,
+      "emerging_score": -38.17,
+      "emerging_evidence": {
+        "repo_age_days": 945,
+        "first_observed_days": 218,
+        "observations_in_lookback": 28,
+        "prior_main_rank_days": 28,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 1.08,
+        "signals": []
+      }
+    },
+    {
+      "rank": 5,
+      "full_name": "huggingface/transformers",
+      "description": "🤗 Transformers: the model-definition framework for state-of-the-art machine learning models in text, vision, audio, and multimodal models, for both inference and training. ",
+      "about": "🤗 Transformers: the model-definition framework for state-of-the-art machine learning models in text, vision, audio, and multimodal models, for both inference and training. ",
+      "readme_highlight": "Transformers acts as the model-definition framework for state-of-the-art machine learning with text, computer vision, audio, video, and multimodal models, for both inference and training.",
+      "intro": "🤗 Transformers: the model-definition framework for state-of-the-art machine learning models in text, vision, audio, and multimodal models, for both inference and training. Transformers acts as the model-definition framework for state-of-the-art machine learning with text, computer vision, audio, video, and multimodal models, for both inference and training.",
+      "intro_en": "🤗 Transformers: the model-definition framework for state-of-the-art machine learning models in text, vision, audio, and multimodal models, for both inference and training. Transformers acts as the model-definition framework for state-of-the-art machine learning with text, computer vision, audio, video, and multimodal models, for both inference and training.",
+      "intro_zh": "",
+      "intro_source": "about+readme",
+      "summary": "",
+      "summary_en": "",
+      "language": "Python",
+      "stars": 169300,
+      "forks": 35298,
+      "issues": 1108,
+      "today_stars": 0,
+      "growth_score": 272.2,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 8.96,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 4.856288,
+        "recency": 1.498586,
+        "base_stars": 2.605385
+      },
+      "discovery_status": "verified",
+      "watchlist": false,
+      "first_observed_at": "2026-04-08",
+      "trend_7d": [
+        {
+          "date": "2026-11-11",
+          "growth": 79.7,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-12",
+          "growth": 90.2,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-13",
+          "growth": 40.1,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-14",
+          "growth": 20.0,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-15",
+          "growth": 27.5,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-16",
+          "growth": 36.1,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-17",
+          "growth": 272.2,
+          "confidence": "high"
+        }
+      ],
+      "trend_ready": true,
+      "streak_days": 7,
+      "lifecycle": "accelerating",
+      "created_at": "2018-10-29T13:56:00Z",
+      "topics": [
+        "audio",
+        "deep-learning",
+        "deepseek",
+        "gemma",
+        "glm",
+        "hacktoberfest",
+        "llm",
+        "machine-learning",
+        "model-hub",
+        "natural-language-processing",
+        "nlp",
+        "pretrained-models",
+        "python",
+        "pytorch",
+        "pytorch-transformers",
+        "qwen",
+        "speech-recognition",
+        "transformer",
+        "vlm"
+      ],
+      "url": "https://github.com/huggingface/transformers",
+      "rank_change": null,
+      "emerging_score": 19.53,
+      "emerging_evidence": {
+        "repo_age_days": 2941,
+        "first_observed_days": 223,
+        "observations_in_lookback": 28,
+        "prior_main_rank_days": 2,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 9.77,
+        "signals": []
+      }
+    },
+    {
+      "rank": 6,
+      "full_name": "thedotmack/claude-mem",
+      "description": "Persistent Context Across Sessions for Every Agent –  Captures everything your agent does during sessions, compresses it with AI, and injects relevant context back into future sessions. Works with Claude Code, OpenClaw, Codex, Gemini, Hermes, Copilot, OpenCode + More",
+      "about": "Persistent Context Across Sessions for Every Agent –  Captures everything your agent does during sessions, compresses it with AI, and injects relevant context back into future sessions. Works with Claude Code, OpenClaw, Codex, Gemini, Hermes, Copilot, OpenCode + More",
+      "readme_highlight": "Claude-Mem runs a second agent beside it that takes notes while it works. The next session starts with a short index of what matters, and pulls in the details only when it needs them. Works with Claude Code, Codex, Cursor, OpenCode and 11 more agents. Copilot CLI, Goose, Roo Code, Warp and Zed can search your memory,...",
+      "intro": "Persistent Context Across Sessions for Every Agent – Captures everything your agent does during sessions, compresses it with AI, and injects relevant context back into future sessions. Works with Claude Code, OpenClaw, Codex, Gemini, Hermes, Copilot, OpenCode + More. Claude-Mem runs a second agent beside it that takes notes while it works. The next session starts with a short index of what matters, and pulls in the details only when it needs them. Works with Claude Code...",
+      "intro_en": "Persistent Context Across Sessions for Every Agent – Captures everything your agent does during sessions, compresses it with AI, and injects relevant context back into future sessions. Works with Claude Code, OpenClaw, Codex, Gemini, Hermes, Copilot, OpenCode + More. Claude-Mem runs a second agent beside it that takes notes while it works. The next session starts with a short index of what matters, and pulls in the details only when it needs them. Works with Claude Code...",
+      "intro_zh": "",
+      "intro_source": "about+readme",
+      "summary": "",
+      "summary_en": "",
+      "language": "TypeScript",
+      "stars": 117912,
+      "forks": 10245,
+      "issues": 162,
+      "today_stars": 0,
+      "growth_score": 312.9,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 8.86,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 4.976497,
+        "recency": 1.358278,
+        "base_stars": 2.527104
+      },
+      "discovery_status": "verified",
+      "watchlist": false,
+      "first_observed_at": "2026-04-08",
+      "trend_7d": [
+        {
+          "date": "2026-11-11",
+          "growth": 407.8,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-12",
+          "growth": 356.1,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-13",
+          "growth": 302.3,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-14",
+          "growth": 242.6,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-15",
+          "growth": 272.7,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-16",
+          "growth": 303.5,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-17",
+          "growth": 312.9,
+          "confidence": "high"
+        }
+      ],
+      "trend_ready": true,
+      "streak_days": 7,
+      "lifecycle": "steady",
+      "created_at": "2025-08-31T20:50:03Z",
+      "topics": [
+        "ai",
+        "ai-agents",
+        "ai-memory",
+        "anthropic",
+        "artificial-intelligence",
+        "chromadb",
+        "claude",
+        "claude-agent-sdk",
+        "claude-agents",
+        "claude-code",
+        "claude-code-plugin",
+        "claude-skills",
+        "embeddings",
+        "long-term-memory",
+        "mem0",
+        "memory-engine",
+        "openmemory",
+        "rag",
+        "sqlite",
+        "supermemory"
+      ],
+      "url": "https://github.com/thedotmack/claude-mem",
+      "rank_change": null,
+      "emerging_score": -33.57,
+      "emerging_evidence": {
+        "repo_age_days": 442,
+        "first_observed_days": 223,
+        "observations_in_lookback": 28,
+        "prior_main_rank_days": 26,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 1.15,
+        "signals": []
+      }
+    },
+    {
+      "rank": 7,
+      "full_name": "ZhuLinsen/daily_stock_analysis",
+      "description": "LLM 驱动的多市场股票智能分析系统：多源行情、实时新闻、决策看板与自动推送，支持零成本定时运行。  LLM-powered multi-market stock analysis system with multi-source market data, real-time news, decision dashboard, automated notifications, and cost-free scheduled runs.",
+      "about": "LLM 驱动的多市场股票智能分析系统：多源行情、实时新闻、决策看板与自动推送，支持零成本定时运行。  LLM-powered multi-market stock analysis system with multi-source market data, real-time news, decision dashboard, automated notifications, and cost-free scheduled runs.",
+      "readme_highlight": "| 社交舆情 | Stock Sentiment API（Reddit / X / Polymarket，仅美股，可选） |",
+      "intro": "LLM 驱动的多市场股票智能分析系统：多源行情、实时新闻、决策看板与自动推送，支持零成本定时运行。 LLM-powered multi-market stock analysis system with multi-source market data, real-time news, decision dashboard, automated notifications, and cost-free scheduled runs. | 社交舆情 | Stock Sentiment API（Reddit / X / Polymarket，仅美股，可选） |",
+      "intro_en": "LLM 驱动的多市场股票智能分析系统：多源行情、实时新闻、决策看板与自动推送，支持零成本定时运行。 LLM-powered multi-market stock analysis system with multi-source market data, real-time news, decision dashboard, automated notifications, and cost-free scheduled runs. | 社交舆情 | Stock Sentiment API（Reddit / X / Polymarket，仅美股，可选） |",
+      "intro_zh": "",
+      "intro_source": "about+readme",
+      "summary": "",
+      "summary_en": "",
+      "language": "Python",
+      "stars": 73041,
+      "forks": 57765,
+      "issues": 37,
+      "today_stars": 0,
+      "growth_score": 289.5,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 8.76,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 4.909437,
+        "recency": 1.424586,
+        "base_stars": 2.423466
+      },
+      "discovery_status": "verified",
+      "watchlist": false,
+      "first_observed_at": "2026-04-10",
+      "trend_7d": [
+        {
+          "date": "2026-11-11",
+          "growth": 429.0,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-12",
+          "growth": 1065.4,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-13",
+          "growth": 272.0,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-14",
+          "growth": 808.7,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-15",
+          "growth": 260.0,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-16",
+          "growth": 318.8,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-17",
+          "growth": 289.5,
+          "confidence": "high"
+        }
+      ],
+      "trend_ready": true,
+      "streak_days": 7,
+      "lifecycle": "cooling",
+      "created_at": "2026-01-10T06:43:20Z",
+      "topics": [
+        "a-stock",
+        "ai-agent",
+        "aigc",
+        "llm",
+        "quant",
+        "quantitative-finance",
+        "quantitative-trading"
+      ],
+      "url": "https://github.com/ZhuLinsen/daily_stock_analysis",
+      "rank_change": null,
+      "emerging_score": 6.8,
+      "emerging_evidence": {
+        "repo_age_days": 311,
+        "first_observed_days": 221,
+        "observations_in_lookback": 8,
+        "prior_main_rank_days": 8,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 0.63,
+        "signals": []
+      }
+    },
+    {
+      "rank": 8,
+      "full_name": "paperclipai/paperclip",
+      "description": "The open-source app everyone uses to manage agents at work",
+      "about": "The open-source app everyone uses to manage agents at work",
+      "readme_highlight": "Paperclip is a Node.js server and React UI that orchestrates a team of AI agents to run a business. Bring your own agents, assign goals, and track work and costs from one dashboard. Choose models and harnesses per agent while keeping your team's tasks, skills, permissions, and history in one place.",
+      "intro": "The open-source app everyone uses to manage agents at work. Paperclip is a Node.js server and React UI that orchestrates a team of AI agents to run a business. Bring your own agents, assign goals, and track work and costs from one dashboard. Choose models and harnesses per agent while keeping your team's tasks, skills, permissions, and history in one place.",
+      "intro_en": "The open-source app everyone uses to manage agents at work. Paperclip is a Node.js server and React UI that orchestrates a team of AI agents to run a business. Bring your own agents, assign goals, and track work and costs from one dashboard. Choose models and harnesses per agent while keeping your team's tasks, skills, permissions, and history in one place.",
+      "intro_zh": "",
+      "intro_source": "about+readme",
+      "summary": "",
+      "summary_en": "",
+      "language": "TypeScript",
+      "stars": 114517,
+      "forks": 18990,
+      "issues": 6812,
+      "today_stars": 0,
+      "growth_score": 222.2,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 8.7,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 4.681316,
+        "recency": 1.496969,
+        "base_stars": 2.520782
+      },
+      "discovery_status": "verified",
+      "watchlist": false,
+      "first_observed_at": "2026-10-25",
+      "trend_7d": [
+        {
+          "date": "2026-11-11",
+          "growth": 272.6,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-12",
+          "growth": 222.2,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-13",
+          "growth": 257.1,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-14",
+          "growth": 265.7,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-15",
+          "growth": 224.7,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-16",
+          "growth": 211.4,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-17",
+          "growth": 222.2,
+          "confidence": "high"
+        }
+      ],
+      "trend_ready": true,
+      "streak_days": 7,
+      "lifecycle": "steady",
+      "created_at": "2026-03-02T15:01:51Z",
+      "topics": [
+        "acpx",
+        "agent-orchestration",
+        "agent-skills",
+        "agentic-ai",
+        "ai-agents",
+        "ai-engineering",
+        "ai-governance",
+        "ai-tools",
+        "autonomous-agents",
+        "claude",
+        "claude-code",
+        "claude-skills",
+        "codex",
+        "hermes",
+        "llm",
+        "mcp",
+        "multi-agent",
+        "openclaw",
+        "project-management",
+        "workflow-automation"
+      ],
+      "url": "https://github.com/paperclipai/paperclip",
+      "rank_change": null,
+      "emerging_score": -23.84,
+      "emerging_evidence": {
+        "repo_age_days": 260,
+        "first_observed_days": 23,
+        "observations_in_lookback": 22,
+        "prior_main_rank_days": 21,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 0.95,
+        "signals": []
+      }
+    },
+    {
+      "rank": 9,
+      "full_name": "JuliusBrussee/caveman",
+      "description": "🪨 why use many token when few token do trick. Viral skill + proxy for coding agents that cuts 65% of tokens by talking like a caveman.",
+      "about": "🪨 why use many token when few token do trick. Viral skill + proxy for coding agents that cuts 65% of tokens by talking like a caveman.",
+      "readme_highlight": "Two findings shaped caveman. Adobe: cavemanning your prompt makes answers worse, so caveman never touches your prompt. JetBrains: agent sessions are mostly code and tool calls, which the voice leaves alone. So caveman grew rocks that shrink what the agent reads and what it runs on.",
+      "intro": "🪨 why use many token when few token do trick. Viral skill + proxy for coding agents that cuts 65% of tokens by talking like a caveman. Two findings shaped caveman. Adobe: cavemanning your prompt makes answers worse, so caveman never touches your prompt. JetBrains: agent sessions are mostly code and tool calls, which the voice leaves alone. So caveman grew rocks that shrink what the agent reads and what it runs on.",
+      "intro_en": "🪨 why use many token when few token do trick. Viral skill + proxy for coding agents that cuts 65% of tokens by talking like a caveman. Two findings shaped caveman. Adobe: cavemanning your prompt makes answers worse, so caveman never touches your prompt. JetBrains: agent sessions are mostly code and tool calls, which the voice leaves alone. So caveman grew rocks that shrink what the agent reads and what it runs on.",
+      "intro_zh": "",
+      "intro_source": "about+readme",
+      "summary": "",
+      "summary_en": "",
+      "language": "Go",
+      "stars": 120990,
+      "forks": 7066,
+      "issues": 97,
+      "today_stars": 0,
+      "growth_score": 286.4,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 8.65,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 4.90015,
+        "recency": 1.214803,
+        "base_stars": 2.532681
+      },
+      "discovery_status": "verified",
+      "watchlist": false,
+      "first_observed_at": "2026-04-09",
+      "trend_7d": [
+        {
+          "date": "2026-11-11",
+          "growth": 235.2,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-12",
+          "growth": 261.0,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-13",
+          "growth": 319.8,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-14",
+          "growth": 227.0,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-15",
+          "growth": 508.2,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-16",
+          "growth": 318.8,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-17",
+          "growth": 286.4,
+          "confidence": "high"
+        }
+      ],
+      "trend_ready": true,
+      "streak_days": 7,
+      "lifecycle": "accelerating",
+      "created_at": "2026-04-04T10:03:00Z",
+      "topics": [
+        "ai",
+        "anthropic",
+        "caveman",
+        "claude",
+        "claude-code",
+        "llm",
+        "meme",
+        "prompt-engineering",
+        "skill",
+        "tokens"
+      ],
+      "url": "https://github.com/JuliusBrussee/caveman",
+      "rank_change": null,
+      "emerging_score": -34.25,
+      "emerging_evidence": {
+        "repo_age_days": 227,
+        "first_observed_days": 222,
+        "observations_in_lookback": 28,
+        "prior_main_rank_days": 26,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 0.82,
+        "signals": []
+      }
+    },
+    {
+      "rank": 10,
+      "full_name": "career-ops-hq/career-ops",
+      "description": "Open-source AI job search agent and job finder: scan job boards, score each job 1-5 against your CV before you apply, tailor an ATS-friendly resume and cover letter, get interview prep and an application tracker. It helps you fill in each application; you press Submit. Runs locally in Codex, OpenCode and other AI CLIs, or as a Claude Code plugin.",
+      "about": "Open-source AI job search agent and job finder: scan job boards, score each job 1-5 against your CV before you apply, tailor an ATS-friendly resume and cover letter, get interview prep and an application tracker. It helps you fill in each application; you press Submit. Runs locally in Codex, OpenCode and other AI CLIs, or as a Claude Code plugin.",
+      "readme_highlight": "What is career-ops? career-ops (career-ops.org, also known as careerops) is an open-source AI job search that runs locally in your AI coding CLI (Claude Code, Codex, OpenCode and others) and leaves every decision to you. It evaluates job offers against your CV, generates ATS-tailored PDFs, finds the right person to...",
+      "intro": "Open-source AI job search agent and job finder: scan job boards, score each job 1-5 against your CV before you apply, tailor an ATS-friendly resume and cover letter, get interview prep and an application tracker. It helps you fill in each application; you press Submit. Runs locally in Codex, OpenCode and other AI CLIs, or as a Claude Code plugin. What is career-ops? career-ops (career-ops.org, also known as careerops) is an open-source AI job search that runs locally in your...",
+      "intro_en": "Open-source AI job search agent and job finder: scan job boards, score each job 1-5 against your CV before you apply, tailor an ATS-friendly resume and cover letter, get interview prep and an application tracker. It helps you fill in each application; you press Submit. Runs locally in Codex, OpenCode and other AI CLIs, or as a Claude Code plugin. What is career-ops? career-ops (career-ops.org, also known as careerops) is an open-source AI job search that runs locally in your...",
+      "intro_zh": "",
+      "intro_source": "about+readme",
+      "summary": "",
+      "summary_en": "",
+      "language": "JavaScript",
+      "stars": 83275,
+      "forks": 15292,
+      "issues": 448,
+      "today_stars": 0,
+      "growth_score": 239.5,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 8.54,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 4.745936,
+        "recency": 1.337836,
+        "base_stars": 2.451842
+      },
+      "discovery_status": "verified",
+      "watchlist": false,
+      "first_observed_at": "2026-07-27",
+      "trend_7d": [
+        {
+          "date": "2026-11-11",
+          "growth": 262.5,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-12",
+          "growth": 239.7,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-13",
+          "growth": 200.5,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-14",
+          "growth": 160.7,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-15",
+          "growth": 206.0,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-16",
+          "growth": 302.6,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-17",
+          "growth": 239.5,
+          "confidence": "high"
+        }
+      ],
+      "trend_ready": true,
+      "streak_days": 7,
+      "lifecycle": "steady",
+      "created_at": "2026-04-04T18:21:18Z",
+      "topics": [
+        "agent-skills",
+        "ai-agent",
+        "ai-job-search",
+        "ats",
+        "career",
+        "career-ops",
+        "claude-code",
+        "claude-code-plugin",
+        "claude-plugin",
+        "cover-letter",
+        "cv",
+        "good-first-issue",
+        "interview-preparation",
+        "interview-questions",
+        "job-application",
+        "job-hunting",
+        "job-search",
+        "latex",
+        "open-source",
+        "resume"
+      ],
+      "url": "https://github.com/career-ops-hq/career-ops",
+      "rank_change": null,
+      "emerging_score": -36.88,
+      "emerging_evidence": {
+        "repo_age_days": 226,
+        "first_observed_days": 112,
+        "observations_in_lookback": 28,
+        "prior_main_rank_days": 27,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 1.07,
+        "signals": []
+      }
+    }
+  ],
+  "ai_app_top20": [
+    {
+      "rank": 1,
+      "full_name": "dream-num/univer",
+      "description": "Build your own AI office with Univer Office SDK. Bring editing, calculation, collaboration, and file processing into your product for people and AI agents. Built on an extensible open-source core.",
+      "about": "Build your own AI office with Univer Office SDK. Bring editing, calculation, collaboration, and file processing into your product for people and AI agents. Built on an extensible open-source core.",
+      "readme_highlight": "Univer is an Office SDK for building Office applications inside your own product. It provides Office editing, calculation, collaboration, and file processing for people and existing agents, using your data and permissions. The product family covers spreadsheets, documents, presentations, relational tables, canvases,...",
+      "intro": "Build your own AI office with Univer Office SDK. Bring editing, calculation, collaboration, and file processing into your product for people and AI agents. Built on an extensible open-source core. Univer is an Office SDK for building Office applications inside your own product. It provides Office editing, calculation, collaboration, and file processing for people and existing agents, using your data and permissions. The product family covers spreadsheets, documents...",
+      "intro_en": "Build your own AI office with Univer Office SDK. Bring editing, calculation, collaboration, and file processing into your product for people and AI agents. Built on an extensible open-source core. Univer is an Office SDK for building Office applications inside your own product. It provides Office editing, calculation, collaboration, and file processing for people and existing agents, using your data and permissions. The product family covers spreadsheets, documents...",
+      "intro_zh": "",
+      "intro_source": "about+readme",
+      "summary": "",
+      "summary_en": "",
+      "language": "TypeScript",
+      "stars": 28764,
+      "forks": 2612,
+      "issues": 0,
+      "today_stars": 1776,
+      "growth_score": 1776.0,
+      "growth_source": "trending",
+      "growth_confidence": "high",
+      "hotness_score": 21.65,
+      "score_breakdown": {
+        "today_stars": 12.954274,
+        "growth_rate": 6.477137,
+        "recency": 0.0,
+        "base_stars": 2.221804
+      },
+      "discovery_status": "verified",
+      "watchlist": false,
+      "first_observed_at": "2026-09-22",
+      "trend_7d": [
+        {
+          "date": "2026-09-27",
+          "growth": 920.0,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-09-28",
+          "growth": 1105.0,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-09-29",
+          "growth": 692.0,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-14",
+          "growth": 495.0,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-15",
+          "growth": 1041.0,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-16",
+          "growth": 1878.0,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-17",
+          "growth": 1776.0,
+          "confidence": "high"
+        }
+      ],
+      "trend_ready": true,
+      "streak_days": 7,
+      "lifecycle": "accelerating",
+      "created_at": null,
+      "topics": [],
+      "url": "https://github.com/dream-num/univer",
+      "rank_change": null,
+      "emerging_score": 27.01,
+      "emerging_evidence": {
+        "repo_age_days": null,
+        "first_observed_days": 56,
+        "observations_in_lookback": 3,
+        "prior_main_rank_days": 3,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 1.56,
+        "signals": []
+      }
+    },
+    {
+      "rank": 2,
+      "full_name": "alibaba/open-code-review",
+      "description": "Secure, fast, efficient, battle-tested at Alibaba's scale. Hybrid architecture code review tool: deterministic pipelines + LLM Agent, precise line-level comments, built-in multi-language ruleset (NPE, thread-safety, XSS, SQL injection), OpenAI & Anthropic compatible.",
+      "about": "Secure, fast, efficient, battle-tested at Alibaba's scale. Hybrid architecture code review tool: deterministic pipelines + LLM Agent, precise line-level comments, built-in multi-language ruleset (NPE, thread-safety, XSS, SQL injection), OpenAI & Anthropic compatible.",
+      "readme_highlight": "Open Code Review is an AI-powered code review CLI tool. It originated as Alibaba Group's internal official AI code review assistant — over the past two years, it has served tens of thousands of developers and identified millions of code defects. After thorough validation at massive scale, we incubated it into an open...",
+      "intro": "Secure, fast, efficient, battle-tested at Alibaba's scale. Hybrid architecture code review tool: deterministic pipelines + LLM Agent, precise line-level comments, built-in multi-language ruleset (NPE, thread-safety, XSS, SQL injection), OpenAI & Anthropic compatible. Open Code Review is an AI-powered code review CLI tool. It originated as Alibaba Group's internal official AI code review assistant — over the past two years, it has served tens of thousands of developers and...",
+      "intro_en": "Secure, fast, efficient, battle-tested at Alibaba's scale. Hybrid architecture code review tool: deterministic pipelines + LLM Agent, precise line-level comments, built-in multi-language ruleset (NPE, thread-safety, XSS, SQL injection), OpenAI & Anthropic compatible. Open Code Review is an AI-powered code review CLI tool. It originated as Alibaba Group's internal official AI code review assistant — over the past two years, it has served tens of thousands of developers and...",
+      "intro_zh": "",
+      "intro_source": "about+readme",
+      "summary": "",
+      "summary_en": "",
+      "language": "Go",
+      "stars": 53544,
+      "forks": 4411,
+      "issues": 354,
+      "today_stars": 764,
+      "growth_score": 764.0,
+      "growth_source": "trending",
+      "growth_confidence": "high",
+      "hotness_score": 20.97,
+      "score_breakdown": {
+        "today_stars": 11.495179,
+        "growth_rate": 5.74759,
+        "recency": 1.367203,
+        "base_stars": 2.35627
+      },
+      "discovery_status": "verified",
+      "watchlist": false,
+      "first_observed_at": "2026-06-14",
+      "trend_7d": [
+        {
+          "date": "2026-10-22",
+          "growth": 210.2,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-10-23",
+          "growth": 113.6,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-13",
+          "growth": 206.0,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-14",
+          "growth": 897.0,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-15",
+          "growth": 688.0,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-16",
+          "growth": 946.0,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-17",
+          "growth": 764.0,
+          "confidence": "high"
+        }
+      ],
+      "trend_ready": true,
+      "streak_days": 7,
+      "lifecycle": "accelerating",
+      "created_at": "2026-05-18T02:16:36Z",
+      "topics": [
+        "agent",
+        "agent-skills",
+        "code-review",
+        "code-review-assistant",
+        "harness",
+        "repository-level-context"
+      ],
+      "url": "https://github.com/alibaba/open-code-review",
+      "rank_change": null,
+      "emerging_score": 16.74,
+      "emerging_evidence": {
+        "repo_age_days": 183,
+        "first_observed_days": 156,
+        "observations_in_lookback": 9,
+        "prior_main_rank_days": 5,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 0.91,
+        "signals": []
+      }
+    },
+    {
+      "rank": 3,
+      "full_name": "mvanhorn/last30days-skill",
+      "description": "AI agent skill that researches any topic across Reddit, X, YouTube, HN, Polymarket, and the web - then synthesizes a grounded summary",
+      "about": "AI agent skill that researches any topic across Reddit, X, YouTube, HN, Polymarket, and the web - then synthesizes a grounded summary",
+      "readme_highlight": "> \"I found a Claude Code skill that researches any topic across Reddit, X, YouTube, and HN from the last 30 days. Then writes the prompts for you. I've been manually searching Reddit and X for research before every piece of content I write. Tab by tab. Thread by thread. That's the part that takes 90 minutes. This...",
+      "intro": "AI agent skill that researches any topic across Reddit, X, YouTube, HN, Polymarket, and the web - then synthesizes a grounded summary. > \"I found a Claude Code skill that researches any topic across Reddit, X, YouTube, and HN from the last 30 days. Then writes the prompts for you. I've been manually searching Reddit and X for research before every piece of content I write. Tab by tab. Thread by thread. That's the part that takes 90 minutes. This...",
+      "intro_en": "AI agent skill that researches any topic across Reddit, X, YouTube, HN, Polymarket, and the web - then synthesizes a grounded summary. > \"I found a Claude Code skill that researches any topic across Reddit, X, YouTube, and HN from the last 30 days. Then writes the prompts for you. I've been manually searching Reddit and X for research before every piece of content I write. Tab by tab. Thread by thread. That's the part that takes 90 minutes. This...",
+      "intro_zh": "",
+      "intro_source": "about+readme",
+      "summary": "",
+      "summary_en": "",
+      "language": "Python",
+      "stars": 68778,
+      "forks": 6133,
+      "issues": 0,
+      "today_stars": 772,
+      "growth_score": 772.0,
+      "growth_source": "trending",
+      "growth_confidence": "high",
+      "hotness_score": 19.68,
+      "score_breakdown": {
+        "today_stars": 11.51319,
+        "growth_rate": 5.756595,
+        "recency": 0.0,
+        "base_stars": 2.410452
+      },
+      "discovery_status": "verified",
+      "watchlist": false,
+      "first_observed_at": "2026-06-05",
+      "trend_7d": [
+        {
+          "date": "2026-07-27",
+          "growth": 221.0,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-07-28",
+          "growth": 240.0,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-07-31",
+          "growth": 378.0,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-08-01",
+          "growth": 658.0,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-08-30",
+          "growth": 272.0,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-16",
+          "growth": 122.0,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-17",
+          "growth": 772.0,
+          "confidence": "high"
+        }
+      ],
+      "trend_ready": true,
+      "streak_days": 7,
+      "lifecycle": "accelerating",
+      "created_at": null,
+      "topics": [],
+      "url": "https://github.com/mvanhorn/last30days-skill",
+      "rank_change": null,
+      "emerging_score": 32.78,
+      "emerging_evidence": {
+        "repo_age_days": null,
+        "first_observed_days": 165,
+        "observations_in_lookback": 1,
+        "prior_main_rank_days": 1,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 6.33,
+        "signals": []
+      }
+    },
+    {
+      "rank": 4,
+      "full_name": "obra/superpowers",
+      "description": "An agentic skills framework & software development methodology that works.",
+      "about": "An agentic skills framework & software development methodology that works.",
+      "readme_highlight": "Superpowers is a complete software development methodology for your coding agents, built on top of a set of composable skills and some initial instructions that make sure your agent uses them.",
+      "intro": "An agentic skills framework & software development methodology that works. Superpowers is a complete software development methodology for your coding agents, built on top of a set of composable skills and some initial instructions that make sure your agent uses them.",
+      "intro_en": "An agentic skills framework & software development methodology that works. Superpowers is a complete software development methodology for your coding agents, built on top of a set of composable skills and some initial instructions that make sure your agent uses them.",
+      "intro_zh": "",
+      "intro_source": "about+readme",
+      "summary": "",
+      "summary_en": "",
+      "language": "Shell",
+      "stars": 319119,
+      "forks": 28451,
+      "issues": 0,
+      "today_stars": 598,
+      "growth_score": 598.0,
+      "growth_source": "trending",
+      "growth_confidence": "high",
+      "hotness_score": 19.35,
+      "score_breakdown": {
+        "today_stars": 11.071695,
+        "growth_rate": 5.535847,
+        "recency": 0.0,
+        "base_stars": 2.742561
+      },
+      "discovery_status": "verified",
+      "watchlist": false,
+      "first_observed_at": "2026-04-09",
+      "trend_7d": [
+        {
+          "date": "2026-10-15",
+          "growth": 534.0,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-10-16",
+          "growth": 973.0,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-10-27",
+          "growth": 608.0,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-10-28",
+          "growth": 1096.0,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-10-30",
+          "growth": 1255.0,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-10-31",
+          "growth": 663.0,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-17",
+          "growth": 598.0,
+          "confidence": "high"
+        }
+      ],
+      "trend_ready": true,
+      "streak_days": 7,
+      "lifecycle": "steady",
+      "created_at": null,
+      "topics": [],
+      "url": "https://github.com/obra/superpowers",
+      "rank_change": null,
+      "emerging_score": 18.93,
+      "emerging_evidence": {
+        "repo_age_days": null,
+        "first_observed_days": 222,
+        "observations_in_lookback": 4,
+        "prior_main_rank_days": 4,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 0.6,
+        "signals": []
+      }
+    },
+    {
+      "rank": 5,
+      "full_name": "Tencent/LoopForge",
+      "description": "Self-hosted workflows for coding-agent delivery. Orchestrate CodeBuddy, Codex and Claude Code with scripts and human approval gates. Includes Local workflows for coding assistants.",
+      "about": "Self-hosted workflows for coding-agent delivery. Orchestrate CodeBuddy, Codex and Claude Code with scripts and human approval gates. Includes Local workflows for coding assistants.",
+      "readme_highlight": "LoopForge is a self-hosted workspace where your team ships software with coding agents. Describe what you need to Main Bot in chat: it opens a Docker sandbox, checks out your repositories, delegates to project roles, and opens the PR. When a way of working proves itself, save it as an SOP (a standard workflow of...",
+      "intro": "Self-hosted workflows for coding-agent delivery. Orchestrate CodeBuddy, Codex and Claude Code with scripts and human approval gates. Includes Local workflows for coding assistants. LoopForge is a self-hosted workspace where your team ships software with coding agents. Describe what you need to Main Bot in chat: it opens a Docker sandbox, checks out your repositories, delegates to project roles, and opens the PR. When a way of working proves itself, save it as an SOP (a...",
+      "intro_en": "Self-hosted workflows for coding-agent delivery. Orchestrate CodeBuddy, Codex and Claude Code with scripts and human approval gates. Includes Local workflows for coding assistants. LoopForge is a self-hosted workspace where your team ships software with coding agents. Describe what you need to Main Bot in chat: it opens a Docker sandbox, checks out your repositories, delegates to project roles, and opens the PR. When a way of working proves itself, save it as an SOP (a...",
+      "intro_zh": "",
+      "intro_source": "about+readme",
+      "summary": "",
+      "summary_en": "",
+      "language": "Go",
+      "stars": 2961,
+      "forks": 428,
+      "issues": 0,
+      "today_stars": 590,
+      "growth_score": 590.0,
+      "growth_source": "trending",
+      "growth_confidence": "high",
+      "hotness_score": 18.3,
+      "score_breakdown": {
+        "today_stars": 11.048417,
+        "growth_rate": 5.524209,
+        "recency": 0.0,
+        "base_stars": 1.729853
+      },
+      "discovery_status": "verified",
+      "watchlist": false,
+      "first_observed_at": "2026-11-14",
+      "trend_7d": [
+        {
+          "date": "2026-11-14",
+          "growth": 174.0,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-15",
+          "growth": 484.0,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-17",
+          "growth": 590.0,
+          "confidence": "high"
+        }
+      ],
+      "trend_ready": false,
+      "streak_days": 3,
+      "lifecycle": "building",
+      "created_at": null,
+      "topics": [],
+      "url": "https://github.com/Tencent/LoopForge",
+      "rank_change": null,
+      "emerging_score": 27.24,
+      "emerging_evidence": {
+        "repo_age_days": null,
+        "first_observed_days": 3,
+        "observations_in_lookback": 2,
+        "prior_main_rank_days": 2,
+        "prior_emerging_rank_days": 1,
+        "acceleration_ratio": 1.79,
+        "signals": [
+          "newly_discovered",
+          "accelerating"
+        ]
+      }
+    },
+    {
+      "rank": 6,
+      "full_name": "google-labs-code/stitch-skills",
+      "description": "A library of Agent Skills designed to work with the Stitch MCP server. Each skill follows the Agent Skills open standard, for compatibility with coding agents such as Antigravity, Gemini CLI, Claude Code, Cursor.",
+      "about": "A library of Agent Skills designed to work with the Stitch MCP server. Each skill follows the Agent Skills open standard, for compatibility with coding agents such as Antigravity, Gemini CLI, Claude Code, Cursor.",
+      "readme_highlight": "A collection of agent skills and plugins for Google Stitch, following the Agent Skills open standard. Compatible with coding agents such as Codex, Antigravity, Gemini CLI, Claude Code, Cursor, and OpenCode (manual install).",
+      "intro": "A library of Agent Skills designed to work with the Stitch MCP server. Each skill follows the Agent Skills open standard, for compatibility with coding agents such as Antigravity, Gemini CLI, Claude Code, Cursor. A collection of agent skills and plugins for Google Stitch, following the Agent Skills open standard. Compatible with coding agents such as Codex, Antigravity, Gemini CLI, Claude Code, Cursor, and OpenCode (manual install).",
+      "intro_en": "A library of Agent Skills designed to work with the Stitch MCP server. Each skill follows the Agent Skills open standard, for compatibility with coding agents such as Antigravity, Gemini CLI, Claude Code, Cursor. A collection of agent skills and plugins for Google Stitch, following the Agent Skills open standard. Compatible with coding agents such as Codex, Antigravity, Gemini CLI, Claude Code, Cursor, and OpenCode (manual install).",
+      "intro_zh": "",
+      "intro_source": "about+readme",
+      "summary": "",
+      "summary_en": "",
+      "language": "TypeScript",
+      "stars": 9993,
+      "forks": 1316,
+      "issues": 0,
+      "today_stars": 350,
+      "growth_score": 350.0,
+      "growth_source": "trending",
+      "growth_confidence": "high",
+      "hotness_score": 17.21,
+      "score_breakdown": {
+        "today_stars": 10.146393,
+        "growth_rate": 5.073196,
+        "recency": 0.0,
+        "base_stars": 1.993027
+      },
+      "discovery_status": "verified",
+      "watchlist": false,
+      "first_observed_at": "2026-11-15",
+      "trend_7d": [
+        {
+          "date": "2026-11-15",
+          "growth": 248.0,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-16",
+          "growth": 540.0,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-17",
+          "growth": 350.0,
+          "confidence": "high"
+        }
+      ],
+      "trend_ready": false,
+      "streak_days": 3,
+      "lifecycle": "building",
+      "created_at": null,
+      "topics": [],
+      "url": "https://github.com/google-labs-code/stitch-skills",
+      "rank_change": null,
+      "emerging_score": 23.97,
+      "emerging_evidence": {
+        "repo_age_days": null,
+        "first_observed_days": 2,
+        "observations_in_lookback": 2,
+        "prior_main_rank_days": 2,
+        "prior_emerging_rank_days": 1,
+        "acceleration_ratio": 0.89,
+        "signals": [
+          "newly_discovered"
+        ]
+      }
+    },
+    {
+      "rank": 7,
+      "full_name": "morluto/rea",
+      "description": "Reverse engineer anything with agents, from app behavior down to native binaries.",
+      "about": "Reverse engineer anything with agents, from app behavior down to native binaries.",
+      "readme_highlight": "REA connects your agent to tools for inspecting native binaries, JavaScript and Electron apps, .NET assemblies, and websites. You can also use the same tools from your terminal. Analysis runs locally, and results include the evidence and limitations behind each conclusion.",
+      "intro": "Reverse engineer anything with agents, from app behavior down to native binaries. REA connects your agent to tools for inspecting native binaries, JavaScript and Electron apps, .NET assemblies, and websites. You can also use the same tools from your terminal. Analysis runs locally, and results include the evidence and limitations behind each conclusion.",
+      "intro_en": "Reverse engineer anything with agents, from app behavior down to native binaries. REA connects your agent to tools for inspecting native binaries, JavaScript and Electron apps, .NET assemblies, and websites. You can also use the same tools from your terminal. Analysis runs locally, and results include the evidence and limitations behind each conclusion.",
+      "intro_zh": "",
+      "intro_source": "about+readme",
+      "summary": "",
+      "summary_en": "",
+      "language": "TypeScript",
+      "stars": 465788,
+      "forks": 113994,
+      "issues": 1552,
+      "today_stars": 0,
+      "growth_score": 2180.3,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 10.9,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 6.654583,
+        "recency": 1.425544,
+        "base_stars": 2.824398
+      },
+      "discovery_status": "verified",
+      "watchlist": false,
+      "first_observed_at": "2026-10-06",
+      "trend_7d": [
+        {
+          "date": "2026-11-11",
+          "growth": 2792.2,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-12",
+          "growth": 2658.6,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-13",
+          "growth": 2325.8,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-14",
+          "growth": 2184.6,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-15",
+          "growth": 2158.3,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-16",
+          "growth": 2226.5,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-17",
+          "growth": 2180.3,
+          "confidence": "high"
+        }
+      ],
+      "trend_ready": true,
+      "streak_days": 7,
+      "lifecycle": "steady",
+      "created_at": "2026-04-14T00:51:32Z",
+      "topics": [
+        "agent-skills",
+        "ai",
+        "android",
+        "claude-code",
+        "cli",
+        "cpp",
+        "dsh-plugin",
+        "html",
+        "java",
+        "javascript",
+        "linux",
+        "mcp",
+        "nodejs",
+        "python",
+        "rea",
+        "react",
+        "rust",
+        "security",
+        "touhou",
+        "typescript"
+      ],
+      "url": "https://github.com/morluto/rea",
+      "rank_change": null,
+      "emerging_score": -29.48,
+      "emerging_evidence": {
+        "repo_age_days": 217,
+        "first_observed_days": 42,
+        "observations_in_lookback": 28,
+        "prior_main_rank_days": 28,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 1.0,
+        "signals": []
+      }
+    },
+    {
+      "rank": 8,
+      "full_name": "heygen-com/hyperframes",
+      "description": "Write HTML. Render video. Built for agents.",
+      "about": "Write HTML. Render video. Built for agents.",
+      "readme_highlight": "The skills teach agents the HyperFrames production loop: plan the video, write valid HTML, wire seekable animations, add media, lint, preview, and render. They work with Claude Code, Codex, Cursor, Gemini CLI, IBM Bob, and other coding agents that support skills.",
+      "intro": "Write HTML. Render video. Built for agents. The skills teach agents the HyperFrames production loop: plan the video, write valid HTML, wire seekable animations, add media, lint, preview, and render. They work with Claude Code, Codex, Cursor, Gemini CLI, IBM Bob, and other coding agents that support skills.",
+      "intro_en": "Write HTML. Render video. Built for agents. The skills teach agents the HyperFrames production loop: plan the video, write valid HTML, wire seekable animations, add media, lint, preview, and render. They work with Claude Code, Codex, Cursor, Gemini CLI, IBM Bob, and other coding agents that support skills.",
+      "intro_zh": "",
+      "intro_source": "about+readme",
+      "summary": "",
+      "summary_en": "",
+      "language": "TypeScript",
+      "stars": 85784,
+      "forks": 7953,
+      "issues": 301,
+      "today_stars": 0,
+      "growth_score": 689.0,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 9.62,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 5.658272,
+        "recency": 1.500986,
+        "base_stars": 2.458266
+      },
+      "discovery_status": "verified",
+      "watchlist": false,
+      "first_observed_at": "2026-04-25",
+      "trend_7d": [
+        {
+          "date": "2026-11-11",
+          "growth": 558.2,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-12",
+          "growth": 607.4,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-13",
+          "growth": 487.4,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-14",
+          "growth": 443.2,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-15",
+          "growth": 388.5,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-16",
+          "growth": 474.2,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-17",
+          "growth": 689.0,
+          "confidence": "high"
+        }
+      ],
+      "trend_ready": true,
+      "streak_days": 7,
+      "lifecycle": "steady",
+      "created_at": "2026-03-10T01:51:06Z",
+      "topics": [
+        "ai",
+        "ai-agents",
+        "animation",
+        "claude-code",
+        "ffmpeg",
+        "framework",
+        "gsap",
+        "html",
+        "html-to-video",
+        "mcp",
+        "motion-graphics",
+        "puppeteer",
+        "rendering",
+        "typescript",
+        "video-editor"
+      ],
+      "url": "https://github.com/heygen-com/hyperframes",
+      "rank_change": null,
+      "emerging_score": -33.3,
+      "emerging_evidence": {
+        "repo_age_days": 252,
+        "first_observed_days": 206,
+        "observations_in_lookback": 28,
+        "prior_main_rank_days": 28,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 1.58,
+        "signals": []
+      }
+    },
+    {
+      "rank": 9,
+      "full_name": "ChromeDevTools/chrome-devtools-mcp",
+      "description": "Chrome DevTools for coding agents",
+      "about": "Chrome DevTools for coding agents",
+      "readme_highlight": "Google collects usage statistics (such as tool invocation success rates, latency, and environment information) to improve the reliability and performance of Chrome DevTools MCP.",
+      "intro": "Chrome DevTools for coding agents. Google collects usage statistics (such as tool invocation success rates, latency, and environment information) to improve the reliability and performance of Chrome DevTools MCP.",
+      "intro_en": "Chrome DevTools for coding agents. Google collects usage statistics (such as tool invocation success rates, latency, and environment information) to improve the reliability and performance of Chrome DevTools MCP.",
+      "intro_zh": "",
+      "intro_source": "about+readme",
+      "summary": "",
+      "summary_en": "",
+      "language": "TypeScript",
+      "stars": 57986,
+      "forks": 4867,
+      "issues": 124,
+      "today_stars": 0,
+      "growth_score": 441.4,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 9.13,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 5.273525,
+        "recency": 1.486419,
+        "base_stars": 2.373516
+      },
+      "discovery_status": "verified",
+      "watchlist": false,
+      "first_observed_at": "2026-04-10",
+      "trend_7d": [
+        {
+          "date": "2026-11-11",
+          "growth": 37.4,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-12",
+          "growth": 57.2,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-13",
+          "growth": 145.0,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-14",
+          "growth": 673.0,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-15",
+          "growth": 718.0,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-16",
+          "growth": 837.0,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-17",
+          "growth": 441.4,
+          "confidence": "high"
+        }
+      ],
+      "trend_ready": true,
+      "streak_days": 7,
+      "lifecycle": "accelerating",
+      "created_at": "2025-09-11T10:39:55Z",
+      "topics": [
+        "browser",
+        "chrome",
+        "chrome-devtools",
+        "debugging",
+        "devtools",
+        "mcp",
+        "mcp-server",
+        "puppeteer"
+      ],
+      "url": "https://github.com/ChromeDevTools/chrome-devtools-mcp",
+      "rank_change": null,
+      "emerging_score": 11.62,
+      "emerging_evidence": {
+        "repo_age_days": 432,
+        "first_observed_days": 221,
+        "observations_in_lookback": 28,
+        "prior_main_rank_days": 4,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 0.59,
+        "signals": []
+      }
+    },
+    {
+      "rank": 10,
+      "full_name": "n8n-io/n8n",
+      "description": "Fair-code workflow automation platform with native AI capabilities. Combine visual building with custom code, self-host or cloud, 400+ integrations.",
+      "about": "Fair-code workflow automation platform with native AI capabilities. Combine visual building with custom code, self-host or cloud, 400+ integrations.",
+      "readme_highlight": "Fair-code platform to build and deploy AI agents and workflows. Combine a visual canvas with custom code, run it self-hosted or in the cloud, and connect to 1500+ integrations. AI automation you can trust with real work, from prototype to production.",
+      "intro": "Fair-code workflow automation platform with native AI capabilities. Combine visual building with custom code, self-host or cloud, 400+ integrations. Fair-code platform to build and deploy AI agents and workflows. Combine a visual canvas with custom code, run it self-hosted or in the cloud, and connect to 1500+ integrations. AI automation you can trust with real work, from prototype to production.",
+      "intro_en": "Fair-code workflow automation platform with native AI capabilities. Combine visual building with custom code, self-host or cloud, 400+ integrations. Fair-code platform to build and deploy AI agents and workflows. Combine a visual canvas with custom code, run it self-hosted or in the cloud, and connect to 1500+ integrations. AI automation you can trust with real work, from prototype to production.",
+      "intro_zh": "",
+      "intro_source": "about+readme",
+      "summary": "",
+      "summary_en": "",
+      "language": "TypeScript",
+      "stars": 210919,
+      "forks": 61620,
+      "issues": 1270,
+      "today_stars": 0,
+      "growth_score": 308.8,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 9.12,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 4.965116,
+        "recency": 1.501003,
+        "base_stars": 2.65295
+      },
+      "discovery_status": "verified",
+      "watchlist": false,
+      "first_observed_at": "2026-04-08",
+      "trend_7d": [
+        {
+          "date": "2026-11-11",
+          "growth": 149.4,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-12",
+          "growth": 152.3,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-13",
+          "growth": 79.2,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-14",
+          "growth": 93.5,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-15",
+          "growth": 96.1,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-16",
+          "growth": 44.3,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-17",
+          "growth": 308.8,
+          "confidence": "high"
+        }
+      ],
+      "trend_ready": true,
+      "streak_days": 7,
+      "lifecycle": "steady",
+      "created_at": "2019-06-22T09:24:21Z",
+      "topics": [
+        "ai",
+        "apis",
+        "automation",
+        "cli",
+        "data-flow",
+        "development",
+        "integration-framework",
+        "integrations",
+        "ipaas",
+        "low-code",
+        "low-code-platform",
+        "mcp",
+        "mcp-client",
+        "mcp-server",
+        "n8n",
+        "no-code",
+        "self-hosted",
+        "typescript",
+        "workflow",
+        "workflow-automation"
+      ],
+      "url": "https://github.com/n8n-io/n8n",
+      "rank_change": null,
+      "emerging_score": -12.0,
+      "emerging_evidence": {
+        "repo_age_days": 2705,
+        "first_observed_days": 223,
+        "observations_in_lookback": 28,
+        "prior_main_rank_days": 18,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 3.96,
+        "signals": []
+      }
+    },
+    {
+      "rank": 11,
+      "full_name": "DuarteSantos8/openGym",
+      "description": "Open-source gym & body-weight tracker, now in the App Store (iPhone + Apple Watch) and as an Android APK. Plan routines, log workouts, see which muscles are trained, import from Strong/Hevy/FitNotes. Self-host it or use it on the phone alone.",
+      "about": "Open-source gym & body-weight tracker, now in the App Store (iPhone + Apple Watch) and as an Android APK. Plan routines, log workouts, see which muscles are trained, import from Strong/Hevy/FitNotes. Self-host it or use it on the phone alone.",
+      "readme_highlight": "- Passkeys (Face ID, Touch ID, fingerprint) with per-profile data synced across devices. Password sign-in can be switched on per instance; new devices pair with a one-time code or QR. - Two devices editing at once merge field by field instead of overwriting each other (see sync). - Import from FitNotes, Strong, Hevy...",
+      "intro": "Open-source gym & body-weight tracker, now in the App Store (iPhone + Apple Watch) and as an Android APK. Plan routines, log workouts, see which muscles are trained, import from Strong/Hevy/FitNotes. Self-host it or use it on the phone alone. - Passkeys (Face ID, Touch ID, fingerprint) with per-profile data synced across devices. Password sign-in can be switched on per instance; new devices pair with a one-time code or QR. - Two devices editing at once merge field by field...",
+      "intro_en": "Open-source gym & body-weight tracker, now in the App Store (iPhone + Apple Watch) and as an Android APK. Plan routines, log workouts, see which muscles are trained, import from Strong/Hevy/FitNotes. Self-host it or use it on the phone alone. - Passkeys (Face ID, Touch ID, fingerprint) with per-profile data synced across devices. Password sign-in can be switched on per instance; new devices pair with a one-time code or QR. - Two devices editing at once merge field by field...",
+      "intro_zh": "",
+      "intro_source": "about+readme",
+      "summary": "",
+      "summary_en": "",
+      "language": "JavaScript",
+      "stars": 22468,
+      "forks": 2985,
+      "issues": 329,
+      "today_stars": 0,
+      "growth_score": 477.0,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 8.97,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 5.34052,
+        "recency": 1.463061,
+        "base_stars": 2.168347
+      },
+      "discovery_status": "verified",
+      "watchlist": false,
+      "first_observed_at": "2026-10-05",
+      "trend_7d": [
+        {
+          "date": "2026-11-11",
+          "growth": 154.5,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-12",
+          "growth": 161.1,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-13",
+          "growth": 116.2,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-14",
+          "growth": 137.6,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-15",
+          "growth": 117.7,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-16",
+          "growth": 494.1,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-17",
+          "growth": 477.0,
+          "confidence": "high"
+        }
+      ],
+      "trend_ready": true,
+      "streak_days": 7,
+      "lifecycle": "accelerating",
+      "created_at": "2026-07-18T20:41:24Z",
+      "topics": [
+        "apple-watch",
+        "bodyweight",
+        "docker",
+        "fitness",
+        "fitness-tracker",
+        "gym",
+        "health",
+        "ios",
+        "mcp",
+        "nodejs",
+        "passkeys",
+        "progressive-web-applications",
+        "pwa",
+        "react",
+        "self-hosted",
+        "self-hosting",
+        "vite",
+        "webauthn",
+        "weightlifting",
+        "workout-tracker"
+      ],
+      "url": "https://github.com/DuarteSantos8/openGym",
+      "rank_change": null,
+      "emerging_score": -18.59,
+      "emerging_evidence": {
+        "repo_age_days": 121,
+        "first_observed_days": 43,
+        "observations_in_lookback": 28,
+        "prior_main_rank_days": 21,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 1.91,
+        "signals": [
+          "recently_created"
+        ]
+      }
+    },
+    {
+      "rank": 12,
+      "full_name": "farion1231/cc-switch",
+      "description": "A cross-platform desktop All-in-One assistant for Claude Code, Codex, OpenCode,DeepSeek Harness and more. Only official website: ccswitch.io",
+      "about": "A cross-platform desktop All-in-One assistant for Claude Code, Codex, OpenCode,DeepSeek Harness and more. Only official website: ccswitch.io",
+      "readme_highlight": "No. When you switch providers for Claude Code, Codex, Gemini CLI, or Grok Build, CC Switch replaces only the key fields in the config file: the endpoint, key, model name, and API protocol (plus the reasoning effort for Codex and the auth method for Gemini CLI), along with a few compatibility options that belong to the...",
+      "intro": "A cross-platform desktop All-in-One assistant for Claude Code, Codex, OpenCode,DeepSeek Harness and more. Only official website: ccswitch.io. No. When you switch providers for Claude Code, Codex, Gemini CLI, or Grok Build, CC Switch replaces only the key fields in the config file: the endpoint, key, model name, and API protocol (plus the reasoning effort for Codex and the auth method for Gemini CLI), along with a few compatibility options that belong to the...",
+      "intro_en": "A cross-platform desktop All-in-One assistant for Claude Code, Codex, OpenCode,DeepSeek Harness and more. Only official website: ccswitch.io. No. When you switch providers for Claude Code, Codex, Gemini CLI, or Grok Build, CC Switch replaces only the key fields in the config file: the endpoint, key, model name, and API protocol (plus the reasoning effort for Codex and the auth method for Gemini CLI), along with a few compatibility options that belong to the...",
+      "intro_zh": "",
+      "intro_source": "about+readme",
+      "summary": "",
+      "summary_en": "",
+      "language": "Rust",
+      "stars": 155190,
+      "forks": 10156,
+      "issues": 882,
+      "today_stars": 0,
+      "growth_score": 289.5,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 8.94,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 4.909437,
+        "recency": 1.445378,
+        "base_stars": 2.586553
+      },
+      "discovery_status": "verified",
+      "watchlist": false,
+      "first_observed_at": "2026-04-11",
+      "trend_7d": [
+        {
+          "date": "2026-11-11",
+          "growth": 323.0,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-12",
+          "growth": 275.6,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-13",
+          "growth": 285.8,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-14",
+          "growth": 214.3,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-15",
+          "growth": 188.4,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-16",
+          "growth": 290.8,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-17",
+          "growth": 289.5,
+          "confidence": "high"
+        }
+      ],
+      "trend_ready": true,
+      "streak_days": 7,
+      "lifecycle": "steady",
+      "created_at": "2025-08-04T14:16:16Z",
+      "topics": [
+        "ai-tools",
+        "claude-code",
+        "codex",
+        "deepseek-harness",
+        "desktop-app",
+        "grok",
+        "grokbuild",
+        "hermes",
+        "kimi-code",
+        "mcp",
+        "open-source",
+        "opencode",
+        "pi",
+        "provider-management",
+        "rust",
+        "skills",
+        "skills-management",
+        "tauri",
+        "wsl-support"
+      ],
+      "url": "https://github.com/farion1231/cc-switch",
+      "rank_change": null,
+      "emerging_score": -37.7,
+      "emerging_evidence": {
+        "repo_age_days": 470,
+        "first_observed_days": 220,
+        "observations_in_lookback": 28,
+        "prior_main_rank_days": 28,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 1.25,
+        "signals": []
+      }
+    },
+    {
+      "rank": 13,
+      "full_name": "cheaper-inference/OmniRoute",
+      "description": "Never stop coding. Free MIT AI gateway: one endpoint, 375 providers (150+ free), 1,400+ models Kimi, Claude, GPT, Gemini, GLM, DeepSeek, MiniMax. Works with Claude Code, Codex, Cursor, OpenCode, Cline & Copilot. Quota-aware auto-fallback, RTK+Caveman compression saves 15-95% tokens, MCP/A2A, Desktop/PWA. Built by 900+ contributors",
+      "about": "Never stop coding. Free MIT AI gateway: one endpoint, 375 providers (150+ free), 1,400+ models Kimi, Claude, GPT, Gemini, GLM, DeepSeek, MiniMax. Works with Claude Code, Codex, Cursor, OpenCode, Cline & Copilot. Quota-aware auto-fallback, RTK+Caveman compression saves 15-95% tokens, MCP/A2A, Desktop/PWA. Built by 900+ contributors",
+      "readme_highlight": "Thanks to Cheaper Inference, an OmniRoute Open Source Friend, for backing this project! Cheaper Inference is a cost-ranked gateway that resells 42 frontier models — Claude, GPT-5.x, Gemini, Kimi K3, GLM, DeepSeek, Grok and MiniMax — behind one OpenAI-compatible endpoint, routing each request to the cheapest eligible...",
+      "intro": "Never stop coding. Free MIT AI gateway: one endpoint, 375 providers (150+ free), 1,400+ models Kimi, Claude, GPT, Gemini, GLM, DeepSeek, MiniMax. Works with Claude Code, Codex, Cursor, OpenCode, Cline & Copilot. Quota-aware auto-fallback, RTK+Caveman compression saves 15-95% tokens, MCP/A2A, Desktop/PWA. Built by 900+ contributors. Thanks to Cheaper Inference, an OmniRoute Open Source Friend, for backing this project! Cheaper Inference is a cost-ranked gateway that resells...",
+      "intro_en": "Never stop coding. Free MIT AI gateway: one endpoint, 375 providers (150+ free), 1,400+ models Kimi, Claude, GPT, Gemini, GLM, DeepSeek, MiniMax. Works with Claude Code, Codex, Cursor, OpenCode, Cline & Copilot. Quota-aware auto-fallback, RTK+Caveman compression saves 15-95% tokens, MCP/A2A, Desktop/PWA. Built by 900+ contributors. Thanks to Cheaper Inference, an OmniRoute Open Source Friend, for backing this project! Cheaper Inference is a cost-ranked gateway that resells...",
+      "intro_zh": "",
+      "intro_source": "about+readme",
+      "summary": "",
+      "summary_en": "",
+      "language": "TypeScript",
+      "stars": 88318,
+      "forks": 13575,
+      "issues": 680,
+      "today_stars": 0,
+      "growth_score": 301.7,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 8.9,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 4.945047,
+        "recency": 1.493228,
+        "base_stars": 2.464565
+      },
+      "discovery_status": "verified",
+      "watchlist": false,
+      "first_observed_at": "2026-07-27",
+      "trend_7d": [
+        {
+          "date": "2026-11-11",
+          "growth": 292.7,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-12",
+          "growth": 303.7,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-13",
+          "growth": 285.8,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-14",
+          "growth": 281.5,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-15",
+          "growth": 322.8,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-16",
+          "growth": 325.2,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-17",
+          "growth": 301.7,
+          "confidence": "high"
+        }
+      ],
+      "trend_ready": true,
+      "streak_days": 7,
+      "lifecycle": "steady",
+      "created_at": "2026-02-13T12:38:31Z",
+      "topics": [
+        "a2a",
+        "ai-agents",
+        "ai-gateway",
+        "anthropic",
+        "claude",
+        "claude-code",
+        "cline",
+        "codex",
+        "copilot",
+        "cursor",
+        "deepseek",
+        "free-ai",
+        "gemini",
+        "kimi",
+        "llm-gateway",
+        "mcp",
+        "openai",
+        "openai-proxy",
+        "qwen",
+        "token-saver"
+      ],
+      "url": "https://github.com/cheaper-inference/OmniRoute",
+      "rank_change": null,
+      "emerging_score": -38.02,
+      "emerging_evidence": {
+        "repo_age_days": 277,
+        "first_observed_days": 112,
+        "observations_in_lookback": 28,
+        "prior_main_rank_days": 28,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 0.97,
+        "signals": []
+      }
+    },
+    {
+      "rank": 14,
+      "full_name": "D4Vinci/Scrapling",
+      "description": "🕷️ The BEST Web Scraping framework that handles everything from a single request to a full-scale crawl! Don't be shy, join here: https://discord.gg/EMgGbDceNQ and follow here for daily tips and tricks: https://x.com/Scrapling_dev",
+      "about": "🕷️ The BEST Web Scraping framework that handles everything from a single request to a full-scale crawl! Don't be shy, join here: https://discord.gg/EMgGbDceNQ and follow here for daily tips and tricks: https://x.com/Scrapling_dev",
+      "readme_highlight": "Scrapling is a Python Web Scraping framework that brings fast HTTP requests, stealth browsers, powerful parsing, and concurrent crawling into one library.",
+      "intro": "🕷️ The BEST Web Scraping framework that handles everything from a single request to a full-scale crawl! Don't be shy, join here: https://discord.gg/EMgGbDceNQ and follow here for daily tips and tricks: https://x.com/Scraplingdev. Scrapling is a Python Web Scraping framework that brings fast HTTP requests, stealth browsers, powerful parsing, and concurrent crawling into one library.",
+      "intro_en": "🕷️ The BEST Web Scraping framework that handles everything from a single request to a full-scale crawl! Don't be shy, join here: https://discord.gg/EMgGbDceNQ and follow here for daily tips and tricks: https://x.com/Scraplingdev. Scrapling is a Python Web Scraping framework that brings fast HTTP requests, stealth browsers, powerful parsing, and concurrent crawling into one library.",
+      "intro_zh": "",
+      "intro_source": "about+readme",
+      "summary": "",
+      "summary_en": "",
+      "language": "Python",
+      "stars": 103895,
+      "forks": 10837,
+      "issues": 21,
+      "today_stars": 0,
+      "growth_score": 319.9,
+      "growth_source": "history_delta",
+      "growth_confidence": "medium",
+      "hotness_score": 8.78,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 4.995588,
+        "recency": 1.279794,
+        "base_stars": 2.499717
+      },
+      "discovery_status": "verified",
+      "watchlist": false,
+      "first_observed_at": "2026-05-06",
+      "trend_7d": [
+        {
+          "date": "2026-11-08",
+          "growth": 485.9,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-09",
+          "growth": 690.4,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-10",
+          "growth": 603.1,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-12",
+          "growth": 515.0,
+          "confidence": "medium"
+        },
+        {
+          "date": "2026-11-14",
+          "growth": 362.1,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-15",
+          "growth": 507.2,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-17",
+          "growth": 319.9,
+          "confidence": "medium"
+        }
+      ],
+      "trend_ready": true,
+      "streak_days": 7,
+      "lifecycle": "cooling",
+      "created_at": "2024-10-13T20:29:53Z",
+      "topics": [
+        "ai",
+        "ai-scraping",
+        "automation",
+        "crawler",
+        "crawling",
+        "crawling-python",
+        "data",
+        "data-extraction",
+        "mcp",
+        "mcp-server",
+        "playwright",
+        "python",
+        "scraping",
+        "selectors",
+        "stealth",
+        "web-scraper",
+        "web-scraping",
+        "web-scraping-python",
+        "webscraping",
+        "xpath"
+      ],
+      "url": "https://github.com/D4Vinci/Scrapling",
+      "rank_change": null,
+      "emerging_score": 0.48,
+      "emerging_evidence": {
+        "repo_age_days": 764,
+        "first_observed_days": 195,
+        "observations_in_lookback": 11,
+        "prior_main_rank_days": 11,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 0.69,
+        "signals": []
+      }
+    },
+    {
+      "rank": 15,
+      "full_name": "github/spec-kit",
+      "description": "💫 Toolkit to help you get started with SDD or any other process!",
+      "about": "💫 Toolkit to help you get started with SDD or any other process!",
+      "readme_highlight": "Spec Kit is an open source toolkit that gives AI coding agents structured processes, reusable templates, and documented outcomes. Start with a ready-made process, customize it, or bring your own.",
+      "intro": "💫 Toolkit to help you get started with SDD or any other process!. Spec Kit is an open source toolkit that gives AI coding agents structured processes, reusable templates, and documented outcomes. Start with a ready-made process, customize it, or bring your own.",
+      "intro_en": "💫 Toolkit to help you get started with SDD or any other process!. Spec Kit is an open source toolkit that gives AI coding agents structured processes, reusable templates, and documented outcomes. Start with a ready-made process, customize it, or bring your own.",
+      "intro_zh": "",
+      "intro_source": "about+readme",
+      "summary": "",
+      "summary_en": "",
+      "language": "Python",
+      "stars": 150236,
+      "forks": 13497,
+      "issues": 226,
+      "today_stars": 0,
+      "growth_score": 171.2,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 8.54,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 4.456765,
+        "recency": 1.500453,
+        "base_stars": 2.579532
+      },
+      "discovery_status": "verified",
+      "watchlist": false,
+      "first_observed_at": "2026-04-08",
+      "trend_7d": [
+        {
+          "date": "2026-11-09",
+          "growth": 318.0,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-10",
+          "growth": 209.8,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-11",
+          "growth": 160.5,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-12",
+          "growth": 182.4,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-13",
+          "growth": 154.2,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-16",
+          "growth": 135.8,
+          "confidence": "medium"
+        },
+        {
+          "date": "2026-11-17",
+          "growth": 171.2,
+          "confidence": "high"
+        }
+      ],
+      "trend_ready": true,
+      "streak_days": 7,
+      "lifecycle": "cooling",
+      "created_at": "2025-08-21T22:54:31Z",
+      "topics": [
+        "ai",
+        "copilot",
+        "development",
+        "engineering",
+        "prd",
+        "spec",
+        "spec-driven"
+      ],
+      "url": "https://github.com/github/spec-kit",
+      "rank_change": null,
+      "emerging_score": -21.29,
+      "emerging_evidence": {
+        "repo_age_days": 452,
+        "first_observed_days": 223,
+        "observations_in_lookback": 24,
+        "prior_main_rank_days": 19,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 1.09,
+        "signals": []
+      }
+    },
+    {
+      "rank": 16,
+      "full_name": "Comfy-Org/ComfyUI",
+      "description": "The most powerful and modular diffusion model GUI, api and backend with a graph/nodes interface. The fastest local inference engine in the world.",
+      "about": "The most powerful and modular diffusion model GUI, api and backend with a graph/nodes interface. The fastest local inference engine in the world.",
+      "readme_highlight": "ComfyUI is the AI creation engine for visual professionals who demand control over every model, every parameter, and every output. Its powerful and modular node graph interface empowers creatives to generate images, videos, 3D models, audio, and more... - ComfyUI natively supports the latest open-source state of the...",
+      "intro": "The most powerful and modular diffusion model GUI, api and backend with a graph/nodes interface. The fastest local inference engine in the world. ComfyUI is the AI creation engine for visual professionals who demand control over every model, every parameter, and every output. Its powerful and modular node graph interface empowers creatives to generate images, videos, 3D models, audio, and more... - ComfyUI natively supports the latest open-source state of the...",
+      "intro_en": "The most powerful and modular diffusion model GUI, api and backend with a graph/nodes interface. The fastest local inference engine in the world. ComfyUI is the AI creation engine for visual professionals who demand control over every model, every parameter, and every output. Its powerful and modular node graph interface empowers creatives to generate images, videos, 3D models, audio, and more... - ComfyUI natively supports the latest open-source state of the...",
+      "intro_zh": "",
+      "intro_source": "about+readme",
+      "summary": "",
+      "summary_en": "",
+      "language": "Python",
+      "stars": 147328,
+      "forks": 17598,
+      "issues": 5556,
+      "today_stars": 0,
+      "growth_score": 165.1,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 8.49,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 4.425545,
+        "recency": 1.485861,
+        "base_stars": 2.575302
+      },
+      "discovery_status": "verified",
+      "watchlist": false,
+      "first_observed_at": "2026-04-08",
+      "trend_7d": [
+        {
+          "date": "2026-11-11",
+          "growth": 199.9,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-12",
+          "growth": 159.1,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-13",
+          "growth": 162.5,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-14",
+          "growth": 135.5,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-15",
+          "growth": 183.5,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-16",
+          "growth": 180.7,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-17",
+          "growth": 165.1,
+          "confidence": "high"
+        }
+      ],
+      "trend_ready": true,
+      "streak_days": 7,
+      "lifecycle": "steady",
+      "created_at": "2023-01-17T03:15:56Z",
+      "topics": [
+        "ai",
+        "comfy",
+        "comfyui",
+        "python",
+        "pytorch",
+        "stable-diffusion"
+      ],
+      "url": "https://github.com/Comfy-Org/ComfyUI",
+      "rank_change": null,
+      "emerging_score": -40.62,
+      "emerging_evidence": {
+        "repo_age_days": 1400,
+        "first_observed_days": 223,
+        "observations_in_lookback": 28,
+        "prior_main_rank_days": 28,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 0.99,
+        "signals": []
+      }
+    },
+    {
+      "rank": 17,
+      "full_name": "vercel-labs/agent-desktop",
+      "description": "Computer use CLI for AI agents",
+      "about": "Computer use CLI for AI agents",
+      "readme_highlight": "agent-desktop gives an AI agent computer use without screenshots or pixel matching. It reads the accessibility tree of a desktop app and returns it as JSON, with a ref for every element the agent can act on. The agent clicks or types on a ref, reads the UI again to check the result, and repeats. The loop lives in your...",
+      "intro": "Computer use CLI for AI agents. agent-desktop gives an AI agent computer use without screenshots or pixel matching. It reads the accessibility tree of a desktop app and returns it as JSON, with a ref for every element the agent can act on. The agent clicks or types on a ref, reads the UI again to check the result, and repeats. The loop lives in your...",
+      "intro_en": "Computer use CLI for AI agents. agent-desktop gives an AI agent computer use without screenshots or pixel matching. It reads the accessibility tree of a desktop app and returns it as JSON, with a ref for every element the agent can act on. The agent clicks or types on a ref, reads the UI again to check the result, and repeats. The loop lives in your...",
+      "intro_zh": "",
+      "intro_source": "about+readme",
+      "summary": "",
+      "summary_en": "",
+      "language": "Rust",
+      "stars": 24931,
+      "forks": 1861,
+      "issues": 259,
+      "today_stars": 0,
+      "growth_score": 386.3,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 8.48,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 5.158385,
+        "recency": 1.132011,
+        "base_stars": 2.190857
+      },
+      "discovery_status": "verified",
+      "watchlist": false,
+      "first_observed_at": "2026-11-02",
+      "trend_7d": [
+        {
+          "date": "2026-11-11",
+          "growth": 718.8,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-12",
+          "growth": 679.2,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-13",
+          "growth": 589.2,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-14",
+          "growth": 481.0,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-15",
+          "growth": 437.5,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-16",
+          "growth": 447.1,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-17",
+          "growth": 386.3,
+          "confidence": "high"
+        }
+      ],
+      "trend_ready": true,
+      "streak_days": 7,
+      "lifecycle": "cooling",
+      "created_at": "2026-02-19T18:00:49Z",
+      "topics": [
+        "accessibility",
+        "accessibility-api",
+        "ai-agents",
+        "automation",
+        "cli",
+        "computer-use",
+        "computer-use-agent",
+        "computer-use-agents",
+        "desktop-automation",
+        "macos",
+        "mcp",
+        "rust"
+      ],
+      "url": "https://github.com/vercel-labs/agent-desktop",
+      "rank_change": null,
+      "emerging_score": -7.71,
+      "emerging_evidence": {
+        "repo_age_days": 270,
+        "first_observed_days": 14,
+        "observations_in_lookback": 15,
+        "prior_main_rank_days": 15,
+        "prior_emerging_rank_days": 1,
+        "acceleration_ratio": 0.85,
+        "signals": []
+      }
+    },
+    {
+      "rank": 18,
+      "full_name": "harry0703/MoneyPrinterTurbo",
+      "description": "利用 AI 大模型和自动化工作流，根据主题或关键词一键生成高清短视频。Generate HD short videos from a topic or keyword with an automated AI workflow.",
+      "about": "利用 AI 大模型和自动化工作流，根据主题或关键词一键生成高清短视频。Generate HD short videos from a topic or keyword with an automated AI workflow.",
+      "readme_highlight": "MoneyPrinterTurbo 用户专属优惠：新用户通过专属链接注册，首次成功充值可获充值金额 10% 的 API 额度。活动截至 2026 年 12 月 31 日。前往 Kimi 开放平台（中文站｜Global）体验 API。",
+      "intro": "利用 AI 大模型和自动化工作流，根据主题或关键词一键生成高清短视频。Generate HD short videos from a topic or keyword with an automated AI workflow. MoneyPrinterTurbo 用户专属优惠：新用户通过专属链接注册，首次成功充值可获充值金额 10% 的 API 额度。活动截至 2026 年 12 月 31 日。前往 Kimi 开放平台（中文站｜Global）体验 API。",
+      "intro_en": "利用 AI 大模型和自动化工作流，根据主题或关键词一键生成高清短视频。Generate HD short videos from a topic or keyword with an automated AI workflow. MoneyPrinterTurbo 用户专属优惠：新用户通过专属链接注册，首次成功充值可获充值金额 10% 的 API 额度。活动截至 2026 年 12 月 31 日。前往 Kimi 开放平台（中文站｜Global）体验 API。",
+      "intro_zh": "",
+      "intro_source": "about+readme",
+      "summary": "",
+      "summary_en": "",
+      "language": "Python",
+      "stars": 144176,
+      "forks": 23129,
+      "issues": 85,
+      "today_stars": 0,
+      "growth_score": 200.8,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 8.44,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 4.594069,
+        "recency": 1.277936,
+        "base_stars": 2.570622
+      },
+      "discovery_status": "verified",
+      "watchlist": false,
+      "first_observed_at": "2026-05-28",
+      "trend_7d": [
+        {
+          "date": "2026-11-10",
+          "growth": 471.8,
+          "confidence": "medium"
+        },
+        {
+          "date": "2026-11-11",
+          "growth": 529.0,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-12",
+          "growth": 384.2,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-13",
+          "growth": 397.9,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-14",
+          "growth": 306.7,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-16",
+          "growth": 231.8,
+          "confidence": "medium"
+        },
+        {
+          "date": "2026-11-17",
+          "growth": 200.8,
+          "confidence": "high"
+        }
+      ],
+      "trend_ready": true,
+      "streak_days": 7,
+      "lifecycle": "cooling",
+      "created_at": "2024-03-11T02:57:34Z",
+      "topics": [
+        "ai-video-generator",
+        "content-creation",
+        "ffmpeg",
+        "instagram-reels",
+        "llm",
+        "python",
+        "short-video",
+        "subtitles",
+        "text-to-speech",
+        "tiktok",
+        "video-automation",
+        "video-workflow",
+        "workflow-automation",
+        "youtube-shorts"
+      ],
+      "url": "https://github.com/harry0703/MoneyPrinterTurbo",
+      "rank_change": null,
+      "emerging_score": -35.28,
+      "emerging_evidence": {
+        "repo_age_days": 981,
+        "first_observed_days": 173,
+        "observations_in_lookback": 26,
+        "prior_main_rank_days": 26,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 0.64,
+        "signals": []
+      }
+    },
+    {
+      "rank": 19,
+      "full_name": "kajisho5/ffmpeg-skill",
+      "description": "Local video editor for coding agents: 42 FFmpeg tools with a machine-readable contract and an MCP server, for Claude Code, Cursor and Codex. Cut, captions, reframe, loudness, platform exports. No cloud, no API keys.",
+      "about": "Local video editor for coding agents: 42 FFmpeg tools with a machine-readable contract and an MCP server, for Claude Code, Cursor and Codex. Cut, captions, reframe, loudness, platform exports. No cloud, no API keys.",
+      "readme_highlight": "ffmpeg-skill is an Agent Skill for Claude Code, Cursor, Codex and any agent that reads SKILL.md. It teaches the agent a fixed workflow (probe → edit losslessly where possible → check → verify) and ships 42 tools that do the actual work with ffmpeg / ffprobe: cut, join, silence removal, fit to duration and aspect,...",
+      "intro": "Local video editor for coding agents: 42 FFmpeg tools with a machine-readable contract and an MCP server, for Claude Code, Cursor and Codex. Cut, captions, reframe, loudness, platform exports. No cloud, no API keys. ffmpeg-skill is an Agent Skill for Claude Code, Cursor, Codex and any agent that reads SKILL.md. It teaches the agent a fixed workflow (probe → edit losslessly where possible → check → verify) and ships 42 tools that do the actual work with ffmpeg / ffprobe: cut...",
+      "intro_en": "Local video editor for coding agents: 42 FFmpeg tools with a machine-readable contract and an MCP server, for Claude Code, Cursor and Codex. Cut, captions, reframe, loudness, platform exports. No cloud, no API keys. ffmpeg-skill is an Agent Skill for Claude Code, Cursor, Codex and any agent that reads SKILL.md. It teaches the agent a fixed workflow (probe → edit losslessly where possible → check → verify) and ships 42 tools that do the actual work with ffmpeg / ffprobe: cut...",
+      "intro_zh": "",
+      "intro_source": "about+readme",
+      "summary": "",
+      "summary_en": "",
+      "language": "Python",
+      "stars": 7652,
+      "forks": 704,
+      "issues": 36,
+      "today_stars": 0,
+      "growth_score": 1254.8,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 8.41,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 6.176635,
+        "recency": 0.298378,
+        "base_stars": 1.935271
+      },
+      "discovery_status": "verified",
+      "watchlist": false,
+      "first_observed_at": "2026-11-16",
+      "trend_7d": [
+        {
+          "date": "2026-11-16",
+          "growth": 475.0,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-17",
+          "growth": 1254.8,
+          "confidence": "high"
+        }
+      ],
+      "trend_ready": false,
+      "streak_days": 2,
+      "lifecycle": "building",
+      "created_at": "2026-09-03T14:33:38Z",
+      "topics": [
+        "agent-skills",
+        "ai-agents",
+        "audio-processing",
+        "captions",
+        "claude-code",
+        "codex",
+        "coding-agent",
+        "cursor",
+        "ffmpeg",
+        "gemini-cli-extension",
+        "loudness-normalization",
+        "mcp",
+        "mcp-server",
+        "model-context-protocol",
+        "python",
+        "subtitles",
+        "transcoding",
+        "video",
+        "video-editing",
+        "whisper"
+      ],
+      "url": "https://github.com/kajisho5/ffmpeg-skill",
+      "rank_change": null,
+      "emerging_score": 39.08,
+      "emerging_evidence": {
+        "repo_age_days": 75,
+        "first_observed_days": 0,
+        "observations_in_lookback": 1,
+        "prior_main_rank_days": 1,
+        "prior_emerging_rank_days": 1,
+        "acceleration_ratio": 2.64,
+        "signals": [
+          "recently_created",
+          "newly_discovered",
+          "accelerating"
+        ]
+      }
+    },
+    {
+      "rank": 20,
+      "full_name": "nextlevelbuilder/ui-ux-pro-max-skill",
+      "description": "An AI skill that provides design intelligence for building professional UI/UX across multiple platforms.",
+      "about": "An AI skill that provides design intelligence for building professional UI/UX across multiple platforms.",
+      "readme_highlight": "An AI skill that provides design intelligence for building professional UI/UX across multiple platforms and frameworks.",
+      "intro": "An AI skill that provides design intelligence for building professional UI/UX across multiple platforms.",
+      "intro_en": "An AI skill that provides design intelligence for building professional UI/UX across multiple platforms.",
+      "intro_zh": "",
+      "intro_source": "about",
+      "summary": "",
+      "summary_en": "",
+      "language": "Python",
+      "stars": 150782,
+      "forks": 15936,
+      "issues": 83,
+      "today_stars": 0,
+      "growth_score": 466.8,
+      "growth_source": "history_delta",
+      "growth_confidence": "high",
+      "hotness_score": 8.29,
+      "score_breakdown": {
+        "today_stars": 0.0,
+        "growth_rate": 5.321849,
+        "recency": 0.389053,
+        "base_stars": 2.580317
+      },
+      "discovery_status": "verified",
+      "watchlist": false,
+      "first_observed_at": "2026-06-21",
+      "trend_7d": [
+        {
+          "date": "2026-11-06",
+          "growth": 477.9,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-08",
+          "growth": 374.5,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-10",
+          "growth": 435.3,
+          "confidence": "medium"
+        },
+        {
+          "date": "2026-11-11",
+          "growth": 421.0,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-15",
+          "growth": 432.5,
+          "confidence": "medium"
+        },
+        {
+          "date": "2026-11-16",
+          "growth": 467.0,
+          "confidence": "high"
+        },
+        {
+          "date": "2026-11-17",
+          "growth": 466.8,
+          "confidence": "high"
+        }
+      ],
+      "trend_ready": true,
+      "streak_days": 7,
+      "lifecycle": "steady",
+      "created_at": "2025-11-30T11:36:31Z",
+      "topics": [
+        "ai-skills",
+        "antigravity",
+        "claude",
+        "claude-code",
+        "codex",
+        "command-line",
+        "copilot",
+        "cursor-ai",
+        "html5",
+        "kiro",
+        "landing-page",
+        "mobile-ui",
+        "qoder",
+        "react",
+        "tailwindcss",
+        "trae",
+        "ui-design",
+        "uikit",
+        "windsurf-ai"
+      ],
+      "url": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill",
+      "rank_change": null,
+      "emerging_score": -11.27,
+      "emerging_evidence": {
+        "repo_age_days": 352,
+        "first_observed_days": 149,
+        "observations_in_lookback": 17,
+        "prior_main_rank_days": 17,
+        "prior_emerging_rank_days": 0,
+        "acceleration_ratio": 1.06,
+        "signals": []
+      }
+    }
+  ],
+  "ai_emerging_top10": []
+}
